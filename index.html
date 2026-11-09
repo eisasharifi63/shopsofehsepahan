@@ -1,0 +1,960 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سیستم مدیریت پخش و فروش</title>
+<style>
+@font-face{font-family:"VazirLocal";src:url("/static/Vazirmatn.woff2") format("woff2");font-display:swap}
+:root{--ink:#14202b;--ink2:#1d2e3c;--paper:#eef1f4;--card:#fff;--line:#d7dde3;--muted:#5e6b78;--teal:#0f6b63;--teal-s:#dcefec;--amber:#b7791f;--amber-s:#f8ecd5;--red:#b3372e;--red-s:#f6dedb;--blue:#2b5f8a;--blue-s:#dde9f3;--r:8px}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:"VazirLocal",Vazirmatn,Tahoma,"Segoe UI",sans-serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.7;display:flex}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+aside{width:224px;background:var(--ink);color:#c9d3dc;display:flex;flex-direction:column;padding:18px 12px;flex:none;overflow:auto}
+.brand{padding:4px 10px 18px;border-bottom:1px solid #2c3f50;margin-bottom:12px}
+.brand b{display:block;color:#fff;font-size:17px;line-height:1.4}
+.brand span{font-size:12px;color:#8a9aa8}
+nav button{display:flex;gap:10px;align-items:center;width:100%;background:none;border:0;border-radius:var(--r);padding:9px 12px;text-align:right;cursor:pointer;color:inherit;margin-bottom:2px}
+nav button:hover{background:#1f3140}
+nav button.on{background:var(--teal);color:#fff}
+nav button i{font-style:normal;width:22px;text-align:center}
+.sp{flex:1}
+main{flex:1;overflow:auto;padding:26px 30px 60px;min-width:0}
+h1{font-size:22px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 20px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.bar .grow{flex:1}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:18px}
+.card h2{font-size:15px;margin:0 0 12px}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:1.6fr 1fr} .g3{grid-template-columns:repeat(3,1fr)}
+@media(max-width:1100px){.g4{grid-template-columns:repeat(2,1fr)}.g2,.g3{grid-template-columns:1fr}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.stat small{color:var(--muted);display:block}
+.stat b{font-size:22px;font-variant-numeric:tabular-nums}
+.stat.hero{background:var(--ink);color:#fff;border-color:var(--ink)} .stat.hero small{color:#9fb0bf}
+.stat.warn b{color:var(--red)}
+input,select,textarea{border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:#fff;min-width:0}
+input[type=checkbox]{width:auto}
+textarea{width:100%;resize:vertical}
+label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:3px}
+.f{margin-bottom:10px} .f input,.f select{width:100%}
+.frow{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0 12px}
+.btn{border:1px solid var(--line);background:#fff;border-radius:6px;padding:7px 14px;cursor:pointer}
+.btn:hover{border-color:var(--ink)}
+.btn.p{background:var(--teal);border-color:var(--teal);color:#fff} .btn.p:hover{background:#0b5a53}
+.btn.d{color:var(--red);border-color:#e3b9b5} .btn.s{padding:3px 9px;font-size:12.5px}
+table{width:100%;border-collapse:collapse}
+th{font-weight:600;color:var(--muted);font-size:12.5px;text-align:right;padding:8px 10px;border-bottom:2px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid #e8ecf0;vertical-align:middle}
+tbody tr:hover{background:#f7f9fa}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tw{overflow-x:auto}
+.tag{display:inline-block;padding:1px 9px;border-radius:20px;font-size:12px;background:#e8ecf0}
+.tag.g{background:var(--teal-s);color:var(--teal)} .tag.a{background:var(--amber-s);color:var(--amber)} .tag.r{background:var(--red-s);color:var(--red)} .tag.b{background:var(--blue-s);color:var(--blue)}
+.thumb{width:40px;height:40px;border-radius:6px;object-fit:cover;background:#e8ecf0;display:block}
+.empty{padding:34px;text-align:center;color:var(--muted)}
+.chart{width:100%;height:auto;display:block}
+#modal{position:fixed;inset:0;background:rgba(20,32,43,.5);display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow:auto;z-index:20}
+#modal.on{display:flex}
+.mbox{background:#fff;border-radius:10px;width:min(720px,100%);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.mbox.wide{width:min(980px,100%)}
+.mh{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line)}
+.mh b{font-size:16px} .mh button{border:0;background:none;font-size:22px;cursor:pointer;color:var(--muted)}
+.mb{padding:20px} .mf{padding:12px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-start}
+#toast{position:fixed;bottom:22px;left:22px;background:var(--ink);color:#fff;padding:10px 18px;border-radius:8px;opacity:0;transition:opacity .2s;z-index:50;max-width:420px;pointer-events:none}
+#toast.on{opacity:1} #toast.err{background:var(--red)}
+.hint{background:var(--blue-s);color:#1f4a6e;border-radius:var(--r);padding:12px 14px;font-size:13px;margin-bottom:14px}
+pre,code{direction:ltr;text-align:left;background:#f2f4f6;border-radius:6px;font-family:Consolas,monospace;font-size:12.5px}
+pre{padding:12px;overflow:auto;white-space:pre-wrap}
+.chk{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:6px}
+.chk label{display:flex;gap:8px;align-items:center;color:var(--ink);font-size:13.5px;padding:3px 6px;margin:0;cursor:pointer}
+.chk label:hover{background:#f2f4f6}
+.pv{max-width:100px;max-height:100px;border-radius:6px;margin-top:6px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 14px;cursor:pointer}
+.chip:hover{border-color:var(--ink)} .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+#login{position:fixed;inset:0;background:var(--ink);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+#login.on{display:flex}
+.lbox{background:#fff;border-radius:12px;padding:30px 28px;width:min(380px,100%)}
+.lbox h1{font-size:20px;margin-bottom:4px} .lbox .f{margin-top:12px}
+.me{border-top:1px solid #2c3f50;padding:12px 6px 0;font-size:12.5px;color:#9fb0bf}
+.me b{color:#fff;display:block;margin-bottom:6px}
+.me button{background:none;border:1px solid #2c3f50;color:#c9d3dc;border-radius:6px;padding:3px 10px;cursor:pointer;margin-left:4px}
+.me button:hover{border-color:#fff;color:#fff}
+th.ck,td.ck{width:34px;padding-left:2px;padding-right:10px}
+.grp{font-weight:600}
+nav .grp.has{color:#fff}
+nav .arw{font-size:11px;transition:transform .15s;font-style:normal}
+nav .arw.o{transform:rotate(180deg)}
+nav .sub{margin:0 22px 6px 0;padding-right:10px;border-right:1px solid #2c3f50}
+nav .sub button{padding:6px 10px;font-size:13px}
+nav button .fill{flex:1;text-align:right}
+.bdg{background:var(--amber);color:#fff;font-style:normal;font-size:11px;border-radius:10px;padding:0 7px;line-height:18px}
+#jdp-pop{position:fixed;z-index:90;display:none;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 36px rgba(20,32,43,.25);width:290px;padding:10px}
+.jh{display:flex;gap:6px;align-items:center;margin-bottom:8px}
+.jh select{flex:1;padding:4px 6px}
+.jh button{border:1px solid var(--line);background:#fff;border-radius:6px;width:30px;height:30px;cursor:pointer;font-size:18px;line-height:1}
+.jw,.jg{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}
+.jw b{font-size:12px;color:var(--muted);padding:3px 0;font-weight:600} .jw b.red{color:var(--red)}
+.jd{border:0;background:none;border-radius:6px;height:34px;cursor:pointer}
+.jd:hover{background:#eef1f4} .jd.red{color:var(--red)} .jd.today{outline:1px solid var(--teal)} .jd.sel{background:var(--teal);color:#fff}
+.jf{display:flex;justify-content:space-between;margin-top:8px} .jf button{border:0;background:none;color:var(--teal);cursor:pointer}
+.jnote{font-size:11px;color:var(--muted);margin-top:6px}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
+.it{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #e8ecf0}
+.it:last-child{border-bottom:0}
+.dt{width:9px;height:9px;border-radius:50%;flex:none}
+.it a{margin-inline-start:auto;color:var(--teal);cursor:pointer;font-size:13px}
+.prog{height:8px;background:#e8ecf0;border-radius:6px;margin-top:12px}
+.prog i{display:block;height:8px;background:var(--teal);border-radius:6px;transition:width .3s}
+.f .bar select{width:auto}
+.chk label.p-all{background:#e3f3ee}
+.chk label.p-some{background:#fbf1dc}
+.pbs{margin-inline-start:auto;font-size:11.5px;color:var(--muted)}
+@media(max-width:800px){aside{width:64px}.brand span,nav button span{display:none}main{padding:16px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand"><b id="brandName">فروشگاه من</b><span>مدیریت پخش و فروش</span></div>
+  <nav id="nav"></nav>
+  <div class="sp"></div>
+  <div class="me" id="me"></div>
+</aside>
+<main id="view"></main>
+<div id="login"></div>
+<div id="modal"><div class="mbox" id="mbox"></div></div>
+<div id="toast"></div>
+
+<script>
+/* ───────── ابزارها ───────── */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fa=n=>Number(n||0).toLocaleString('fa-IR');
+const num=s=>{const t=String(s??'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/[,٬\s]/g,'');return t===''||isNaN(t)?0:Number(t)};
+const faDigits=s=>String(s).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+function g2j(gy,gm,gd){const gdm=[0,31,59,90,120,151,181,212,243,273,304,334];const gy2=gm>2?gy+1:gy;let days=355666+365*gy+Math.floor((gy2+3)/4)-Math.floor((gy2+99)/100)+Math.floor((gy2+399)/400)+gd+gdm[gm-1];let jy=-1595+33*Math.floor(days/12053);days%=12053;jy+=4*Math.floor(days/1461);days%=1461;if(days>365){jy+=Math.floor((days-1)/365);days=(days-1)%365}let jm,jd;if(days<186){jm=1+Math.floor(days/31);jd=1+days%31}else{jm=7+Math.floor((days-186)/30);jd=1+(days-186)%30}return[jy,jm,jd]}
+function jd(s,t){if(!s)return'';const m=String(s).match(/(\d+)-(\d+)-(\d+)(?:[ T](\d+):(\d+))?/);if(!m)return s;const[y,mo,d]=g2j(+m[1],+m[2],+m[3]);let o=`${y}/${String(mo).padStart(2,'0')}/${String(d).padStart(2,'0')}`;if(t&&m[4])o+=` ${m[4]}:${m[5]}`;return faDigits(o)}
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+
+async function api(name,args={}){
+  const r=await fetch('/api/'+name,{method:'POST',headers:{'X-App':'1','Content-Type':'application/json'},body:JSON.stringify(args)});
+  if(r.status===401){ if(name!=='me') showLogin(false); throw new Error('AUTH') }
+  const j=await r.json(); if(!j.ok) throw new Error(j.error); return j.data;
+}
+async function act(name,args,okMsg){ // فراخوانی با نمایش خطا/موفقیت
+  try{const d=await api(name,args); if(okMsg) toast(okMsg); return d}catch(e){if(e.message!=='AUTH')toast(e.message||'خطا',true); throw e}
+}
+let tt;function toast(m,err){const t=$('#toast');t.textContent=m;t.className='on'+(err?' err':'');clearTimeout(tt);tt=setTimeout(()=>t.className='',3200)}
+function modal(title,body,foot,wide){$('#mbox').className='mbox'+(wide?' wide':'');$('#mbox').innerHTML=`<div class="mh"><b>${title}</b><button onclick="closeModal()" aria-label="بستن">×</button></div><div class="mb">${body}</div>${foot?`<div class="mf">${foot}</div>`:''}`;$('#modal').classList.add('on')}
+function closeModal(){$('#modal').classList.remove('on');$('#mbox').innerHTML=''}
+$('#modal').addEventListener('mousedown',e=>{if(e.target.id==='modal')closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+const view=h=>$('#view').innerHTML=h;
+const fld=(l,id,v='',t='text',x='')=>`<div class="f"><label for="${id}">${l}</label><input id="${id}" type="${t}" value="${esc(v)}" ${x}></div>`;
+const g=id=>$('#'+id).value;
+const debounce=(f,ms=250)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>f(...a),ms)}};
+const statusTag=s=>`<span class="tag ${{'جدید':'b','در حال آماده‌سازی':'a','ارسال شد':'a','تحویل شد':'g','لغو شده':'r'}[s]||''}">${esc(s)}</span>`;
+const payTag=s=>`<span class="tag ${s==='پرداخت شده'?'g':s==='پرداخت در محل'?'a':'r'}">${esc(s)}</span>`;
+const S={cfg:{},cur:'dashboard'};
+const cur=()=>esc(S.cfg.currency||'تومان');
+
+/* ───────── تقویم شمسی ───────── */
+const JM=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const JW=['ش','ی','د','س','چ','پ','ج'];
+const HOL={'1-1':'نوروز','1-2':'نوروز','1-3':'نوروز','1-4':'نوروز','1-12':'روز جمهوری اسلامی','1-13':'سیزده‌به‌در','3-14':'رحلت امام خمینی','3-15':'قیام ۱۵ خرداد','11-22':'پیروزی انقلاب اسلامی','12-29':'ملی شدن صنعت نفت'};
+function j2g(jy,jm,jd){jy+=1595;let days=-355668+(365*jy)+Math.floor(jy/33)*8+Math.floor(((jy%33)+3)/4)+jd+((jm<7)?(jm-1)*31:((jm-7)*30)+186);let gy=400*Math.floor(days/146097);days%=146097;if(days>36524){gy+=100*Math.floor(--days/36524);days%=36524;if(days>=365)days++}gy+=4*Math.floor(days/1461);days%=1461;if(days>365){gy+=Math.floor((days-1)/365);days=(days-1)%365}let gd=days+1;const sal=[0,31,((gy%4===0&&gy%100!==0)||(gy%400===0))?29:28,31,30,31,30,31,31,30,31,30,31];let gm;for(gm=0;gm<13&&gd>sal[gm];gm++)gd-=sal[gm];return[gy,gm,gd]}
+function jLeap(y){const[a,b,c]=j2g(y,12,30),r=g2j(a,b,c);return r[0]===y&&r[1]===12&&r[2]===30}
+const jLen=(y,m)=>m<=6?31:m<=11?30:(jLeap(y)?30:29);
+const isoOf=(y,m,d)=>y+'-'+String(m).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+const jIso=(y,m,d)=>{const[a,b,c]=j2g(y,m,d);return isoOf(a,b,c)};
+function jMonthStart(){const n=new Date(),j=g2j(n.getFullYear(),n.getMonth()+1,n.getDate())[2];return ymd(new Date(n.getFullYear(),n.getMonth(),n.getDate()-(j-1)))}
+let JP={inp:null,y:0,m:0};
+const jdpEl=()=>{let p=document.getElementById('jdp-pop');if(!p){p=document.createElement('div');p.id='jdp-pop';document.body.appendChild(p)}return p};
+function jdpOpen(inp){
+  let y,m;if(inp.dataset.v){[y,m]=g2j(...inp.dataset.v.split('-').map(Number))}else{const n=new Date();[y,m]=g2j(n.getFullYear(),n.getMonth()+1,n.getDate())}
+  JP={inp,y,m};jdpDraw();const p=jdpEl(),r=inp.getBoundingClientRect();p.style.display='block';
+  p.style.top=(r.bottom+340>window.innerHeight?Math.max(8,r.top-336):r.bottom+4)+'px';p.style.left=Math.max(8,Math.min(r.left,window.innerWidth-300))+'px'}
+function jdpClose(){const p=document.getElementById('jdp-pop');if(p)p.style.display='none'}
+function jdpNav(k){JP.m+=k;if(JP.m>12){JP.m=1;JP.y++}if(JP.m<1){JP.m=12;JP.y--}jdpDraw()}
+function jdpDraw(){
+  const p=jdpEl(),{y,m,inp}=JP,sel=inp.dataset.v,today=ymd(new Date());
+  const[gy,gm,gd]=j2g(y,m,1),off=(new Date(gy,gm-1,gd).getDay()+1)%7,len=jLen(y,m);
+  let cells='';for(let i=0;i<off;i++)cells+='<span></span>';
+  for(let d=1;d<=len;d++){const I=jIso(y,m,d),col=(off+d-1)%7,hol=HOL[m+'-'+d];
+    cells+=`<button type="button" class="jd ${col===6||hol?'red':''} ${I===today?'today':''} ${I===sel?'sel':''}" ${hol?`title="${hol}"`:''} onclick="jdpPick('${I}')">${faDigits(d)}</button>`}
+  const yrs=[];for(let k=y-6;k<=y+6;k++)yrs.push(k);
+  p.innerHTML=`<div class="jh"><button type="button" onclick="jdpNav(-1)" aria-label="ماه قبل">›</button><select onchange="JP.m=+this.value;jdpDraw()">${JM.map((n,i)=>`<option value="${i+1}" ${i+1===m?'selected':''}>${n}</option>`).join('')}</select><select onchange="JP.y=+this.value;jdpDraw()">${yrs.map(k=>`<option value="${k}" ${k===y?'selected':''}>${faDigits(k)}</option>`).join('')}</select><button type="button" onclick="jdpNav(1)" aria-label="ماه بعد">‹</button></div>
+  <div class="jw">${JW.map((w,i)=>`<b class="${i===6?'red':''}">${w}</b>`).join('')}</div><div class="jg">${cells}</div>
+  <div class="jf"><button type="button" onclick="jdpPick('${today}')">امروز</button><button type="button" onclick="jdpPick('')">پاک کردن</button></div>
+  <div class="jnote">جمعه‌ها و تعطیلات ثابت قرمزند (تعطیلات قمری نشان داده نمی‌شوند)</div>`}
+function jdpPick(I){const inp=JP.inp;inp.dataset.v=I;inp.value=I?jd(I):'';jdpClose();inp.dispatchEvent(new Event('change'))}
+function jdpTyped(inp){
+  const t=inp.value.trim();if(!t){inp.dataset.v='';return}
+  const m=t.replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).match(/^(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})$/);
+  if(m){const y=+m[1],mo=+m[2],d=+m[3];
+    if(y>=1700&&mo>=1&&mo<=12&&d>=1&&d<=31){inp.dataset.v=isoOf(y,mo,d);inp.value=jd(inp.dataset.v);return}
+    if(y<1700&&mo>=1&&mo<=12&&d>=1&&d<=jLen(y,mo)){inp.dataset.v=jIso(y,mo,d);inp.value=jd(inp.dataset.v);return}}
+  inp.value=inp.dataset.v?jd(inp.dataset.v):'';toast('تاریخ را مثل ۱۴۰۵/۰۷/۲۰ بنویسید',true)}
+const jinput=(id,v,on='',x='')=>`<input class="jdp" id="${id}" data-v="${esc(v||'')}" value="${v?jd(v):''}" placeholder="۱۴۰۵/۰۱/۰۱" autocomplete="off" inputmode="numeric" style="width:128px" onfocus="jdpOpen(this)" onclick="jdpOpen(this)" onchange="jdpTyped(this);${on}" ${x}>`;
+const jv=id=>$('#'+id).dataset.v||'';
+const jtime=(id,hh='09',mm='00')=>{const o=(n,sel)=>Array.from({length:n},(_,i)=>String(i).padStart(2,'0')).map(v=>`<option value="${v}" ${v===sel?'selected':''}>${faDigits(v)}</option>`).join('');return `<select id="${id}_h">${o(24,hh)}</select> : <select id="${id}_m">${o(60,mm)}</select>`};
+document.addEventListener('mousedown',e=>{const p=document.getElementById('jdp-pop');if(p&&p.style.display==='block'&&!p.contains(e.target)&&e.target!==JP.inp)jdpClose()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')jdpClose()});
+
+/* ───────── واحدها: عدد / بسته / کارتن ───────── */
+const UN={pc:'عدد',pack:'بسته',ctn:'کارتن'};
+function sizesOf(p){let P=+p.pack_size||0,C=+p.ctn_size||0;if(P&&C&&C%P)C=0;return[P,C]}
+const unitsOf=p=>{const[P,C]=sizesOf(p);return['pc'].concat(P?['pack']:[],C?['ctn']:[])};
+const usize=(p,u)=>{const[P,C]=sizesOf(p);return u==='pc'?1:u==='pack'?P:C};
+const priceOf=(p,u,t)=>u==='pc'?(+p[t]||0):(+p[u+'_'+t]||0);
+const unitName=(p,u)=>u==='pc'?'عدد':`${UN[u]} (${fa(usize(p,u))} عددی)`;
+const lowP=p=>+p.min_stock>0&&+p.stock<=+p.min_stock;
+const stTag=p=>`<span class="tag ${lowP(p)?'r':p.stock<=0?'':'g'}" title="جمعاً ${fa(p.stock)} عدد${+p.min_stock>0?' — حداقل '+fa(p.min_stock):''}">${p.stock<=0?'ناموجود':stockStr(p)}</span>`;
+const stockStr=p=>{const a=[];if(+p.stock_ctn)a.push(fa(p.stock_ctn)+' کارتن');if(+p.stock_pack)a.push(fa(p.stock_pack)+' بسته');if(+p.stock_pc||!a.length)a.push(fa(p.stock_pc||0)+' عدد');return a.join(' + ')};
+
+/* ───────── ناوبری ───────── */
+const IC={home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',box:'<path d="M21 8l-9-5-9 5v8l9 5 9-5zM3 8l9 5 9-5M12 13v8"/>',cart:'<circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/><path d="M2 3h3l2.5 12h11L21 7H6"/>',mega:'<path d="M3 10v4h4l8 5V5L7 10zM19 9a4 4 0 0 1 0 6"/>',wallet:'<path d="M3 7h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 7l2-3h12v3M16 13h3"/>',gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>'};
+const ico=k=>`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">${IC[k]||''}</svg>`;
+const MENU=[
+ {id:'dashboard',i:'home',t:'داشبورد'},
+ {i:'box',t:'کالا و انبار',items:[['products','محصولات'],['pricing','قیمت‌گذاری درصدی'],['inventory','انبار و موجودی']]},
+ {i:'cart',t:'فروش',items:[['orders','سفارش‌ها'],['customers','مشتریان']]},
+ {i:'mega',t:'انتشار و کانال‌ها',items:[['publish','انتشار در کانال‌ها'],['channels','کانال‌ها و اتصال'],['bot','ربات مشتری']]},
+ {i:'wallet',t:'مالی و گزارش',items:[['finance','درآمد و هزینه'],['cheques','چک‌ها'],['reports','گزارش فروش']]},
+ {i:'gear',t:'تنظیمات',items:[['settings','مشخصات فروشگاه'],['users','کاربران و دسترسی'],['backup','پشتیبان و انتقال']]}];
+const ADMIN_PAGES=['pricing','finance','cheques','account','reports','channels','bot','settings','users','backup'];
+const canSee=p=>S.me.role==='admin'||!ADMIN_PAGES.includes(p);
+const bdg=n=>n?`<em class="bdg">${fa(n)}</em>`:'';
+function drawNav(){
+  const B=S.badges||{};
+  $('#nav').innerHTML=MENU.map(g=>{
+    if(!g.items)return `<button data-p="${g.id}" class="${S.cur===g.id?'on':''}" onclick="go('${g.id}')"><i>${ico(g.i)}</i><span>${g.t}</span></button>`;
+    const its=g.items.filter(x=>canSee(x[0]));if(!its.length)return '';
+    const open=S.open===g.t,has=its.some(x=>x[0]===S.cur),sum=its.reduce((a,x)=>a+(B[x[0]]||0),0);
+    return `<button class="grp ${has?'has':''}" onclick="toggleGrp('${g.t}')" aria-expanded="${open}"><i>${ico(g.i)}</i><span class="fill">${g.t}</span>${open?'':bdg(sum)}<b class="arw ${open?'o':''}">▾</b></button>
+    <div class="sub" style="display:${open?'block':'none'}">${its.map(x=>`<button data-p="${x[0]}" class="${S.cur===x[0]?'on':''}" onclick="go('${x[0]}')"><span class="fill">${x[1]}</span>${bdg(B[x[0]])}</button>`).join('')}</div>`}).join('')
+}
+function toggleGrp(t){S.open=S.open===t?'':t;drawNav()}
+function buildNav(){drawNav()}
+async function refreshBadges(){try{S.badges=await api('nav_badges');drawNav()}catch(e){}}
+async function go(p){
+  clearInterval(S.pubTimer);
+  if(S.me.role!=='admin'&&ADMIN_PAGES.includes(p))p='dashboard';
+  S.cur=p;const g=MENU.find(g=>g.items&&g.items.some(x=>x[0]===p));if(g)S.open=g.t;drawNav();
+  try{await PG[p]()}catch(e){view(`<div class="card"><b>خطا:</b> ${esc(e.message)}</div>`)}
+  refreshBadges()}
+const head=(t,s,btn='')=>`<div class="bar"><div class="grow"><h1>${t}</h1><p class="sub" style="margin:0">${s}</p></div>${btn}</div>`;
+const emptyRow=(n,t='موردی وجود ندارد')=>`<tr><td colspan="${n}" class="empty">${t}</td></tr>`;
+
+const PG={};
+/* ───────── داشبورد ───────── */
+const goOrders=(st,pay)=>{OF.range='all';OF.status=st||'';OF.payment=pay||'';OF.printed='';OF.search='';OF.page=1;go('orders')};
+PG.dashboard=async()=>{
+  const d=await api('dashboard');
+  const mx=Math.max(1,...d.days.map(x=>x.total)),has=d.days.some(x=>x.total>0);
+  const bars=d.days.map((x,i)=>{const h=Math.max(Math.round(x.total/mx*110),4),dd=g2j(...x.date.split('-').map(Number))[2],last=i===d.days.length-1;
+    return `<div style="flex:1;text-align:center" title="${jd(x.date)} — ${fa(x.total)}"><i style="display:block;height:${h}px;background:${last?'var(--teal)':'#b9c7d2'};border-radius:3px;margin-bottom:6px"></i><small style="color:${last?'var(--ink)':'var(--muted)'}">${faDigits(dd)}</small></div>`}).join('');
+  const items=[];
+  if(d.new_orders)items.push(['var(--blue)',`<b>${fa(d.new_orders)}</b> سفارش جدید منتظر آماده‌سازی`,`goOrders('جدید')`,'مشاهده']);
+  if(d.unpaid_orders)items.push(['var(--amber)',`<b>${fa(d.unpaid_orders)}</b> سفارش پرداخت‌نشده`,`goOrders('','پرداخت نشده')`,'مشاهده']);
+  d.bots.forEach(b=>items.push(['var(--red)',`ربات ${b.platform==='bale'?'بله':'تلگرام'} («${esc(b.name)}») قطع است: ${esc(b.error)}`,`go('bot')`,'بررسی']));
+  if(d.failed_posts)items.push(['var(--red)',`<b>${fa(d.failed_posts)}</b> ارسال ناموفق در ۷ روز اخیر`,`go('publish')`,'مشاهده']);
+  if(d.cheques_due)items.push(['var(--amber)',`<b>${fa(d.cheques_due)}</b> چک سررسیده یا تا ۳ روز دیگر سررسید (جمعاً ${fa(d.cheques_due_sum)} ${cur()})`,`CQ.status='در جریان وصول';go('cheques')`,'مشاهده']);
+  if(d.low)items.push(['var(--amber)',`<b>${fa(d.low)}</b> کالا کمتر از حداقل موجودی`,`go('inventory')`,'مشاهده']);
+  if(d.backup_on&&(d.backup_age_h==null||d.backup_age_h>48))items.push(['var(--red)',d.backup_age_h==null?'هنوز پشتیبان‌گیری نشده':`آخرین پشتیبان ${fa(Math.round(d.backup_age_h/24))} روز پیش بوده`,`go('backup')`,'بررسی']);
+  view(head('داشبورد',`امروز ${jd(ymd(new Date()))}`,`<button class="btn p" onclick="go('orders');setTimeout(newOrder,150)">+ سفارش جدید</button>`)+`
+  <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:18px">
+   <div class="stat hero"><small>فروش امروز · ${fa(d.today_orders)} سفارش</small><b>${fa(d.today_sales)}</b> <small style="display:inline">${cur()}</small></div>
+   <div class="stat"><small>درآمد پرداخت‌شده‌ی این ماه</small><b>${fa(d.month_revenue)}</b> <small style="display:inline">${cur()}</small></div>
+   <div class="stat"><small>مطالبات وصول‌نشده</small><b>${fa(d.unpaid)}</b> <small style="display:inline">${cur()}</small></div></div>
+  <div class="grid" style="grid-template-columns:1.5fr 1fr;margin-bottom:18px;align-items:start">
+   <div class="card" style="margin:0"><h2>نیازمند اقدام</h2>${items.length?items.map(x=>`<div class="it"><i class="dt" style="background:${x[0]}"></i><span>${x[1]}</span><a onclick="${x[2]}">${x[3]}</a></div>`).join(''):'<div class="empty" style="padding:20px">موردی نیاز به اقدام ندارد.</div>'}
+    ${d.zero_nomin?`<p class="sub" style="margin:10px 0 0;font-size:12px">${fa(d.zero_nomin)} کالا موجودی صفر دارند ولی حداقل برایشان تعیین نشده؛ در هشدار نمی‌آیند.</p>`:''}</div>
+   <div class="card" style="margin:0"><h2>فروش ۷ روز اخیر</h2>${has?`<div style="display:flex;gap:10px;height:150px;align-items:flex-end;margin-top:12px">${bars}</div>`:'<div class="empty" style="padding:30px 10px">هنوز فروشی در این هفته ثبت نشده</div>'}</div></div>
+  <div class="card"><div class="bar" style="margin:0 0 4px"><h2 class="grow" style="margin:0">آخرین سفارش‌ها</h2><a style="color:var(--teal);cursor:pointer;font-size:13px" onclick="goOrders()">مشاهده همه</a></div>
+   ${d.recent.map(o=>`<div class="it" style="cursor:pointer" onclick="orderView(${o.id})"><span style="width:34px;color:var(--muted)">${fa(o.id)}</span><b style="width:180px">${esc(o.customer||'—')}</b><span class="num" style="width:120px">${fa(o.final_total)}</span>${statusTag(o.status)} ${payTag(o.payment)}</div>`).join('')||'<div class="empty" style="padding:20px">هنوز سفارشی ثبت نشده</div>'}</div>`)
+};
+
+/* ───────── محصولات ───────── */
+let CATS=[],PRC={src:'pc'};
+let PF={q:'',cat:''};const PSEL=new Set();
+const catOpts=()=>CATS.map(c=>`<option ${c===PF.cat?'selected':''}>${esc(c)}</option>`).join('');
+PG.products=async()=>{
+  PF={q:'',cat:''};PSEL.clear();CATS=await api('categories');
+  view(head('محصولات','قیمت و موجودی هر کالا به‌تفکیک عدد، بسته و کارتن',`${S.me.role==='admin'?'<button class="btn" onclick="importForm()">ورود از Excel</button> ':''}<button class="btn p" onclick="productForm()">+ محصول جدید</button>`)+`
+  <div class="bar"><input id="ps" placeholder="جستجوی نام، کد یا برند…" style="width:260px" oninput="PF.q=this.value;loadProducts()"><select id="pc" onchange="PF.cat=this.value;loadProducts()"><option value="">همه‌ی دسته‌ها</option>${catOpts()}</select><span id="p_cnt" class="sub" style="margin:0"></span></div>
+  <div class="bar" id="p_bulk" style="display:none"></div>
+  <div class="card tw" style="padding:0"><table><thead><tr><th class="ck"><input type="checkbox" id="p_all" onchange="pSelAll(this.checked)" title="انتخاب همه‌ی کالاهای نمایش‌داده‌شده"></th><th></th><th>کد</th><th>نام</th><th>دسته</th><th>واحدها</th><th>قیمت فروش</th><th>موجودی</th><th></th></tr></thead><tbody id="pt"></tbody></table></div>`);
+  fetchProducts()
+};
+let PL=[];
+const unitsTxt=p=>{const[P,C]=sizesOf(p),a=['عدد'];if(P)a.push('بسته '+fa(P));if(C)a.push('کارتن '+fa(C));return a.join(' · ')};
+async function fetchProducts(){PL=await api('products_list',{search:PF.q,category:PF.cat});drawProducts()}
+const loadProducts=debounce(fetchProducts,200);
+async function refreshProducts(){   // بعد از ذخیره/حذف: فقط فهرست دوباره خوانده می‌شود و جستجو و فیلتر می‌ماند
+  if(S.cur!=='products')return;
+  CATS=await api('categories');if(PF.cat&&!CATS.includes(PF.cat))PF.cat='';
+  const s=$('#pc');if(s){s.innerHTML='<option value="">همه‌ی دسته‌ها</option>'+catOpts();s.value=PF.cat}
+  await fetchProducts()
+}
+function drawProducts(){
+  $('#pt').innerHTML=PL.map(p=>`<tr style="${p.active?'':'opacity:.5'}"><td class="ck"><input type="checkbox" ${PSEL.has(p.id)?'checked':''} onchange="pSel(${p.id},this.checked)"></td><td>${p.image?`<img class="thumb" src="/img/${esc(p.image)}">`:'<div class="thumb"></div>'}</td><td>${esc(p.code)}</td><td><b>${esc(p.name)}</b><br><small style="color:var(--muted)">${esc(p.brand||'')}</small></td><td>${esc(p.category||'')}</td>
+  <td><small>${unitsTxt(p)}</small></td>
+  <td class="num" title="${esc(unitsOf(p).map(u=>`${UN[u]}: عمده ${fa(priceOf(p,u,'wholesale'))} — مصرف‌کننده ${fa(priceOf(p,u,'consumer'))}`).join(' | '))}">${unitsOf(p).map(u=>`<div>${UN[u]}: <b>${priceOf(p,u,'sale')?fa(priceOf(p,u,'sale')):'—'}</b></div>`).join('')}</td>
+  <td>${stTag(p)}</td>
+  <td style="white-space:nowrap"><button class="btn s" onclick="productForm(${p.id})">ویرایش</button> <button class="btn s d" onclick="productDel(${p.id})">حذف</button></td></tr>`).join('')||emptyRow(9,'محصولی پیدا نشد');
+  $('#p_cnt').textContent=`${fa(PL.length)} کالا`;pBulk()
+}
+function pBulk(){
+  const n=PSEL.size,b=$('#p_bulk');b.style.display=n?'flex':'none';
+  b.innerHTML=n?`<span class="tag b">${fa(n)} کالا انتخاب شده</span><button class="btn s" onclick="pCatSel()">تغییر دسته‌بندی</button><button class="btn s d" onclick="pDelSel()">حذف انتخاب‌شده‌ها</button><button class="btn s" onclick="PSEL.clear();drawProducts()">لغو انتخاب</button>`:'';
+  const all=$('#p_all');if(all)all.checked=PL.length>0&&PL.every(p=>PSEL.has(p.id))
+}
+function pSel(id,on){on?PSEL.add(id):PSEL.delete(id);pBulk()}
+function pSelAll(on){PL.forEach(p=>on?PSEL.add(p.id):PSEL.delete(p.id));drawProducts()}
+async function pDelSel(){
+  const n=PSEL.size;if(!n||!confirm(`${fa(n)} کالا حذف شود؟\nکالاهایی که در سفارش‌ها استفاده شده‌اند حذف نمی‌شوند و فقط غیرفعال می‌شوند.`))return;
+  const r=await act('products_delete',{ids:[...PSEL]});PSEL.clear();
+  toast(`${fa(r.deleted)} کالا حذف شد${r.deactivated?` و ${fa(r.deactivated)} کالا (چون در سفارش‌ها هست) غیرفعال شد`:''}`);refreshProducts()
+}
+function pCatSel(){modal(`تغییر دسته‌بندی ${fa(PSEL.size)} کالا`,`<div class="f"><label>دسته‌بندی جدید</label><input id="pc_new" list="catl2" autofocus><datalist id="catl2">${CATS.map(c=>`<option value="${esc(c)}">`).join('')}</datalist></div><p class="sub">برای برداشتن دسته‌بندی، خالی بگذارید.</p>`,`<button class="btn p" onclick="pCatSave()">اعمال</button>`)}
+async function pCatSave(){await act('products_set_category',{ids:[...PSEL],category:g('pc_new')},'دسته‌بندی تغییر کرد');closeModal();PSEL.clear();refreshProducts()}
+let IMG='';
+function shrink(file){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const m=1000,s=Math.min(1,m/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.85))};im.src=r.result};r.readAsDataURL(file)})}
+const fx=x=>x?String(Math.round(x*100)/100):'';
+function sizesForm(){const hp=$('#f_hp').checked,hc=$('#f_hc').checked,P=hp?num($('#f_ps').value):0,C=hc?(hp?num($('#f_cp').value)*P:num($('#f_cpc').value)):0;return{hp,hc,P,C}}
+function unitsChanged(){
+  const{hp,hc,P,C}=sizesForm();
+  $('#w_ps').style.display=hp?'':'none';$('#w_cp').style.display=(hc&&hp)?'':'none';$('#w_cpc').style.display=(hc&&!hp)?'':'none';
+  $('#r_pack').style.display=hp?'':'none';$('#r_ctn').style.display=hc?'':'none';
+  $('#l_pack').innerHTML=`<b>بسته</b>${P?` <small>(${fa(P)} عددی)</small>`:''}`;$('#l_ctn').innerHTML=`<b>کارتن</b>${C?` <small>(${fa(C)} عددی)</small>`:''}`;
+  const a=$('#w_sp'),b=$('#w_sc');if(a)a.style.display=hp?'':'none';if(b)b.style.display=hc?'':'none'
+}
+function perPiece(){const{P,C}=sizesForm(),v=u=>num($('#pp_'+u+'_prod').value);return PRC.src==='pack'&&P?v('pack')/P:PRC.src==='ctn'&&C?v('ctn')/C:v('pc')}
+function calcFromPiece(){
+  const{P,C}=sizesForm(),dp=num($('#f_dp').value),dc=num($('#f_dc').value),rt=+g('f_rnd')||0,rd=v=>rt?Math.round(v/rt)*rt:Math.round(v),cost=perPiece();
+  ['wholesale','sale','consumer'].forEach(t=>{const pp=num($('#pp_pc_'+t).value);if(!pp)return;if(P)$('#pp_pack_'+t).value=rd(pp*P*(1-dp/100));if(C)$('#pp_ctn_'+t).value=rd(pp*C*(1-dc/100))});
+  if(cost){$('#pp_pc_prod').value=fx(cost);if(P)$('#pp_pack_prod').value=fx(cost*P);if(C)$('#pp_ctn_prod').value=fx(cost*C)}
+  toast('محاسبه شد؛ هر خانه را می‌توانید دستی تغییر دهید')
+}
+function productForm(id){
+  const p=PL.find(x=>x.id===id)||{active:1};IMG='';PRC={src:'pc'};
+  const[P,C]=sizesOf(p),hp=!!P,hc=!!C,prod=+p.production||0;
+  const cell=(u,t,v)=>`<td><input id="pp_${u}_${t}" value="${v?esc(fx(v)):''}" inputmode="decimal" style="width:100%" ${t==='prod'?`oninput="PRC.src='${u}'"`:''}></td>`;
+  const row=(u,label,sz)=>`<tr id="r_${u}"><td id="l_${u}"><b>${label}</b></td>${cell(u,'prod',prod*sz)}${cell(u,'wholesale',priceOf(p,u,'wholesale'))}${cell(u,'sale',priceOf(p,u,'sale'))}${cell(u,'consumer',priceOf(p,u,'consumer'))}</tr>`;
+  modal(id?'ویرایش محصول':'محصول جدید',`
+  <div class="frow">${fld('نام محصول','f_name',p.name)}${fld('کد محصول','f_code',p.code,'text','placeholder="خودکار"')}${fld('برند','f_brand',p.brand)}
+  <div class="f"><label>دسته‌بندی</label><input id="f_cat" list="catl" value="${esc(p.category||'')}"><datalist id="catl">${CATS.map(c=>`<option value="${esc(c)}">`).join('')}</datalist></div></div>
+  <div class="card" style="background:#f7f9fa;padding:12px"><h2 style="margin-bottom:8px">واحدهای فروش</h2>
+   <p class="sub" style="margin:0 0 8px">«عدد» همیشه فعال است. بسته و کارتن را فقط اگر این کالا را به آن شکل می‌فروشید روشن کنید.</p>
+   <div class="bar" style="margin:0 0 8px"><label style="color:var(--ink);display:flex;gap:6px;align-items:center;margin:0"><input type="checkbox" id="f_hp" ${hp?'checked':''} onchange="unitsChanged()"> بسته دارد</label>
+    <span id="w_ps">تعداد در هر بسته: <input id="f_ps" value="${P||''}" style="width:80px" inputmode="numeric" oninput="unitsChanged()"></span></div>
+   <div class="bar" style="margin:0"><label style="color:var(--ink);display:flex;gap:6px;align-items:center;margin:0"><input type="checkbox" id="f_hc" ${hc?'checked':''} onchange="unitsChanged()"> کارتن دارد</label>
+    <span id="w_cp">تعداد بسته در هر کارتن: <input id="f_cp" value="${(P&&C)?C/P:''}" style="width:80px" inputmode="numeric" oninput="unitsChanged()"></span>
+    <span id="w_cpc">تعداد در هر کارتن: <input id="f_cpc" value="${(C&&!P)?C:''}" style="width:80px" inputmode="numeric" oninput="unitsChanged()"></span></div>
+   ${id?'<p class="sub" style="margin:8px 0 0">تغییر اندازه‌ی بسته یا کارتن در کالای دارای موجودی، «جمع کل» را تغییر می‌دهد.</p>':''}</div>
+  <div class="card" style="padding:12px"><h2 style="margin-bottom:8px">قیمت‌ها (هر خانه همان قیمت نهایی با تخفیف است)</h2>
+   <div class="tw"><table><thead><tr><th>واحد</th><th>قیمت تولید</th><th>عمده</th><th>فروش</th><th>مصرف‌کننده</th></tr></thead><tbody>${row('pc','عدد',1)}${row('pack','بسته',P)}${row('ctn','کارتن',C)}</tbody></table></div>
+   <div class="bar" style="margin:10px 0 0"><button type="button" class="btn s" onclick="calcFromPiece()">محاسبه‌ی بسته و کارتن از روی عدد</button>
+    <span>تخفیف بسته <input id="f_dp" value="0" style="width:52px"> ٪</span><span>تخفیف کارتن <input id="f_dc" value="0" style="width:52px"> ٪</span>
+    <span>رُند به <select id="f_rnd"><option value="0">بدون رُند</option><option value="100">۱۰۰</option><option value="500">۵۰۰</option><option value="1000" selected>۱٬۰۰۰</option></select></span></div>
+   <p class="sub" style="margin:8px 0 0">قیمت تولید را در هر واحدی بنویسید؛ برنامه آن را به قیمت هر عدد تبدیل می‌کند.</p></div>
+  ${id?'':`<div class="card" style="padding:12px"><h2 style="margin-bottom:8px">موجودی اولیه</h2><div class="bar" style="margin:0"><span id="w_sc">کارتن: <input id="f_sc" style="width:80px" inputmode="numeric"></span><span id="w_sp">بسته: <input id="f_sp" style="width:80px" inputmode="numeric"></span><span>عدد: <input id="f_sl" style="width:80px" inputmode="numeric"></span></div></div>`}
+  <div class="frow">${fld('حداقل موجودی برای هشدار (به عدد)','f_min',p.min_stock||'','text','inputmode="numeric"')}
+  <div class="f"><label>وضعیت</label><select id="f_act"><option value="1" ${p.active?'selected':''}>فعال</option><option value="0" ${p.active?'':'selected'}>غیرفعال</option></select></div></div>
+  <div class="f"><label>توضیحات (در پست کانال هم می‌آید)</label><textarea id="f_desc" rows="3">${esc(p.description||'')}</textarea></div>
+  <div class="f"><label>عکس محصول</label><input type="file" id="f_img" accept="image/*" onchange="pickImg(this)">
+  <div id="f_prev">${p.image?`<img class="pv" src="/img/${esc(p.image)}">`:''}</div></div>`,
+  `<button class="btn p" onclick="productSave(${id||0},'${esc(p.image||'')}')">ذخیره</button><button class="btn" onclick="closeModal()">انصراف</button>`,true);
+  unitsChanged()
+}
+async function pickImg(i){if(!i.files[0])return;IMG=await shrink(i.files[0]);$('#f_prev').innerHTML=`<img class="pv" src="${IMG}">`}
+async function productSave(id,oldImg){
+  const{hp,hc,P}=sizesForm(),V=(u,t)=>num($('#pp_'+u+'_'+t).value);
+  const p={id:id||undefined,name:g('f_name'),code:g('f_code'),brand:g('f_brand'),category:g('f_cat'),
+    pack_size:P,ctn_packs:(hp&&hc)?num(g('f_cp')):0,ctn_pieces:(!hp&&hc)?num(g('f_cpc')):0,production:perPiece(),
+    wholesale:V('pc','wholesale'),sale:V('pc','sale'),consumer:V('pc','consumer'),
+    pack_wholesale:V('pack','wholesale'),pack_sale:V('pack','sale'),pack_consumer:V('pack','consumer'),
+    ctn_wholesale:V('ctn','wholesale'),ctn_sale:V('ctn','sale'),ctn_consumer:V('ctn','consumer'),
+    stock_ctn:id?0:num(g('f_sc')),stock_pack:id?0:num(g('f_sp')),stock_pc:id?0:num(g('f_sl')),
+    min_stock:num(g('f_min')),active:+g('f_act'),description:g('f_desc'),image:oldImg,image_data:IMG};
+  const r=await act('product_save',{p},'ذخیره شد');closeModal();refreshProducts();
+  if(r&&r.warnings&&r.warnings.length)modal('هشدار قیمت (کالا ذخیره شد)',`<ul style="margin:0;padding-right:18px;line-height:2">${r.warnings.map(w=>`<li>${esc(w)}</li>`).join('')}</ul><p class="sub">اگر عمدی است، نادیده بگیرید؛ وگرنه کالا را ویرایش کنید.</p>`,`<button class="btn p" onclick="closeModal()">باشه</button>`)
+}
+async function productDel(id){if(!confirm('این محصول حذف شود؟'))return;toast(await act('product_delete',{id}));PSEL.delete(id);refreshProducts()}
+
+/* ───────── ورود از Excel ───────── */
+let IMP={name:'',b64:'',rows:[],counts:{},found:[]};
+const stem=n=>String(n||'').replace(/\.[^.\/\\]+$/,'').trim().toLowerCase();
+const readB64=f=>new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(f)});
+function importForm(){
+  IMP={name:'',b64:'',rows:[],counts:{},found:[]};
+  modal('ورود محصولات از Excel',`
+  <div class="hint"><b>مراحل:</b> ۱) <a href="/template/products.xlsx" style="color:inherit;font-weight:700">فایل نمونه</a> را دانلود و پر کنید (فقط «نام کالا» اجباری است؛ ستون‌های بسته و کارتن را فقط برای کالاهایی پر کنید که آن واحد را دارند). ۲) فایل را انتخاب و «بررسی فایل» را بزنید. ۳) نتیجه را ببینید و «ورود به برنامه» را بزنید.<br>
+  <b>عکس‌ها:</b> یا عکس را در Excel روی همان سطر بچسبانید (حالت معمولی Insert ← Pictures، نه «Place in Cell»)، یا فایل عکس‌ها را پایین انتخاب کنید؛ نام هر فایل باید با «کد کالا» یا ستون «نام فایل عکس» یکی باشد (مثلاً P101.jpg).</div>
+  <div class="frow"><div class="f"><label>فایل Excel یا CSV</label><input type="file" id="imp_f" accept=".xlsx,.xlsm,.csv"></div>
+   <div class="f"><label>اگر کالا از قبل بود (هم‌کد یا هم‌نام)</label><select id="imp_dup"><option value="update">به‌روزرسانی (فقط خانه‌های پرشده)</option><option value="skip">نادیده بگیر</option></select></div>
+   <div class="f"><label>موجودی</label><select id="imp_stock"><option value="set">برابر عدد فایل شود</option><option value="add">عدد فایل به موجودی اضافه شود</option><option value="ignore">موجودی را دست نزن</option></select></div></div>
+  <div class="f"><label>عکس‌ها (اختیاری، چند فایل)</label><input type="file" id="imp_i" accept="image/*" multiple onchange="impMatch()"></div>
+  <button class="btn" onclick="impPreview()">بررسی فایل</button><div id="imp_out" style="margin-top:14px"></div>`,
+  `<button class="btn p" id="imp_go" onclick="impApply()" disabled>ورود به برنامه</button><button class="btn" onclick="closeModal()">بستن</button>`,true)
+}
+async function impPreview(){
+  const f=$('#imp_f').files[0];if(!f)return toast('اول فایل Excel را انتخاب کنید',true);
+  $('#imp_out').innerHTML='<div class="sub">در حال خواندن فایل…</div>';
+  try{IMP.b64=await readB64(f);IMP.name=f.name;const d=await api('import_preview',{filename:f.name,data:IMP.b64});IMP.rows=d.rows;IMP.found=d.found;IMP.counts=d.counts;impDraw()}
+  catch(e){$('#imp_out').innerHTML='';$('#imp_go').disabled=true;if(e.message!=='AUTH')toast(e.message,true)}
+}
+function impDraw(){
+  const c=IMP.counts,r=IMP.rows;
+  $('#imp_out').innerHTML=`<div class="grid g4" style="margin-bottom:12px"><div class="stat"><small>کالای جدید</small><b>${fa(c.new)}</b></div><div class="stat"><small>به‌روزرسانی</small><b>${fa(c.update)}</b></div><div class="stat ${c.error?'warn':''}"><small>سطر خطادار (وارد نمی‌شود)</small><b>${fa(c.error)}</b></div><div class="stat"><small>عکس داخل فایل</small><b>${fa(c.images)}</b></div></div>
+  <p class="sub" style="margin:0 0 6px">ستون‌های شناخته‌شده: ${IMP.found.map(esc).join('، ')}</p><div id="imp_match" class="sub" style="margin-bottom:8px"></div>
+  <div class="tw" style="max-height:340px;overflow:auto"><table><thead><tr><th>سطر</th><th>کد</th><th>نام</th><th>دسته</th><th>واحدها</th><th>فروش (عدد)</th><th>موجودی</th><th>عکس</th><th>وضعیت</th></tr></thead><tbody>${r.slice(0,100).map(x=>`<tr><td>${fa(x.row)}</td><td>${esc(x.code)}</td><td>${esc(x.name)}</td><td>${esc(x.category)}</td><td><small>${[x.pack_size?'بسته '+fa(x.pack_size):'',x.ctn_packs?'کارتن '+fa(x.ctn_packs)+' بسته':x.ctn_pieces?'کارتن '+fa(x.ctn_pieces):''].filter(Boolean).join(' · ')}</small></td><td class="num">${x.sale==null?'':fa(x.sale)}</td><td class="num"><small>${[x.stock_ctn!=null?fa(x.stock_ctn)+' کارتن':'',x.stock_pack!=null?fa(x.stock_pack)+' بسته':'',x.stock!=null?fa(x.stock)+' عدد':''].filter(Boolean).join(' + ')}</small></td><td>${x.has_image?'داخل فایل':esc(x.image)}</td><td>${x.action==='error'?'<span class="tag r">خطا</span>':x.action==='new'?'<span class="tag g">جدید</span>':'<span class="tag b">به‌روزرسانی</span>'} ${x.msg?`<small style="color:${x.action==='error'?'var(--red)':'var(--amber)'}">${esc(x.msg)}</small>`:''}</td></tr>`).join('')}</tbody></table></div>${r.length>100?`<p class="sub">فقط ۱۰۰ سطر اول نمایش داده شده؛ در کل ${fa(r.length)} سطر بررسی شد.</p>`:''}`;
+  $('#imp_go').disabled=(c.new+c.update)===0;impMatch()
+}
+function impMatch(){
+  const el=$('#imp_match');if(!el||!IMP.rows.length)return;
+  const files=[...($('#imp_i').files||[])];if(!files.length){el.textContent='';return}
+  const keys=new Set(files.map(f=>stem(f.name))),used=new Set();let n=0;
+  IMP.rows.forEach(x=>{if(x.action==='error'||x.has_image)return;const k=x.image?stem(x.image):stem(x.code);if(keys.has(k)){n++;used.add(k)}});
+  el.innerHTML=`عکس‌ها: <b>${fa(n)}</b> کالا عکس می‌گیرند — <b>${fa(files.length-used.size)}</b> فایل عکس به هیچ کالایی نخورد`
+}
+async function impApply(){
+  const go=$('#imp_go');go.disabled=true;
+  try{
+    const r=await api('import_apply',{filename:IMP.name,data:IMP.b64,on_duplicate:g('imp_dup'),stock_mode:g('imp_stock')});
+    const files=[...($('#imp_i').files||[])],map=new Map(files.map(f=>[stem(f.name),f])),byRow=new Map(IMP.rows.map(x=>[x.row,x]));
+    const todo=r.items.filter(it=>!it.embedded).map(it=>{const x=byRow.get(it.row)||{};const f=map.get(x.image?stem(x.image):stem(it.code));return f?{code:it.code,f}:null}).filter(Boolean);
+    let ok=0,bad=0;
+    for(let i=0;i<todo.length;i++){
+      $('#imp_out').innerHTML=`<div class="hint">در حال بارگذاری عکس‌ها… ${fa(i+1)} از ${fa(todo.length)}</div>`;
+      try{await api('product_image_set',{code:todo[i].code,image_data:await shrink(todo[i].f)});ok++}catch(e){bad++}
+    }
+    $('#imp_out').innerHTML=`<div class="card" style="border-color:var(--teal)"><h2>✅ ورود انجام شد</h2><p style="margin:0">${fa(r.created)} کالای جدید، ${fa(r.updated)} به‌روزرسانی${r.skipped?`، ${fa(r.skipped)} نادیده`:''}${r.error_count?`، ${fa(r.error_count)} سطر خطادار وارد نشد`:''}.<br>عکس: ${fa(r.images+ok)} ثبت شد${bad?`، ${fa(bad)} ناموفق`:''}.</p>${r.errors.length?`<table style="margin-top:10px"><tbody>${r.errors.map(e=>`<tr><td>سطر ${fa(e.row)}</td><td>${esc(e.msg)}</td></tr>`).join('')}</tbody></table>`:''}</div>`;
+    refreshProducts()
+  }catch(e){go.disabled=false;if(e.message!=='AUTH')toast(e.message,true)}
+}
+
+/* ───────── قیمت‌گذاری درصدی ───────── */
+PG.pricing=async()=>{
+  const cats=await api('categories');
+  view(head('قیمت‌گذاری درصدی','قیمت عدد، بسته و کارتن هر کالا را با یک درصد تغییر دهید')+`
+  <div class="card"><div class="frow">
+   <div class="f"><label>محاسبه‌ی قیمت</label><select id="pr_f"><option value="wholesale">عمده</option><option value="sale" selected>فروش</option><option value="consumer">مصرف‌کننده</option></select></div>
+   <div class="f"><label>بر اساس قیمت پایه‌ی (همان واحد)</label><select id="pr_b"><option value="production" selected>تولید</option><option value="wholesale">عمده</option><option value="sale">فروش</option></select></div>
+   ${fld('درصد افزایش','pr_p','20','text','inputmode="decimal"')}
+   <div class="f"><label>رُند کردن به</label><select id="pr_r"><option value="0">بدون رُند</option><option value="100">۱۰۰</option><option value="500">۵۰۰</option><option value="1000" selected>۱٬۰۰۰</option><option value="10000">۱۰٬۰۰۰</option></select></div>
+   <div class="f"><label>دسته‌بندی</label><select id="pr_c"><option value="">همه‌ی محصولات</option>${cats.map(c=>`<option>${esc(c)}</option>`).join('')}</select></div></div>
+   <button class="btn" onclick="pricingRun(false)">پیش‌نمایش</button> <button class="btn p" onclick="pricingRun(true)">اعمال روی محصولات</button></div>
+  <div class="card tw" style="padding:0"><table><thead><tr><th>کد</th><th>محصول</th><th>عدد</th><th>بسته</th><th>کارتن</th></tr></thead><tbody id="prt">${emptyRow(5,'برای دیدن نتیجه «پیش‌نمایش» بزنید')}</tbody></table></div>`);
+};
+async function pricingRun(apply){
+  if(apply&&!confirm('قیمت عدد، بسته و کارتن همه‌ی محصولات انتخابی تغییر می‌کند. ادامه می‌دهید؟'))return;
+  const r=await act('pricing',{field:g('pr_f'),base:g('pr_b'),percent:g('pr_p').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)),round_to:g('pr_r'),category:g('pr_c'),apply},apply?'قیمت‌ها به‌روز شد':'');
+  const c=(x,u)=>{const v=x.units.find(y=>y.unit===u);return v?`<span style="color:var(--muted)">${fa(v.old)}</span> ← <b style="color:var(--teal)">${fa(v.new)}</b>`:'<span style="color:var(--muted)">—</span>'};
+  $('#prt').innerHTML=r.map(x=>`<tr><td>${esc(x.code)}</td><td>${esc(x.name)}</td><td class="num">${c(x,'pc')}</td><td class="num">${c(x,'pack')}</td><td class="num">${c(x,'ctn')}</td></tr>`).join('')||emptyRow(5)
+}
+
+/* ───────── انبار ───────── */
+let INV=[],IQ='';
+const nrm=s=>String(s??'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/\u200c/g,' ').toLowerCase();
+function invRows(){
+  const w=nrm(IQ).split(/\s+/).filter(Boolean);
+  const l=INV.filter(p=>{const h=nrm([p.code,p.name,p.brand,p.category].join(' '));return w.every(x=>h.includes(x))});
+  $('#invb').innerHTML=l.map(p=>`<tr><td>${p.image?`<img class="thumb" src="/img/${esc(p.image)}">`:'<div class="thumb"></div>'}</td><td>${esc(p.code)}</td><td>${esc(p.name)}<br><small style="color:var(--muted)">${esc(unitsTxt(p))}</small></td><td>${esc(p.category||'')}</td>
+  <td>${stTag(p)}</td><td class="num">${p.stock?fa(p.stock):'—'}</td><td class="num">${p.min_stock?fa(p.min_stock):'—'}</td>
+  <td style="white-space:nowrap"><button class="btn s" onclick="stockForm(${p.id})">ورود / خروج</button> ${(sizesOf(p)[0]||sizesOf(p)[1])?`<button class="btn s" onclick="convForm(${p.id})">باز کردن / بسته‌بندی</button> `:''}<button class="btn s" onclick="stockLog(${p.id})">تاریخچه</button></td></tr>`).join('')||emptyRow(8,IQ?'کالایی با این جستجو پیدا نشد':undefined);
+  $('#invn').textContent=IQ?fa(l.length)+' از '+fa(INV.length)+' کالا':'';
+}
+const invFind=debounce(invRows,150);
+async function invReload(){INV=await api('inventory');invRows()}
+PG.inventory=async()=>{
+  INV=await api('inventory');IQ='';
+  view(head('انبار و موجودی','موجودی هر کالا به‌صورت کارتن، بسته و عدد؛ موجودی کم‌تر از حداقل قرمز است')+`<div class="bar"><input id="is" placeholder="جستجوی نام، کد، برند یا دسته…" style="width:300px" oninput="IQ=this.value;invFind()"><span id="invn" class="sub" style="margin:0"></span></div>
+  <div class="card tw" style="padding:0"><table><thead><tr><th></th><th>کد</th><th>محصول</th><th>دسته</th><th>موجودی</th><th>جمع (عدد)</th><th>حداقل (عدد)</th><th></th></tr></thead><tbody id="invb"></tbody></table></div>`);
+  invRows();
+};
+function stockForm(id){
+  const p=INV.find(x=>x.id===id);
+  modal('ورود و خروج — '+esc(p.name),`<p class="sub" style="margin-top:0">موجودی فعلی: <b>${stockStr(p)}</b> (جمعاً ${fa(p.stock)} عدد)</p>
+  <div class="frow"><div class="f"><label>عملیات</label><select id="s_dir"><option value="1">ورود به انبار (+)</option><option value="-1">خروج از انبار (−)</option></select></div>
+  <div class="f"><label>واحد</label><select id="s_u">${unitsOf(p).map(u=>`<option value="${u}">${unitName(p,u)}</option>`).join('')}</select></div>
+  ${fld('تعداد','s_q','','text','inputmode="numeric"')}</div>${fld('دلیل (اختیاری)','s_r','')}
+  <p class="sub">در «خروج»، اگر موجودی همان واحد کم باشد، از واحد بالاتر باز می‌شود (اگر «باز شدن خودکار» در تنظیمات روشن باشد).</p>`,`<button class="btn p" onclick="stockSave(${id})">ثبت</button>`)}
+async function stockSave(id){const q=num(g('s_q'));if(!q)return toast('تعداد را وارد کنید',true);await act('stock_adjust',{product_id:id,unit:g('s_u'),qty:q*(+g('s_dir')),reason:g('s_r')},'ثبت شد');closeModal();invReload()}
+function convForm(id){
+  const p=INV.find(x=>x.id===id),[P,C]=sizesOf(p),ops=[];
+  if(C)ops.push(['open_ctn',`باز کردن کارتن ← ${P?'بسته':'عدد'}`,'تعداد کارتن'],['make_ctn',`بسته‌بندی در کارتن`,'تعداد کارتن‌های جدید']);
+  if(P)ops.push(['open_pack','باز کردن بسته ← عدد','تعداد بسته'],['make_pack','بسته‌بندی: عدد ← بسته','تعداد بسته‌های جدید']);
+  modal('باز کردن / بسته‌بندی — '+esc(p.name),`<p class="sub" style="margin-top:0">موجودی فعلی: <b>${stockStr(p)}</b></p>
+  <div class="frow"><div class="f"><label>عملیات</label><select id="cv_op">${ops.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join('')}</select></div>${fld('تعداد (واحد بزرگ‌تر)','cv_n','1','text','inputmode="numeric"')}</div>
+  <p class="sub">مثلاً «باز کردن کارتن» ۱ عدد، یک کارتن را کم و محتویاتش را به بسته یا عدد اضافه می‌کند. جمع کل تغییر نمی‌کند.</p>`,`<button class="btn p" onclick="convSave(${id})">انجام</button>`)}
+async function convSave(id){const m=await act('stock_convert',{product_id:id,op:g('cv_op'),n:num(g('cv_n'))});toast(m);closeModal();invReload()}
+async function stockLog(id){
+  const l=await api('stock_log',{product_id:id});
+  const lab=x=>x.unit&&UN[x.unit]?`${x.qty>0?'+':''}${fa(x.qty)} ${UN[x.unit]}`:(x.unit==='open'||x.unit==='conv')?'—':`${x.delta>0?'+':''}${fa(x.delta)} عدد`;
+  const col=x=>(x.qty!=null&&x.unit&&UN[x.unit]?x.qty:x.delta)<0?'var(--red)':'var(--teal)';
+  modal('تاریخچه‌ی موجودی',`<table><thead><tr><th>تاریخ</th><th>تغییر</th><th>توضیح</th></tr></thead><tbody>${l.map(x=>`<tr><td>${jd(x.created,1)}</td><td class="num" style="color:${col(x)}">${lab(x)}</td><td>${esc(x.reason)}</td></tr>`).join('')||emptyRow(3)}</tbody></table>`)}
+
+/* ───────── مشتریان ───────── */
+let CL=[];
+let CF={q:''};
+PG.customers=async()=>{
+  CF={q:''};
+  view(head('مشتریان','','<button class="btn p" onclick="custForm()">+ مشتری جدید</button>')+`<div class="bar"><input id="cs" placeholder="جستجوی نام، تلفن یا شهر…" style="width:260px" oninput="CF.q=this.value;loadCust()"></div>
+  <div class="card tw" style="padding:0"><table><thead><tr><th>نام</th><th>تلفن</th><th>شهر</th><th>گروه</th><th>تعداد سفارش</th><th>جمع خرید</th>${S.me.role==='admin'?'<th>مانده حساب</th>':''}<th></th></tr></thead><tbody id="ct"></tbody></table></div>`);fetchCust()
+};
+async function fetchCust(){CL=await api('customers_list',{search:CF.q});
+  $('#ct').innerHTML=CL.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.phone||'')}</td><td>${esc(c.city||'')}</td><td>${esc(c.group_name||'')}</td><td class="num">${fa(c.orders)}</td><td class="num">${fa(c.spent)}</td>${S.me.role==='admin'?`<td class="num">${c.balance?fa(Math.abs(c.balance))+' '+balTag(c.balance):'—'}${c.cheque_pending?`<br><small style="color:var(--amber)">چک در جریان: ${fa(c.cheque_pending)}</small>`:''}</td>`:''}<td style="white-space:nowrap">${S.me.role==='admin'?`<button class="btn s" onclick="openAccount(${c.id})">حساب</button> `:''}<button class="btn s" onclick="custForm(${c.id})">ویرایش</button> <button class="btn s d" onclick="custDel(${c.id})">حذف</button></td></tr>`).join('')||emptyRow(S.me.role==='admin'?8:7)}
+const loadCust=debounce(fetchCust,200);
+async function refreshCustomers(){if(S.cur==='customers')await fetchCust()}
+function custForm(id){const c=CL.find(x=>x.id===id)||{};
+  modal(id?'ویرایش مشتری':'مشتری جدید',`<div class="frow">${fld('نام','c_n',c.name)}${fld('تلفن','c_p',c.phone)}${fld('شهر','c_c',c.city)}${fld('گروه (مثلاً عمده‌فروش)','c_g',c.group_name)}
+  <div class="f"><label>واحد پیش‌فرض سفارش</label><select id="c_du">${['pc','pack','ctn'].map(u=>`<option value="${u}" ${(c.default_unit||'pc')===u?'selected':''}>${UN[u]}</option>`).join('')}</select></div>
+  <div class="f"><label>نوع قیمت پیش‌فرض</label><select id="c_dp">${[['sale','فروش'],['wholesale','عمده'],['consumer','مصرف‌کننده']].map(o=>`<option value="${o[0]}" ${(c.default_price||'sale')===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></div></div>${fld('آدرس','c_a',c.address)}${fld('یادداشت','c_o',c.note)}`,`<button class="btn p" onclick="custSave(${id||0})">ذخیره</button>`)}
+async function custSave(id){await act('customer_save',{c:{id:id||undefined,name:g('c_n'),phone:g('c_p'),city:g('c_c'),group_name:g('c_g'),address:g('c_a'),note:g('c_o'),default_unit:g('c_du'),default_price:g('c_dp')}},'ذخیره شد');closeModal();refreshCustomers()}
+async function custDel(id){if(!confirm('حذف شود؟'))return;await act('customer_delete',{id},'حذف شد');refreshCustomers()}
+
+/* ───────── حساب مشتری و چک‌ها (فقط مدیر) ───────── */
+const CHQ=['در جریان وصول','وصول شد','برگشت خورد'];
+const PAYM=['نقد','کارت به کارت / واریز','سایر'];
+const chqTag=s=>`<span class="tag ${s==='وصول شد'?'g':s==='برگشت خورد'?'r':'a'}">${esc(s)}</span>`;
+const balTag=b=>b>0?'<span class="tag r">بدهکار</span>':b<0?'<span class="tag g">بستانکار</span>':'<span class="tag">تسویه</span>';
+const dueTxt=d=>d==null?'':d<0?`<small style="color:var(--red)">${fa(-d)} روز گذشته</small>`:d===0?'<small style="color:var(--red)">امروز</small>':d<=3?`<small style="color:var(--amber)">${fa(d)} روز دیگر</small>`:`<small style="color:var(--muted)">${fa(d)} روز دیگر</small>`;
+let ACC={id:0,ch:[]};
+function openAccount(id){ACC.id=id;go('account')}
+async function refreshAcc(){if(S.cur==='cheques')await PG.cheques();else if(S.cur==='account')await PG.account()}
+
+PG.account=async()=>{
+  const a=await api('customer_account',{customer_id:ACC.id}),c=a.customer,t=a.totals;ACC.ch=a.cheques;ACC.bal=a.balance;
+  const rows=a.entries.map(e=>{
+    let desc=esc(e.desc),act='';
+    if(e.kind==='cheque'){desc+=` ${chqTag(e.status)} <small style="color:var(--muted)">سررسید ${jd(e.due_date)}</small>`;act=`<button class="btn s" onclick="chqForm(${e.id})">ویرایش</button>`}
+    if(e.kind==='payment')act=`<button class="btn s d" onclick="payDel(${e.id})">حذف</button>`;
+    if(e.kind==='order')act=`<button class="btn s" onclick="orderView(${e.id})">مشاهده</button>`;
+    return `<tr><td>${jd(e.date)}</td><td>${desc}</td><td class="num">${e.debit?fa(e.debit):'—'}</td><td class="num">${e.credit?fa(e.credit):'—'}</td><td class="num"><b>${fa(e.balance)}</b></td><td style="white-space:nowrap">${act}</td></tr>`}).join('');
+  view(head(`حساب ${esc(c.name)}`,`${esc(c.phone||'')}${c.city?' · '+esc(c.city):''}`,
+    `<button class="btn" onclick="go('customers')">بازگشت</button> <button class="btn" onclick="payForm()">+ دریافت وجه</button> <button class="btn p" onclick="chqForm()">+ ثبت چک</button>`)+`
+  <div class="grid g4" style="margin-bottom:18px">
+   <div class="stat"><small>فاکتورهای پرداخت‌نشده</small><b>${fa(t.debt)}</b></div>
+   <div class="stat"><small>دریافتی (نقد و چک)</small><b>${fa(t.paid+t.cheque)}</b></div>
+   <div class="stat hero"><small>مانده حساب ${balTag(a.balance)}</small><b>${fa(Math.abs(a.balance))}</b> <small style="display:inline">${cur()}</small></div>
+   <div class="stat"><small>چک‌های در جریان وصول</small><b>${fa(t.pending)}</b></div></div>
+  <p class="sub">مانده مثبت یعنی مشتری بدهکار است. فاکتورِ «پرداخت شده» خودش تسویه حساب می‌شود؛ برای فاکتورهایی که با چک یا واریز جداگانه پرداخت می‌شوند، وضعیت فاکتور را «پرداخت نشده» بگذارید و چک یا پرداخت را اینجا ثبت کنید. چکِ «برگشت خورد» از مانده کم نمی‌شود.</p>
+  <div class="card tw" style="padding:0"><table><thead><tr><th>تاریخ</th><th>شرح</th><th>بدهکار</th><th>بستانکار</th><th>مانده</th><th></th></tr></thead><tbody>${rows||emptyRow(6,'هنوز گردشی ثبت نشده')}</tbody></table></div>`)
+};
+function payForm(){
+  modal('دریافت وجه',`<div class="frow">${fld('مبلغ','p_a',ACC.bal>0?ACC.bal:'','text','inputmode="numeric"')}<div class="f"><label>تاریخ</label>${jinput('p_d',ymd(new Date()))}</div>
+  <div class="f"><label>روش</label><select id="p_m">${PAYM.map(m=>`<option>${m}</option>`).join('')}</select></div></div>${fld('یادداشت','p_n')}
+  <p class="sub">مبلغ به‌طور پیش‌فرض برابر مانده‌ی فعلی است (تسویه کامل). برای دریافت چک از «ثبت چک» استفاده کنید.</p>`,`<button class="btn p" onclick="paySave()">ثبت</button>`)}
+async function paySave(){await act('payment_save',{p:{customer_id:ACC.id,amount:num(g('p_a')),date:jv('p_d'),method:g('p_m'),note:g('p_n')}},'ثبت شد');closeModal();PG.account()}
+async function payDel(id){if(!confirm('این دریافت حذف شود؟'))return;await act('payment_delete',{id},'حذف شد');PG.account()}
+
+function chqForm(id){
+  const c=(ACC.ch||[]).find(x=>x.id===id)||{};
+  modal(id?'ویرایش چک':'ثبت چک',`<div class="frow">${fld('شماره چک','q_no',c.cheque_no,'text','inputmode="numeric"')}${fld('شماره صیاد (اختیاری)','q_sy',c.sayad_no,'text','inputmode="numeric"')}${fld('بانک','q_bk',c.bank)}</div>
+  <div class="frow">${fld('مبلغ','q_a',c.amount||'','text','inputmode="numeric"')}<div class="f"><label>تاریخ دریافت</label>${jinput('q_d',c.date||ymd(new Date()))}</div><div class="f"><label>تاریخ سررسید</label>${jinput('q_due',c.due_date||'')}</div></div>
+  ${id?`<div class="f"><label>وضعیت</label><select id="q_st">${CHQ.map(s=>`<option ${s===c.status?'selected':''}>${s}</option>`).join('')}</select></div>`:''}${fld('یادداشت','q_n',c.note)}`,
+  `<button class="btn p" onclick="chqSave(${id||0})">ذخیره</button>${id?` <button class="btn d" onclick="chqDel(${id})">حذف چک</button>`:''}`)}
+async function chqSave(id){
+  const c={id:id||undefined,customer_id:ACC.id,cheque_no:g('q_no'),sayad_no:g('q_sy'),bank:g('q_bk'),amount:num(g('q_a')),date:jv('q_d'),due_date:jv('q_due'),note:g('q_n')};
+  if(id)c.status=g('q_st');
+  await act('cheque_save',{c},'ذخیره شد');closeModal();refreshAcc()}
+async function chqDel(id){if(!confirm('این چک حذف شود؟ (اگر فقط برگشت خورده، وضعیتش را عوض کنید)'))return;await act('cheque_delete',{id},'حذف شد');closeModal();refreshAcc()}
+async function chqSet(id,st){
+  if(st==='برگشت خورد'&&!confirm('چک برگشت خورده و دوباره به مانده‌ی مشتری اضافه شود؟'))return;
+  await act('cheque_status',{id,status:st},'وضعیت چک تغییر کرد');refreshAcc()}
+
+/* ───────── فهرست چک‌ها ───────── */
+let CQ={status:'در جریان وصول',q:''};
+PG.cheques=async()=>{
+  view(head('چک‌ها','چک‌های دریافتی از مشتریان؛ ثبت چک از «مشتریان ← حساب» انجام می‌شود')+`
+  <div class="grid g4" style="margin-bottom:18px" id="cq_st"></div>
+  <div class="bar"><select id="cq_s" onchange="CQ.status=this.value;fetchChq()"><option value="">همه‌ی وضعیت‌ها</option>${CHQ.map(s=>`<option ${s===CQ.status?'selected':''}>${s}</option>`).join('')}</select>
+   <input id="cq_q" placeholder="جستجوی مشتری، شماره چک، صیاد یا بانک…" style="width:300px" value="${esc(CQ.q)}" oninput="CQ.q=this.value;loadChq()"></div>
+  <div class="card tw" style="padding:0"><table><thead><tr><th>سررسید</th><th>مشتری</th><th>شماره چک</th><th>بانک</th><th>مبلغ</th><th>وضعیت</th><th></th></tr></thead><tbody id="cq_t"></tbody></table></div>`);
+  fetchChq()
+};
+async function fetchChq(){
+  const r=await api('cheques_list',{status:CQ.status,search:CQ.q});
+  $('#cq_st').innerHTML=`<div class="stat"><small>در جریان وصول</small><b>${fa(r.pending_n)}</b></div><div class="stat hero"><small>جمع مبلغ در جریان وصول</small><b>${fa(r.pending_sum)}</b> <small style="display:inline">${cur()}</small></div><div class="stat"><small>سررسیده یا تا ۳ روز آینده</small><b>${fa(r.due_n)}</b></div><div class="stat"><small>جمع مبلغ آن‌ها</small><b>${fa(r.due_sum)}</b></div>`;
+  $('#cq_t').innerHTML=r.rows.map(c=>`<tr><td>${jd(c.due_date)}<br>${dueTxt(c.days)}</td><td><a style="color:var(--teal);cursor:pointer" onclick="openAccount(${c.customer_id})">${esc(c.customer||'—')}</a></td><td>${esc(c.cheque_no)}${c.sayad_no?`<br><small style="color:var(--muted)">صیاد ${esc(c.sayad_no)}</small>`:''}</td><td>${esc(c.bank||'')}</td><td class="num">${fa(c.amount)}</td><td>${chqTag(c.status)}</td>
+   <td style="white-space:nowrap">${c.status==='در جریان وصول'?`<button class="btn s" onclick="chqSet(${c.id},'وصول شد')">وصول شد</button> <button class="btn s d" onclick="chqSet(${c.id},'برگشت خورد')">برگشت خورد</button>`:`<button class="btn s" onclick="chqSet(${c.id},'در جریان وصول')">برگرداندن به «در جریان»</button>`}</td></tr>`).join('')||emptyRow(7,'چکی پیدا نشد')}
+const loadChq=debounce(fetchChq,200);
+
+/* ───────── سفارش‌ها ───────── */
+const OF={range:'today',start:'',end:'',status:'',payment:'',printed:'',search:'',page:1,per:25};
+const SEL=new Set();let ORD=[],PRINT_IDS=[];
+const RANGES=[['today','امروز'],['yesterday','دیروز'],['week','۷ روز اخیر'],['month','این ماه'],['all','همه'],['custom','بازه‌ی دلخواه']];
+function rangeDates(){
+  const n=new Date(),add=k=>new Date(n.getFullYear(),n.getMonth(),n.getDate()+k);
+  switch(OF.range){
+   case 'today':return{start:ymd(n),end:ymd(n)};
+   case 'yesterday':return{start:ymd(add(-1)),end:ymd(add(-1))};
+   case 'week':return{start:ymd(add(-6)),end:ymd(n)};
+   case 'month':{const j=g2j(n.getFullYear(),n.getMonth()+1,n.getDate())[2];return{start:ymd(add(-(j-1))),end:ymd(n)}}
+   case 'custom':return{start:OF.start,end:OF.end};
+   default:return{start:'',end:''}}
+}
+const orderFilters=()=>{const r=rangeDates();return{start:r.start,end:r.end,status:OF.status,payment:OF.payment,printed:OF.printed,search:OF.search}};
+const printFilters=()=>SEL.size?{ids:[...SEL].join(',')}:orderFilters();
+PG.orders=async()=>{
+  S.cfg=await api('settings_get');
+  view(head('سفارش‌ها','هر روز فقط سفارش‌های همان روز را ببینید و چاپ کنید','<button class="btn p" onclick="newOrder()">+ سفارش جدید</button>')+`
+  <div class="card" style="padding:14px"><div class="bar" id="o_chips" style="margin-bottom:10px"></div>
+   <div class="bar" style="margin:0">
+    <select id="o_st" onchange="setF('status',this.value)"><option value="">همه‌ی وضعیت‌ها</option>${S.cfg._statuses.map(s=>`<option>${s}</option>`).join('')}</select>
+    <select id="o_pay" onchange="setF('payment',this.value)"><option value="">همه‌ی پرداخت‌ها</option>${S.cfg._payments.map(s=>`<option>${s}</option>`).join('')}</select>
+    <select id="o_pr" onchange="setF('printed',this.value)"><option value="">چاپ‌شده و نشده</option><option value="0">فقط چاپ‌نشده</option><option value="1">فقط چاپ‌شده</option></select>
+    <input id="o_q" placeholder="نام مشتری، تلفن یا شماره سفارش…" style="width:260px" oninput="OF.search=this.value;OF.page=1;loadOrdersD()"></div></div>
+  <div class="bar" id="o_sum"></div>
+  <div class="card tw" style="padding:0"><table><thead><tr><th class="ck"><input type="checkbox" onchange="selPage(this.checked)" title="انتخاب همه‌ی این صفحه"></th><th>#</th><th>زمان</th><th>مشتری</th><th>منبع</th><th>مبلغ</th><th>وضعیت</th><th>پرداخت</th><th></th></tr></thead><tbody id="ot"></tbody></table></div>
+  <div class="bar" id="o_pg" style="justify-content:space-between"></div>`);
+  $('#o_st').value=OF.status;$('#o_pay').value=OF.payment;$('#o_pr').value=OF.printed;$('#o_q').value=OF.search;
+  drawChips();loadOrders()
+};
+function drawChips(){
+  $('#o_chips').innerHTML=RANGES.map(r=>`<button class="chip ${OF.range===r[0]?'on':''}" onclick="setRange('${r[0]}')">${r[1]}</button>`).join('')+
+   (OF.range==='custom'?` <label style="margin:0 8px 0 0">از</label>${jinput('o_from',OF.start,"OF.start=jv('o_from');OF.page=1;loadOrders()")}<label style="margin:0">تا</label>${jinput('o_to',OF.end,"OF.end=jv('o_to');OF.page=1;loadOrders()")}`:'');
+}
+function setRange(r){OF.range=r;OF.page=1;if(r==='custom'&&!OF.start){OF.start=OF.end=ymd(new Date())}drawChips();loadOrders()}
+function setF(k,v){OF[k]=v;OF.page=1;loadOrders()}
+const selToggle=(id,on)=>{on?SEL.add(id):SEL.delete(id);loadOrdersSum()};
+function selPage(on){ORD.forEach(o=>on?SEL.add(o.id):SEL.delete(o.id));loadOrders()}
+let LAST={total:0,sum:0,pages:1};
+function loadOrdersSum(){const d=LAST;
+  $('#o_sum').innerHTML=`<div class="grow"><b>${fa(d.total)}</b> سفارش — جمع مبلغ (بدون لغوشده): <b>${fa(d.sum)}</b> ${cur()}${SEL.size?` &nbsp;<span class="tag b">${fa(SEL.size)} انتخاب‌شده</span> <button class="btn s" onclick="SEL.clear();loadOrders()">لغو انتخاب</button>`:''}</div>
+  <button class="btn" onclick="printDlg('list')">چاپ لیست</button><button class="btn" onclick="printDlg('invoices')">چاپ فاکتورها</button><button class="btn" onclick="printDlg('summary')">برگه‌ی انبار</button>`}
+async function loadOrders(){
+  const d=await api('orders_list',{...orderFilters(),page:OF.page,per:OF.per});
+  if(d.page>d.pages){OF.page=d.pages;return loadOrders()}
+  ORD=d.rows;LAST=d;loadOrdersSum();
+  $('#ot').innerHTML=d.rows.map(o=>`<tr><td class="ck"><input type="checkbox" ${SEL.has(o.id)?'checked':''} onchange="selToggle(${o.id},this.checked)"></td><td>${fa(o.id)}</td><td class="num">${jd(o.created,1)}</td><td>${esc(o.customer||'—')}</td><td>${esc(o.source)}</td><td class="num"><b>${fa(o.final_total)}</b></td><td>${statusTag(o.status)}</td><td>${payTag(o.payment)}</td>
+  <td style="white-space:nowrap">${o.printed?'<span class="tag g">چاپ‌شده</span> ':''}<button class="btn s" onclick="orderView(${o.id})">مشاهده</button> <button class="btn s" onclick="invoice(${o.id})">فاکتور</button></td></tr>`).join('')||emptyRow(9,'سفارشی با این فیلتر پیدا نشد');
+  $('#o_pg').innerHTML=`<div><button class="btn s" ${d.page<=1?'disabled':''} onclick="OF.page--;loadOrders()">‹ قبلی</button> <span style="margin:0 10px">صفحه ${fa(d.page)} از ${fa(d.pages)}</span> <button class="btn s" ${d.page>=d.pages?'disabled':''} onclick="OF.page++;loadOrders()">بعدی ›</button></div>
+   <div>نمایش <select onchange="OF.per=+this.value;OF.page=1;loadOrders()">${[25,50,100].map(n=>`<option ${n===OF.per?'selected':''}>${n}</option>`).join('')}</select> در هر صفحه</div>`
+}
+const loadOrdersD=debounce(loadOrders,300);
+async function printDlg(kind){
+  const titles={list:'چاپ لیست سفارش‌ها',invoices:'چاپ فاکتورها (هر سفارش یک برگه)',summary:'برگه‌ی جمع‌بندی کالاها برای انبار'};
+  const f=printFilters(),ids=await api('orders_ids',f);
+  if(!ids.length)return toast('سفارشی برای چاپ وجود ندارد',true);
+  PRINT_IDS=ids;const q=new URLSearchParams(Object.entries(f).filter(([k,v])=>v!==''&&v!=null)).toString();
+  modal(titles[kind],`<p class="sub" style="margin-top:0">${SEL.size?`فقط ${fa(SEL.size)} سفارش انتخاب‌شده`:`همه‌ی سفارش‌های فیلتر فعلی (${fa(ids.length)} سفارش)`}${kind==='summary'?' — سفارش‌های لغوشده حساب نمی‌شوند':''}</p><iframe id="prf" src="/print/${kind}?${q}" style="width:100%;height:540px;border:1px solid var(--line);border-radius:6px"></iframe>`,
+  `<button class="btn p" onclick="document.getElementById('prf').contentWindow.print()">چاپ</button>${kind!=='summary'?`<button class="btn" onclick="markPrinted()">✔ علامت‌گذاری به‌عنوان چاپ‌شده</button>`:''}<span class="sub" style="margin:6px 6px 0">بعد از چاپ موفق، علامت‌گذاری کنید تا دفعه‌ی بعد با فیلتر «فقط چاپ‌نشده» فقط سفارش‌های تازه را بگیرید.</span>`,true)
+}
+async function markPrinted(){await act('orders_mark_printed',{ids:PRINT_IDS},`${fa(PRINT_IDS.length)} سفارش علامت «چاپ‌شده» خورد`);closeModal();SEL.clear();loadOrders()}
+async function orderView(id){
+  const o=await api('order_get',{id});S.cfg=S.cfg._statuses?S.cfg:await api('settings_get');
+  modal('سفارش شماره '+fa(id),`<div class="grid g2" style="grid-template-columns:1fr 1fr;margin-bottom:12px"><div><small class="sub">مشتری</small><br><b>${esc(o.customer||'—')}</b> ${esc(o.phone||'')}<br>${esc((o.city||'')+' '+(o.address||''))}</div><div><small class="sub">تاریخ / منبع</small><br>${jd(o.created,1)} — ${esc(o.source)}</div></div>
+  <table><thead><tr><th>محصول</th><th>تعداد</th><th>قیمت</th><th>مبلغ</th></tr></thead><tbody>${o.items.map(i=>`<tr><td>${esc(i.name)}</td><td class="num">${fa(i.qty)} ${UN[i.unit||'pc']||'عدد'}</td><td class="num">${fa(i.price)}</td><td class="num">${fa(i.qty*i.price)}</td></tr>`).join('')}</tbody></table>
+  <p class="num" style="text-align:left;margin:10px 0">تخفیف: ${fa(o.discount)} — ارسال: ${fa(o.shipping)} — <b style="font-size:16px">قابل پرداخت: ${fa(o.final_total)} ${cur()}</b></p>${o.note?`<p>توضیحات: ${esc(o.note)}</p>`:''}
+  <div class="frow"><div class="f"><label>وضعیت سفارش</label><select id="o_s">${S.cfg._statuses.map(s=>`<option ${s===o.status?'selected':''}>${s}</option>`).join('')}</select></div>
+  <div class="f"><label>پرداخت</label><select id="o_p">${S.cfg._payments.map(s=>`<option ${s===o.payment?'selected':''}>${s}</option>`).join('')}</select></div></div>`,
+  `<button class="btn p" onclick="orderSave(${id})">ذخیره‌ی وضعیت</button><button class="btn" onclick="invoice(${id})">🧾 فاکتور / چاپ</button><button class="btn d" onclick="orderDel(${id})">حذف سفارش</button>`,true)
+}
+async function orderSave(id){await act('order_update',{id,status:g('o_s'),payment:g('o_p')},'ذخیره شد');closeModal();go(S.cur)}
+async function orderDel(id){if(!confirm('سفارش حذف شود؟ موجودی به انبار برمی‌گردد.'))return;await act('order_delete',{id},'حذف شد');closeModal();go(S.cur)}
+function invoice(id){modal('فاکتور شماره '+fa(id),`<iframe id="invf" src="/invoice/${id}" style="width:100%;height:560px;border:1px solid var(--line);border-radius:6px"></iframe>`,`<button class="btn p" onclick="document.getElementById('invf').contentWindow.print();api('orders_mark_printed',{ids:[${id}]})">چاپ</button><span class="sub" style="margin:6px 8px">فایل HTML این فاکتور در پوشه‌ی data/invoices ذخیره می‌شود؛ در پنجره‌ی چاپ می‌توانید «Save as PDF» را انتخاب کنید.</span>`,true)}
+
+let CART=[],PR=[],CUS=[];
+async function newOrder(){
+  [PR,CUS,S.cfg]=await Promise.all([api('products_list',{}),api('customers_list',{}),api('settings_get')]);PR=PR.filter(p=>p.active);CART=[];
+  modal('سفارش جدید',`
+  <div class="frow"><div class="f"><label>مشتری</label><select id="n_c" onchange="$('#n_new').style.display=this.value?'none':'block';custPick()"><option value="">+ مشتری جدید</option>${CUS.map(c=>`<option value="${c.id}">${esc(c.name)} ${esc(c.phone||'')}</option>`).join('')}</select></div>
+   <div class="f"><label>منبع سفارش</label><select id="n_src"><option>دستی</option><option>تلگرام</option><option>ایتا</option><option>روبیکا</option><option>تلفنی</option><option>حضوری</option></select></div></div>
+  <div id="n_new" class="frow">${fld('نام مشتری جدید','n_nn')}${fld('تلفن','n_np')}${fld('آدرس','n_na')}</div>
+  <div class="card" style="background:#f7f9fa"><div class="bar" style="margin:0">
+   <select id="n_p" style="flex:1;min-width:240px" onchange="nUnits()">${PR.map(p=>`<option value="${p.id}">${esc(p.name)} — ${stockStr(p)}</option>`).join('')}</select>
+   <select id="n_u"></select>
+   <select id="n_t"><option value="sale">قیمت فروش</option><option value="wholesale">عمده</option><option value="consumer">مصرف‌کننده</option></select>
+   <input id="n_q" value="1" style="width:70px" inputmode="numeric"><button class="btn p" onclick="cartAdd()">افزودن</button></div></div>
+  <div id="n_cart"></div>
+  <div class="frow">${fld('تخفیف','n_d','0','text','inputmode="numeric" oninput="cartDraw()"')}${fld('هزینه ارسال','n_s','0','text','inputmode="numeric" oninput="cartDraw()"')}
+   <div class="f"><label>وضعیت پرداخت</label><select id="n_pay">${S.cfg._payments.map(s=>`<option>${s}</option>`).join('')}</select></div></div>
+  ${fld('توضیحات','n_note')}`,`<button class="btn p" onclick="orderCreate()">ثبت سفارش</button><button class="btn" onclick="closeModal()">انصراف</button>`,true);
+  $('#n_new').style.display='block';nUnits();cartDraw()
+}
+let NDU='pc';
+function custPick(){const c=CUS.find(x=>String(x.id)===g('n_c'));NDU=c?c.default_unit||'pc':'pc';if(c)$('#n_t').value=c.default_price||'sale';nUnits()}
+function nUnits(){const p=PR.find(x=>x.id==g('n_p'));if(!p)return;const us=unitsOf(p);$('#n_u').innerHTML=us.map(u=>`<option value="${u}" ${u===(us.includes(NDU)?NDU:'pc')?'selected':''}>${unitName(p,u)}</option>`).join('')}
+function cartAdd(){
+  const p=PR.find(x=>x.id==g('n_p'));if(!p)return;const u=g('n_u'),t=g('n_t'),q=num(g('n_q'))||1,price=priceOf(p,u,t);
+  if(!price)return toast(`قیمت ${{wholesale:'عمده',sale:'فروش',consumer:'مصرف‌کننده'}[t]} برای «${UN[u]}» این کالا ثبت نشده`,true);
+  const ex=CART.find(i=>i.product_id===p.id&&i.unit===u&&i.price===price);if(ex)ex.qty+=q;else CART.push({product_id:p.id,name:p.name,unit:u,uname:unitName(p,u),qty:q,price});cartDraw()
+}
+function cartDraw(){
+  const tot=CART.reduce((s,i)=>s+i.qty*i.price,0),fin=Math.max(0,tot-num($('#n_d')?.value)+num($('#n_s')?.value));
+  $('#n_cart').innerHTML=`<table><thead><tr><th>محصول</th><th>واحد</th><th>تعداد</th><th>قیمت واحد</th><th>مبلغ</th><th></th></tr></thead><tbody>${CART.map((i,k)=>`<tr><td>${esc(i.name)}</td><td><small>${esc(i.uname)}</small></td><td><input value="${i.qty}" style="width:70px" onchange="CART[${k}].qty=num(this.value);cartDraw()"></td><td><input value="${i.price}" style="width:110px" onchange="CART[${k}].price=num(this.value);cartDraw()"></td><td class="num">${fa(i.qty*i.price)}</td><td><button class="btn s d" onclick="CART.splice(${k},1);cartDraw()">×</button></td></tr>`).join('')||emptyRow(6,'محصولی اضافه نشده')}</tbody></table>
+  <p class="num" style="text-align:left;margin:10px 0;font-size:16px">جمع: <b>${fa(tot)}</b> — قابل پرداخت: <b style="color:var(--teal)">${fa(fin)}</b> ${cur()}</p>`}
+async function orderCreate(){
+  const o={customer_id:g('n_c')||null,new_customer:{name:g('n_nn'),phone:g('n_np'),address:g('n_na')},source:g('n_src'),items:CART.map(i=>({product_id:i.product_id,unit:i.unit,qty:i.qty,price:i.price})),discount:num(g('n_d')),shipping:num(g('n_s')),payment:g('n_pay'),note:g('n_note')};
+  const id=await act('order_create',{o},'سفارش ثبت شد');closeModal();await go('orders');invoice(id)
+}
+
+/* ───────── انتشار ───────── */
+const PUBF={only_err:false,start:'',end:'',search:'',page:1};
+let PUBP=[],PUBD=4,PUBPOST={},PUBCH=[];
+const pubMin=n=>Math.max(1,Math.round(n*PUBD/60));
+const noPrice=id=>{const p=PUBP.find(x=>x.id===id);return !!p&&unitsOf(p).every(u=>!priceOf(p,u,'sale'))};
+PG.publish=async()=>{
+  const [pr,ch,cfg,posted]=await Promise.all([api('products_list',{}),api('channels_list'),api('settings_get'),api('products_posted')]);S.cfg=cfg;PUBP=pr.filter(p=>p.active);PUBD=+cfg.publish_delay||0;PUBPOST=posted;
+  const en=ch.filter(c=>c.enabled);PUBCH=en.map(c=>c.id);
+  const firstPrice=p=>{const u=unitsOf(p).find(u=>priceOf(p,u,'sale'));return u?fa(priceOf(p,u,'sale')):''};
+  view(head('انتشار در کانال‌ها','هر محصول یک پست مستقل؛ بین پست‌ها فاصله می‌ماند تا محدودیت نخورید')+`<div id="pb_banner"></div>`+
+  (en.length?'':'<div class="hint">هنوز کانالی تعریف نشده. اول از بخش «کانال‌ها و اتصال» کانال اضافه کنید.</div>')+`
+  <div class="grid" style="grid-template-columns:1fr 1fr;align-items:start;margin-bottom:18px">
+   <div class="card" style="margin:0"><h2>۱) محصولات</h2><input id="pb_s" placeholder="جستجو…" style="width:100%;margin-bottom:6px" oninput="pubFilter()">
+    <div class="bar" style="margin:0 0 6px"><select id="pb_f" onchange="pubFilter()"><option value="">همه‌ی محصولات</option><option value="new">فقط ارسال‌نشده‌ها</option><option value="posted">فقط ارسال‌شده‌ها</option></select><button class="btn s" onclick="pubSelNew()">انتخاب ارسال‌نشده‌ها</button></div>
+    <label style="margin-bottom:6px"><input type="checkbox" onchange="document.querySelectorAll('#pb_l input').forEach(i=>i.closest('label').style.display!=='none'&&(i.checked=this.checked));pubEstimate()"> انتخاب همه</label>
+    <div class="chk" id="pb_l" onchange="pubEstimate()">${PUBP.map(p=>`<label data-id="${p.id}" data-n="${esc(p.name+' '+p.code)}"><input type="checkbox" value="${p.id}"> ${esc(p.name)} ${noPrice(p.id)?'<span class="tag a">بدون قیمت</span>':`<small style="color:var(--muted)">${firstPrice(p)}</small>`}<span class="pbs"></span></label>`).join('')||'<div class="empty">محصولی نیست</div>'}</div><p class="sub" style="margin:6px 0 0;font-size:12px"><span class="tag g">سبز</span> قبلاً در کانال(های) انتخاب‌شده ارسال شده · <span class="tag a">زرد</span> فقط در بعضی از آن‌ها</p></div>
+   <div class="card" style="margin:0"><h2>۲) کانال‌ها</h2><div class="chk" id="pb_c" onchange="pubEstimate();pubMark()">${en.map(c=>`<label><input type="checkbox" value="${c.id}"> ${esc(c.name)} <span class="tag b">${esc(c.platform)}</span></label>`).join('')||'<div class="empty">—</div>'}</div>
+    <h2 style="margin-top:14px">۳) زمان</h2>
+    <div class="f"><label>زمان ارسال (تاریخ خالی = همین الان)</label><div class="bar" style="margin:0">${jinput('pb_d','')} ${jtime('pb_t')}</div></div>
+    <label style="color:var(--ink)"><input type="checkbox" id="pb_r"> هر روز در همین ساعت تکرار شود</label></div></div>
+  <div class="card"><h2>متن پست</h2><textarea id="pb_x" rows="8">${esc(cfg.template)}</textarea>
+   <p class="sub" style="margin:6px 0 0">متغیرها: <code>{name}</code> <code>{code}</code> <code>{brand}</code> <code>{prices}</code> (قیمت فروش همه‌ی واحدها) <code>{prices_wholesale}</code> <code>{prices_consumer}</code> <code>{price}</code> (عدد) <code>{pack_size}</code> <code>{ctn_size}</code> <code>{description}</code> <code>{phone}</code> <code>{date}</code> <code>{currency}</code></p></div>
+  <div class="card" id="pb_est" style="background:var(--blue-s);border-color:#c5d8e8;display:flex;align-items:center;gap:14px;flex-wrap:wrap"></div>
+  <div class="card" id="pb_queue"></div>
+  <div class="card"><h2>گزارش اجراها</h2>
+   <div class="bar" style="margin:10px 0 6px"><button class="chip ${PUBF.only_err?'on':''}" onclick="PUBF.only_err=!PUBF.only_err;this.classList.toggle('on');PUBF.page=1;pubRuns()">فقط خطاها</button>
+    <label style="margin:0">از</label>${jinput('pr_s',PUBF.start,"PUBF.start=jv('pr_s');PUBF.page=1;pubRuns()")}<label style="margin:0">تا</label>${jinput('pr_e',PUBF.end,"PUBF.end=jv('pr_e');PUBF.page=1;pubRuns()")}
+    <input id="pr_q" placeholder="جستجوی محصول…" value="${esc(PUBF.search)}" style="width:180px" oninput="PUBF.search=this.value;PUBF.page=1;pubRunsD()">
+    <span style="margin-inline-start:auto"></span><button class="btn s" onclick="pubPurge(${+cfg.log_days||30})">پاک کردن قدیمی‌تر از ${fa(+cfg.log_days||30)} روز</button><button class="btn s d" onclick="pubPurge(0)">پاک کردن همه</button></div>
+   <p class="sub" style="margin:0 0 8px">پاک‌سازی خودکار: جزئیات ارسال‌ها ${fa(+cfg.log_days||30)} روز و خلاصه‌ی هر اجرا ${fa(+cfg.runs_days||365)} روز نگه داشته می‌شود (در «مشخصات فروشگاه» قابل تنظیم).</p>
+   <div id="pb_rt"></div><div id="pb_rp" class="bar" style="margin:10px 0 0"></div></div>`);
+  pubEstimate();pubMark();await pubRefresh();await pubRuns();
+  clearInterval(S.pubTimer);S.pubTimer=setInterval(()=>{if(S.cur==='publish')pubRefresh(true)},3000)
+};
+function pubMark(){
+  const chosen=checked('#pb_c'),sel=chosen.length?chosen:PUBCH;
+  document.querySelectorAll('#pb_l label').forEach(l=>{
+    const m=PUBPOST[l.dataset.id]||{},hit=sel.filter(c=>m[c]);
+    const st=!hit.length?'none':(chosen.length&&hit.length<sel.length)?'some':'all',last=hit.map(c=>m[c]).sort().pop();
+    l.className='p-'+st;l.dataset.st=st;
+    const cap=l.querySelector('.pbs');if(cap)cap.textContent=st==='none'?'':st==='all'?'ارسال شده '+jd(last):'فقط در بعضی کانال‌ها · '+jd(last)});
+  pubFilter()
+}
+function pubFilter(){
+  const q=g('pb_s').trim(),f=g('pb_f');
+  document.querySelectorAll('#pb_l label').forEach(l=>{const st=l.dataset.st||'none',okf=!f||(f==='new'&&st!=='all')||(f==='posted'&&st==='all');l.style.display=(!q||l.dataset.n.includes(q))&&okf?'flex':'none'})
+}
+function pubSelNew(){document.querySelectorAll('#pb_l label').forEach(l=>{if(l.style.display!=='none')l.querySelector('input').checked=(l.dataset.st||'none')!=='all'});pubEstimate()}
+const checked=sel=>[...document.querySelectorAll(sel+' input:checked')].map(i=>+i.value);
+function pubTime(){const d=jv('pb_d');return d?`${d}T${g('pb_t_h')}:${g('pb_t_m')}`:''}
+function pubEstimate(){
+  const ps=checked('#pb_l'),cs=checked('#pb_c'),n=ps.length*cs.length,nop=ps.filter(noPrice).length;
+  $('#pb_est').innerHTML=`<span>انتخاب فعلی: <b>${fa(ps.length)} محصول × ${fa(cs.length)} کانال = ${fa(n)} پست</b>${n?` · حدود ${fa(pubMin(n))} دقیقه`:''}${nop?` · <span style="color:var(--amber)">${fa(nop)} محصول بدون قیمت</span>`:''}</span><button class="btn p" style="margin-inline-start:auto" onclick="pubCreate()" ${n?'':'disabled'}>ثبت انتشار</button>`}
+async function pubCreate(){
+  const ps=checked('#pb_l'),cs=checked('#pb_c'),n=ps.length*cs.length,nop=ps.filter(noPrice).length;
+  if(!n)return toast('محصول و کانال انتخاب کنید',true);
+  if(nop&&!confirm(`${fa(nop)} محصول قیمت ندارند و پستشان بدون قیمت ارسال می‌شود. ادامه می‌دهید؟`))return;
+  if(n>=30&&!confirm(`${fa(n)} پست ارسال می‌شود (حدود ${fa(pubMin(n))} دقیقه، با فاصله‌ی ${fa(PUBD)} ثانیه). ادامه می‌دهید؟`))return;
+  const at=pubTime(),id=await act('publish_create',{product_ids:ps,channel_ids:cs,template:g('pb_x'),run_at:at,repeat_daily:$('#pb_r').checked},at?'برای زمان انتخابی در صف ثبت شد':'ارسال شروع شد');
+  if(!at)await act('publish_run_now',{id});
+  pubRefresh()
+}
+async function pubRefresh(light){
+  const d=await api('publish_jobs');PUBD=d.delay;
+  const run=d.jobs.filter(j=>j.status==='در حال ارسال');
+  $('#pb_banner').innerHTML=run.map(j=>{const pct=j.total?Math.round(j.done/j.total*100):0;return `<div class="card" style="border-color:var(--teal)"><div class="bar" style="margin:0"><b>در حال ارسال: ${fa(j.done)} از ${fa(j.total)} پست</b><span class="sub" style="margin:0 12px">حدود ${fa(Math.max(1,Math.round(j.eta/60)))} دقیقه مانده · بین هر پست ${fa(PUBD)} ثانیه</span><span style="margin-inline-start:auto"></span><button class="btn s" onclick="pubStop(${j.id})">توقف</button></div><div class="prog"><i style="width:${pct}%"></i></div></div>`}).join('');
+  const st=j=>{const pct=j.total?Math.round(j.done/j.total*100):0,err=j.last_error?`<br><small style="color:var(--red)">${esc(j.last_error)}</small>`:'';
+    if(j.status==='در حال ارسال')return `<span class="tag b">در حال ارسال ${fa(pct)}٪</span>`;
+    if(j.status==='در انتظار'&&j.attempts>0)return `<span class="tag a">منتظر تلاش دوباره (${fa(j.attempts)} از ۱۲)</span>${err}`;
+    if(j.status==='متوقف شد')return `<span class="tag a">متوقف شد · ${fa(j.left)} مانده</span>`;
+    if(j.status==='ناموفق')return `<span class="tag r">ناموفق · ${fa(j.left)} مانده</span>${err}`;
+    return `<span class="tag ${j.repeat_daily?'g':'a'}">${j.repeat_daily?'فعال':'در انتظار'}</span>`};
+  const act_=j=>j.status==='در حال ارسال'?`<button class="btn s" onclick="pubStop(${j.id})">توقف</button>`:(j.status==='متوقف شد'||j.status==='ناموفق')?`<button class="btn s" onclick="pubResume(${j.id})">ادامه</button> <button class="btn s d" onclick="pubDel(${j.id})">حذف</button>`:`<button class="btn s" onclick="pubNow(${j.id})">ارسال الان</button> <button class="btn s d" onclick="pubDel(${j.id})">حذف</button>`;
+  $('#pb_queue').innerHTML=`<h2>صف انتشار</h2><div class="tw"><table><thead><tr><th>زمان</th><th>محتوا</th><th>کانال‌ها</th><th>وضعیت</th><th></th></tr></thead><tbody>${d.jobs.map(j=>`<tr><td class="num">${jd(j.run_at,1)} ${j.repeat_daily?'<span class="tag g">هر روز</span>':''}</td><td><b>${fa(j.n_products)}</b> محصول</td><td>${esc(j.channels.join('، '))}</td><td>${st(j)}</td><td style="white-space:nowrap">${act_(j)}</td></tr>`).join('')||emptyRow(5,'کاری در صف نیست')}</tbody></table></div>
+   <div class="bar" style="margin:10px 0 0"><span class="sub" style="margin:0">${d.done_count?`${fa(d.done_count)} کار انجام‌شده؛ بعد از ${fa(+S.cfg.jobs_days||7)} روز خودکار پاک می‌شود`:'اگر اینترنت قطع شود، ارسال‌های ناموفق هر ۵ دقیقه دوباره امتحان می‌شوند (تا ۱۲ بار). برنامه باید باز باشد.'}</span>${d.done_count?`<span style="margin-inline-start:auto"></span><button class="btn s" onclick="pubClear()">پاک کردن انجام‌شده‌ها</button>`:''}</div>`;
+  if(!light||S.pubRun!==run.length){S.pubRun=run.length;await pubRuns();PUBPOST=await api('products_posted');pubMark()}
+}
+const runChips=r=>`${r.ok?`<span class="tag g">${fa(r.ok)} موفق</span> `:''}${r.failed?`<span class="tag r">${fa(r.failed)} خطا</span> `:''}${!['موفق','با خطا'].includes(r.status)?`<span class="tag a">${esc(r.status)}</span>`:''}`;
+async function pubRuns(){
+  const f=PUBF,d=await api('publish_runs',{start:f.start,end:f.end,only_errors:f.only_err,search:f.search,page:f.page,per:15});
+  $('#pb_rt').innerHTML=`<div class="tw"><table><thead><tr><th>زمان</th><th>محتوا</th><th>نتیجه</th><th></th></tr></thead><tbody>${d.rows.map(r=>`<tr style="cursor:pointer" onclick="pubExpand(${r.id},${r.failed>0})"><td class="num">${jd(r.started,1)}</td><td>${fa(r.n_products||0)} محصول × ${fa((r.channels||'').split('، ').filter(Boolean).length)} کانال <small style="color:var(--muted)">${esc(r.channels||'')}</small></td><td>${runChips(r)}</td><td class="num">▾</td></tr><tr id="pe_${r.id}" style="display:none"><td colspan="4" id="pd_${r.id}" style="background:#fafbfc"></td></tr>`).join('')||emptyRow(4,'گزارشی پیدا نشد')}</tbody></table></div>`;
+  $('#pb_rp').innerHTML=d.pages>1?`<button class="btn s" ${d.page<=1?'disabled':''} onclick="PUBF.page--;pubRuns()">‹ قبلی</button><span>صفحه ${fa(d.page)} از ${fa(d.pages)}</span><button class="btn s" ${d.page>=d.pages?'disabled':''} onclick="PUBF.page++;pubRuns()">بعدی ›</button>`:'';
+}
+const pubRunsD=debounce(pubRuns,300);
+async function pubExpand(id,onlyErr,force){
+  const tr=$('#pe_'+id);if(!force&&tr.style.display==='table-row'){tr.style.display='none';return}
+  tr.style.display='table-row';
+  const rows=await api('publish_run_detail',{run_id:id,only_errors:onlyErr,search:PUBF.search});
+  $('#pd_'+id).innerHTML=`<div class="bar" style="margin:4px 0"><span class="sub" style="margin:0">${onlyErr?'فقط ارسال‌های ناموفق':'همه‌ی ارسال‌ها'}</span><a style="color:var(--teal);cursor:pointer;font-size:13px" onclick="event.stopPropagation();pubExpand(${id},${!onlyErr},true)">${onlyErr?'نمایش همه':'فقط خطاها'}</a></div>`+(rows.map(x=>`<div class="it" style="padding:8px 0"><span style="width:240px">${esc(x.product)} ← ${esc(x.channel)}</span><span class="tag ${x.status==='موفق'?'g':'r'}">${x.status}</span><small style="color:var(--muted)">${esc(x.message||'')}</small>${x.status==='خطا'?`<button class="btn s" style="margin-inline-start:auto" onclick="event.stopPropagation();pubRetry(${x.id},${id},${onlyErr})">ارسال دوباره</button>`:''}</div>`).join('')||'<div class="empty" style="padding:14px">موردی نیست</div>')
+}
+async function pubRetry(logId,runId,onlyErr){const r=await act('publish_retry',{log_id:logId});toast(r.message,!r.ok);await pubRuns();pubExpand(runId,onlyErr,true)}
+async function pubPurge(days){if(!confirm(days?`گزارش‌های قدیمی‌تر از ${fa(days)} روز پاک شود؟`:'همه‌ی گزارش‌های ارسال پاک شود؟ (صف انتشار دست نمی‌خورد)'))return;const n=await act('publish_purge',{days});toast(`${fa(n)} اجرا پاک شد`);pubRuns()}
+async function pubNow(id){await act('publish_run_now',{id},'ارسال شروع شد');setTimeout(pubRefresh,600)}
+async function pubStop(id){await act('publish_stop',{id},'در حال توقف…');setTimeout(pubRefresh,800)}
+async function pubResume(id){await act('publish_resume',{id},'ادامه داده شد');setTimeout(pubRefresh,600)}
+async function pubDel(id){if(!confirm('این کار از صف حذف شود؟'))return;await act('publish_delete',{id});pubRefresh()}
+async function pubClear(){const n=await act('publish_clear_done');toast(`${fa(n)} کار پاک شد`);pubRefresh()}
+
+/* ───────── مالی ───────── */
+let FIN={s:'',e:''};
+PG.finance=async()=>{
+  const now=new Date();if(!FIN.s){FIN.s=jMonthStart();FIN.e=ymd(now)}
+  const [f,ex]=await Promise.all([api('finance',{start:FIN.s,end:FIN.e}),api('expenses_list',{start:FIN.s,end:FIN.e})]);
+  view(head('مالی','درآمد از سفارش‌های «پرداخت شده» محاسبه می‌شود','<button class="btn p" onclick="expForm()">+ ثبت هزینه</button>')+
+  `<div class="bar"><label>از</label>${jinput('fs',FIN.s)}<label>تا</label>${jinput('fe',FIN.e)}<button class="btn" onclick="FIN.s=jv('fs');FIN.e=jv('fe');PG.finance()">اعمال</button></div>
+  <div class="grid g4" style="margin-bottom:18px"><div class="stat"><small>درآمد</small><b>${fa(f.revenue)}</b></div><div class="stat"><small>بهای تمام‌شده‌ی کالا</small><b>${fa(f.cogs)}</b></div><div class="stat"><small>هزینه‌ها</small><b>${fa(f.expenses)}</b></div><div class="stat hero"><small>سود خالص</small><b>${fa(f.profit)}</b></div></div>
+  <p class="sub">مطالبات وصول‌نشده در این بازه: <b class="num">${fa(f.receivable)}</b> ${cur()}</p>
+  <div class="card tw" style="padding:0"><table><thead><tr><th>تاریخ</th><th>عنوان</th><th>دسته</th><th>مبلغ</th><th></th></tr></thead><tbody>${ex.map(e=>`<tr><td>${jd(e.date)}</td><td>${esc(e.title)}</td><td>${esc(e.category||'')}</td><td class="num">${fa(e.amount)}</td><td><button class="btn s d" onclick="expDel(${e.id})">حذف</button></td></tr>`).join('')||emptyRow(5,'هزینه‌ای ثبت نشده')}</tbody></table></div>`)
+};
+function expForm(){modal('ثبت هزینه',`${fld('عنوان','e_t','')}<div class="frow">${fld('مبلغ','e_a','','text','inputmode="numeric"')}${fld('دسته (حمل، اجاره، تبلیغات…)','e_c','')}<div class="f"><label>تاریخ</label>${jinput('e_d',ymd(new Date()))}</div></div>${fld('یادداشت','e_n')}`,`<button class="btn p" onclick="expSave()">ذخیره</button>`)}
+async function expSave(){await act('expense_save',{e:{title:g('e_t'),amount:num(g('e_a')),category:g('e_c'),date:jv('e_d'),note:g('e_n')}},'ثبت شد');closeModal();PG.finance()}
+async function expDel(id){await act('expense_delete',{id});PG.finance()}
+
+/* ───────── گزارش‌ها ───────── */
+let RP={s:'',e:''};
+PG.reports=async()=>{
+  const now=new Date();if(!RP.s){RP.s=jMonthStart();RP.e=ymd(now)}
+  const r=await api('reports',{start:RP.s,end:RP.e});
+  const tbl=(cols,rows)=>`<div class="tw"><table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${rows||emptyRow(cols.length)}</tbody></table></div>`;
+  view(head('گزارش فروش','سفارش‌های لغوشده حساب نمی‌شوند')+`
+  <div class="bar"><label>از</label>${jinput('rs',RP.s)}<label>تا</label>${jinput('re',RP.e)}<button class="btn" onclick="RP.s=jv('rs');RP.e=jv('re');PG.reports()">اعمال</button><span class="grow"></span>
+   <a class="btn" href="/export/orders.csv">خروجی سفارش‌ها</a><a class="btn" href="/export/products.csv">خروجی محصولات</a><a class="btn" href="/export/customers.csv">خروجی مشتریان</a></div>
+  <div class="grid g3" style="grid-template-columns:repeat(2,1fr);margin-bottom:18px"><div class="stat hero"><small>جمع فروش</small><b>${fa(r.sales)}</b></div><div class="stat"><small>تعداد سفارش</small><b>${fa(r.orders)}</b></div></div>
+  <div class="card"><h2>پرفروش‌ترین محصولات</h2>${tbl(['محصول','تعداد (معادل عدد)','فروش','سود'],r.by_product.map(x=>`<tr><td>${esc(x.name)}</td><td class="num">${fa(x.qty)}</td><td class="num">${fa(x.revenue)}</td><td class="num" style="color:var(--teal)">${fa(x.profit)}</td></tr>`).join(''))}</div>
+  <div class="grid g3" style="grid-template-columns:1fr 1fr"><div class="card"><h2>بهترین مشتریان</h2>${tbl(['مشتری','سفارش','جمع'],r.by_customer.map(x=>`<tr><td>${esc(x.name)}</td><td class="num">${fa(x.orders)}</td><td class="num">${fa(x.total)}</td></tr>`).join(''))}</div>
+  <div class="card"><h2>فروش بر اساس منبع</h2>${tbl(['منبع','سفارش','جمع'],r.by_source.map(x=>`<tr><td>${esc(x.name)}</td><td class="num">${fa(x.orders)}</td><td class="num">${fa(x.total)}</td></tr>`).join(''))}</div></div>`)
+};
+
+/* ───────── کانال‌ها و ربات ───────── */
+let CH=[];
+PG.channels=async()=>{
+  [CH,S.cfg]=await Promise.all([api('channels_list'),api('settings_get')]);
+  view(head('کانال‌ها و ربات','اتصال به تلگرام، ایتا و روبیکا','<button class="btn p" onclick="chForm()">+ کانال جدید</button>')+`
+  <div class="card tw" style="padding:0"><table><thead><tr><th>نام</th><th>پلتفرم</th><th>شناسه‌ی کانال</th><th>وضعیت</th><th></th></tr></thead><tbody>${CH.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td><span class="tag b">${esc(c.platform)}</span></td><td dir="ltr" style="text-align:right">${esc(c.chat_id||'')}</td><td>${c.enabled?'<span class="tag g">فعال</span>':'<span class="tag">غیرفعال</span>'} ${c.bot_on&&['telegram','bale'].includes(c.platform)?'<span class="tag b">ربات مشتری</span>':''}</td>
+  <td style="white-space:nowrap"><button class="btn s" onclick="chTest(${c.id})">ارسال تست</button> <button class="btn s" onclick="chForm(${c.id})">ویرایش</button> <button class="btn s d" onclick="chDel(${c.id})">حذف</button></td></tr>`).join('')||emptyRow(5,'کانالی تعریف نشده')}</tbody></table></div>
+  <div class="grid g3" style="grid-template-columns:1fr 1fr;align-items:start">
+  <div class="card"><h2>راهنمای اتصال</h2><p><b>تلگرام:</b> در BotFather ربات بسازید، توکن را اینجا بگذارید، ربات را در کانال «ادمین» کنید. شناسه‌ی کانال: <code>@نام_کانال</code></p>
+  <p><b>بله:</b> در BotFather خودِ بله (@botfather) ربات بسازید، توکن را بگذارید و ربات را در کانال بله ادمین کنید. شناسه‌ی کانال: <code>@نام_کانال</code></p>
+  <p><b>ایتا:</b> در eitaayar.ir با شماره‌ی ایتایتان ثبت‌نام کنید، ربات <code>@sender</code> را در کانال «ادمین» کنید (نه عضو)، کانال را در پنل ایتایار اضافه و از صفحه‌ی «API» توکن را کپی کنید. شناسه‌ی کانال را <b>بدون @</b> بنویسید. ایتا فقط برای <b>انتشار</b> است، ربات مشتری ندارد.</p>
+  <p><b>روبیکا:</b> توکن ربات روبیکا و شناسه‌ی کانال. (متن و عکس)</p>
+  <p><b>سفارشی:</b> هر API دیگر؛ آدرس را در «آدرس API» بنویسید تا یک JSON ساده POST شود.</p>
+  <p class="sub">اگر تلگرام فیلتر است، می‌توانید در «آدرس API» آدرس یک پروکسی/میرور سازگار با Bot API بگذارید.</p></div>
+  <div class="card"><h2>ربات سفارش</h2><p class="sub">ربات‌های تلگرام و بله داخل خود برنامه اجرا می‌شوند و سفارش را مستقیم ثبت می‌کنند؛ تنظیمشان در صفحه‌ی «ربات مشتری» است.</p><p class="sub">برای ربات‌های بیرونی (مثل ایتا و روبیکا) بعداً یک «کلید API» اضافه می‌کنیم تا ورود امن بماند.</p></div></div>`)
+};
+function chForm(id){const c=CH.find(x=>x.id===id)||{platform:'telegram',enabled:1};
+  modal(id?'ویرایش کانال':'کانال جدید',`<div class="frow">${fld('نام کانال','c_name',c.name)}<div class="f"><label>پلتفرم</label><select id="c_pl" onchange="chPl()">${['telegram','bale','eitaa','rubika','custom'].map(p=>`<option ${p===c.platform?'selected':''}>${p}</option>`).join('')}</select></div></div>
+  ${fld('توکن ربات','c_tok',c.token,'text','dir="ltr"')}${fld('شناسه‌ی کانال (chat_id)','c_chat',c.chat_id,'text','dir="ltr"')}${fld('آدرس API (اختیاری)','c_api',c.api_url,'text','dir="ltr"')}
+  <div class="frow"><div class="f"><label>وضعیت</label><select id="c_en"><option value="1" ${c.enabled?'selected':''}>فعال</option><option value="0" ${c.enabled?'':'selected'}>غیرفعال</option></select></div>
+  <div class="f" id="c_botw"><label>ربات مشتری (فقط تلگرام و بله)</label><select id="c_bot"><option value="0" ${c.bot_on?'':'selected'}>خاموش</option><option value="1" ${c.bot_on?'selected':''}>روشن: مشتری‌ها در ربات سفارش بدهند</option></select></div></div>`,`<button class="btn p" onclick="chSave(${id||0})">ذخیره</button>`);chPl()}
+function chPl(){const w=$('#c_botw');if(w)w.style.display=['telegram','bale'].includes(g('c_pl'))?'':'none'}
+async function chSave(id){await act('channel_save',{c:{id:id||undefined,name:g('c_name'),platform:g('c_pl'),token:g('c_tok'),chat_id:g('c_chat'),api_url:g('c_api'),enabled:+g('c_en'),bot_on:+g('c_bot')}},'ذخیره شد');closeModal();PG.channels()}
+async function chDel(id){if(!confirm('کانال حذف شود؟'))return;await act('channel_delete',{id});PG.channels()}
+async function chTest(id){toast('در حال ارسال…');const r=await act('channel_test',{id});toast(r.message,!r.ok)}
+
+
+/* ───────── ربات مشتری ───────── */
+let RULES=[];
+const BKEYS=['bot_welcome','bot_contact','bot_price_field','bot_admin_chat','bot_payment_info','bot_followup_hours','bot_followup_text','bot_card'];
+PG.bot=async()=>{
+  const [st,rules,s]=await Promise.all([api('bots_status'),api('rules_list'),api('settings_get')]);S.cfg=s;RULES=rules;
+  view(head('ربات مشتری','مشتری در تلگرام یا بله محصولات را می‌بیند، سبد می‌سازد و سفارش ثبت می‌کند. سفارش مستقیم در بخش «سفارش‌ها» می‌نشیند','<button class="btn p" onclick="ruleForm()">+ پاسخ خودکار جدید</button>')+`
+  <div class="card"><h2>وضعیت ربات‌ها</h2>${st.length?`<table><thead><tr><th>کانال</th><th>پلتفرم</th><th>آخرین اتصال موفق</th><th>وضعیت</th></tr></thead><tbody>${st.map(x=>`<tr><td>${esc(x.name)}</td><td><span class="tag b">${esc(x.platform)}</span></td><td>${x.last?jd(x.last,1):'—'}</td><td>${x.error?`<span class="tag r">خطا</span> <small>${esc(x.error)}</small>`:'<span class="tag g">روشن</span>'}</td></tr>`).join('')}</tbody></table>`:'<div class="hint">هیچ رباتی روشن نیست. در «کانال‌ها و ربات» برای یک کانال تلگرام یا بله گزینه‌ی «ربات مشتری» را روشن کنید.</div>'}
+  <p class="sub" style="margin:10px 0 0">ربات فقط وقتی جواب می‌دهد که برنامه باز و کامپیوتر روشن (و اینترنت وصل) باشد. برای ۲۴ ساعته شدن بعداً به سرور نیاز دارید.</p></div>
+  <div class="card"><h2>تنظیمات ربات</h2>
+   <div class="f"><label>پیام خوش‌آمدگویی</label><textarea id="b_bot_welcome" rows="3">${esc(s.bot_welcome)}</textarea></div>
+   <div class="f"><label>متن «تماس با ما»</label><textarea id="b_bot_contact" rows="2">${esc(s.bot_contact)}</textarea></div>
+   <div class="frow"><div class="f"><label>قیمت نمایش‌داده‌شده به مشتری</label><select id="b_bot_price_field">${[['sale','قیمت فروش'],['wholesale','قیمت عمده'],['consumer','قیمت مصرف‌کننده']].map(o=>`<option value="${o[0]}" ${s.bot_price_field===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></div>
+   ${fld('شناسه‌ی چت شما (برای اطلاع سفارش جدید)','b_bot_admin_chat',s.bot_admin_chat,'text','dir="ltr" placeholder="در ربات /myid بفرستید"')}
+   ${fld('پیگیری سبد رهاشده بعد از (ساعت، ۰ = خاموش)','b_bot_followup_hours',s.bot_followup_hours,'text','inputmode="decimal"')}</div>
+   <div class="f"><label>متن یادآوری سبد خرید</label><textarea id="b_bot_followup_text" rows="2">${esc(s.bot_followup_text)}</textarea></div>
+   <div class="f"><label>راهنمای پرداخت بعد از ثبت سفارش (مثلاً شماره کارت). بعداً با درگاه جایگزین می‌شود</label><textarea id="b_bot_payment_info" rows="2">${esc(s.bot_payment_info)}</textarea></div>
+   <div class="f"><label>قالب کارت محصول</label><textarea id="b_bot_card" rows="4">${esc(s.bot_card)}</textarea></div>
+   <button class="btn p" onclick="botSave()">ذخیره‌ی تنظیمات</button></div>
+  <div class="card tw" style="padding:0"><div style="padding:14px 18px 0"><h2>پاسخ‌های خودکار (کلمه‌ی کلیدی)</h2><p class="sub" style="margin:0 0 8px">اگر پیام مشتری شامل یکی از کلمه‌ها باشد، ربات این پاسخ و کارت محصولات را می‌فرستد. اگر هیچ قانونی نخورد، ربات بین نام محصولات جستجو می‌کند.</p></div>
+   <table><thead><tr><th>کلمه‌های کلیدی</th><th>پاسخ</th><th>محصولات</th><th></th></tr></thead><tbody>${rules.map(r=>`<tr style="${r.active?'':'opacity:.5'}"><td>${esc(r.keyword)}</td><td>${esc((r.reply||'').slice(0,60))}</td><td>${esc(r.product_codes||'')}</td><td style="white-space:nowrap"><button class="btn s" onclick="ruleForm(${r.id})">ویرایش</button> <button class="btn s d" onclick="ruleDel(${r.id})">حذف</button></td></tr>`).join('')||emptyRow(4,'هنوز قانونی تعریف نشده')}</tbody></table></div>
+  <div class="hint">نکته: برای اینکه زیر پست‌های کانال تلگرام دکمه‌ی «🛒 ثبت سفارش» بیاید که مشتری را به ربات ببرد، در «کانال‌ها و ربات» گزینه‌ی «ربات مشتری» را برای همان کانال روشن کنید.</div>`)
+};
+async function botSave(){const s={};BKEYS.forEach(k=>s[k]=g('b_'+k));await act('settings_save',{s},'ذخیره شد');S.cfg=await api('settings_get')}
+function ruleForm(id){const r=RULES.find(x=>x.id===id)||{active:1};
+  modal(id?'ویرایش پاسخ خودکار':'پاسخ خودکار جدید',`${fld('کلمه‌های کلیدی (با ویرگول جدا کنید)','r_k',r.keyword,'text','placeholder="قیمت، نرخ، چنده"')}
+  <div class="f"><label>متن پاسخ</label><textarea id="r_r" rows="4">${esc(r.reply||'')}</textarea></div>
+  ${fld('کد محصولات برای نمایش (اختیاری، با ویرگول جدا کنید)','r_p',r.product_codes,'text','dir="ltr" placeholder="P101, P102"')}
+  <div class="f"><label>وضعیت</label><select id="r_a"><option value="1" ${r.active?'selected':''}>فعال</option><option value="0" ${r.active?'':'selected'}>غیرفعال</option></select></div>`,
+  `<button class="btn p" onclick="ruleSave(${id||0})">ذخیره</button>`)}
+async function ruleSave(id){await act('rule_save',{r:{id:id||undefined,keyword:g('r_k'),reply:g('r_r'),product_codes:g('r_p'),active:+g('r_a')}},'ذخیره شد');closeModal();PG.bot()}
+async function ruleDel(id){await act('rule_delete',{id});PG.bot()}
+
+/* ───────── تنظیمات ───────── */
+PG.settings=async()=>{
+  const s=await api('settings_get');S.cfg=s;
+  view(head('مشخصات فروشگاه','برای فاکتور و متن پیش‌فرض پست‌ها')+`
+  <div class="card"><div class="frow">${fld('نام فروشگاه','s_shop_name',s.shop_name)}${fld('تلفن','s_shop_phone',s.shop_phone)}${fld('واحد پول','s_currency',s.currency)}<div class="f"><label>باز شدن خودکار کارتن و بسته هنگام فروش یا خروج</label><select id="s_auto_open"><option value="1" ${s.auto_open!=='0'?'selected':''}>روشن (پیشنهادی)</option><option value="0" ${s.auto_open==='0'?'selected':''}>خاموش (خطا بده)</option></select></div></div>${fld('آدرس','s_shop_address',s.shop_address)}${fld('متن پایین فاکتور','s_invoice_footer',s.invoice_footer)}
+  <div class="f"><label>قالب پیش‌فرض پست کانال</label><textarea id="s_template" rows="7">${esc(s.template)}</textarea></div>
+  <h2 style="margin-top:6px">انتشار در کانال‌ها</h2><div class="frow">${fld('فاصله‌ی بین هر پست (ثانیه)','s_publish_delay',s.publish_delay,'text','inputmode="decimal"')}${fld('نگه‌داری جزئیات ارسال‌ها (روز)','s_log_days',s.log_days,'text','inputmode="numeric"')}${fld('نگه‌داری خلاصه‌ی اجراها (روز)','s_runs_days',s.runs_days,'text','inputmode="numeric"')}${fld('پاک شدن خودکار کارهای انجام‌شده بعد از (روز)','s_jobs_days',s.jobs_days,'text','inputmode="numeric"')}</div>
+  <button class="btn p" onclick="setSave()">ذخیره</button></div>`)
+};
+PG.users=async()=>{
+  view(head('کاربران و دسترسی','چه کسانی می‌توانند وارد برنامه شوند','<button class="btn p" onclick="userForm()">+ کاربر جدید</button>')+`
+  <div class="card"><p class="sub" style="margin-top:0">«مدیر» به همه‌ی بخش‌ها دسترسی دارد. «کارمند» فقط محصولات، انبار، مشتریان، سفارش‌ها و انتشار را می‌بیند (نه مالی، گزارش، تنظیمات و توکن‌ها).</p><div id="ucard"></div></div>`);loadUsers()
+};
+PG.backup=async()=>{
+  const [s,L]=await Promise.all([api('settings_get'),api('backups_list')]);S.cfg=s;
+  const kind={auto:'خودکار',manual:'دستی',before:'قبل از بازیابی'},sz=b=>faDigits(b>1048576?(b/1048576).toFixed(1)+' مگابایت':Math.max(1,Math.round(b/1024))+' کیلوبایت');
+  view(head('پشتیبان و انتقال','هر چند ساعت یک‌بار خودکار از اطلاعات نسخه گرفته می‌شود')+
+  (L.pending?`<div class="hint" style="background:var(--amber-s);color:#6b4607">یک بازیابی ثبت شده؛ برنامه را کامل ببندید و دوباره باز کنید تا اعمال شود. <button class="btn s" onclick="backupCancel()">لغو بازیابی</button></div>`:'')+`
+  <div class="card"><h2>پشتیبان‌گیری خودکار</h2>
+   <div class="frow"><div class="f"><label>وضعیت</label><select id="bk_en"><option value="1" ${s.backup_enabled!=='0'?'selected':''}>روشن</option><option value="0" ${s.backup_enabled==='0'?'selected':''}>خاموش</option></select></div>
+    ${fld('حداکثر فاصله‌ی دو پشتیبان (ساعت)','bk_int',s.backup_interval_h,'text','inputmode="numeric"')}${fld('تعداد نسخه‌های خودکار که نگه داشته شود','bk_keep',s.backup_keep,'text','inputmode="numeric"')}</div>
+   ${fld('پوشه‌ی دوم (اختیاری): فلش، هارد دیگر یا پوشه‌ی همگام‌شده؛ مثلاً D:\\Backup','bk_dir',s.backup_dir2,'text','dir="ltr"')}
+   <p class="sub" style="margin:0 0 12px">آخرین پشتیبان: <b>${L.last?jd(L.last,1):'هنوز گرفته نشده'}</b> · نتیجه: ${esc(L.status||'—')}<br>در پوشه‌ی دوم، عکس‌های کالاها هم کپی می‌شوند (نسخه‌ی خودکار فقط دیتابیس است). برنامه باید باز باشد تا پشتیبان بگیرد.</p>
+   <button class="btn p" onclick="backupSave()">ذخیره‌ی تنظیمات</button> <button class="btn" onclick="backup()">گرفتن پشتیبان همین الان</button></div>
+  <div class="card tw" style="padding:0"><table><thead><tr><th>فایل</th><th>نوع</th><th>حجم</th><th>زمان</th><th></th></tr></thead><tbody>${L.files.map(f=>`<tr><td dir="ltr" style="text-align:right">${esc(f.name)}</td><td><span class="tag ${f.kind==='auto'?'g':f.kind==='before'?'a':'b'}">${kind[f.kind]}</span></td><td class="num">${sz(f.size)}</td><td class="num">${jd(f.time,1)}</td><td style="white-space:nowrap"><button class="btn s" onclick="backupRestore('${esc(f.name)}')">بازیابی</button> <button class="btn s d" onclick="backupDel('${esc(f.name)}')">حذف</button></td></tr>`).join('')||emptyRow(5,'هنوز پشتیبانی گرفته نشده')}</tbody></table></div>
+  <div class="card"><h2>انتقال از برنامه‌ی قدیمی</h2><p class="sub">مسیر کامل فایل <code>distribution_pro.db</code> نسخه‌ی قبلی را بنویسید تا محصولات و مشتریان منتقل شوند.</p><div class="bar"><input id="old" dir="ltr" style="flex:1" placeholder="C:\\Users\\user\\Desktop\\robat\\distribution_pro.db"><button class="btn" onclick="impOld()">انتقال</button></div></div>`)
+};
+let UL=[];
+async function loadUsers(){UL=await api('users_list');$('#ucard').innerHTML=`<table><thead><tr><th>نام کاربری</th><th>نقش</th><th>وضعیت</th><th></th></tr></thead><tbody>${UL.map(u=>`<tr><td><b>${esc(u.username)}</b></td><td>${u.role==='admin'?'مدیر':'کارمند'}</td><td>${u.active?'<span class="tag g">فعال</span>':'<span class="tag">غیرفعال</span>'}</td><td style="white-space:nowrap"><button class="btn s" onclick="userForm(${u.id})">ویرایش</button> <button class="btn s d" onclick="userDel(${u.id})">حذف</button></td></tr>`).join('')}</tbody></table>`}
+function userForm(id){const u=UL.find(x=>x.id===id)||{role:'staff',active:1};
+  modal(id?'ویرایش کاربر':'کاربر جدید',`<div class="frow">${fld('نام کاربری','u_n',u.username)}${fld(id?'رمز جدید (خالی = بدون تغییر)':'رمز عبور (حداقل ۶ کاراکتر)','u_p','','password','autocomplete="new-password"')}
+  <div class="f"><label>نقش</label><select id="u_r"><option value="staff" ${u.role==='staff'?'selected':''}>کارمند</option><option value="admin" ${u.role==='admin'?'selected':''}>مدیر</option></select></div>
+  <div class="f"><label>وضعیت</label><select id="u_a"><option value="1" ${u.active?'selected':''}>فعال</option><option value="0" ${u.active?'':'selected'}>غیرفعال</option></select></div></div>`,`<button class="btn p" onclick="userSave(${id||0})">ذخیره</button>`)}
+async function userSave(id){await act('user_save',{u:{id:id||undefined,username:g('u_n'),password:g('u_p'),role:g('u_r'),active:+g('u_a')}},'ذخیره شد');closeModal();loadUsers()}
+async function userDel(id){if(!confirm('این کاربر حذف شود؟'))return;await act('user_delete',{id},'حذف شد');loadUsers()}
+async function setSave(){const s={};['shop_name','shop_phone','currency','shop_address','invoice_footer','template','auto_open','publish_delay','log_days','runs_days','jobs_days'].forEach(k=>s[k]=g('s_'+k));await act('settings_save',{s},'ذخیره شد');S.cfg=await api('settings_get');$('#brandName').textContent=S.cfg.shop_name}
+async function backup(){const r=await act('backup');toast('پشتیبان گرفته شد'+(r.includes('\n')?' (پوشه‌ی دوم: '+r.split('\n')[1]+')':''),r.includes('\n'));PG.backup()}
+async function backupSave(){await act('settings_save',{s:{backup_enabled:g('bk_en'),backup_interval_h:g('bk_int'),backup_keep:g('bk_keep'),backup_dir2:g('bk_dir')}},'ذخیره شد');PG.backup()}
+async function backupRestore(name){if(!confirm('اطلاعات فعلی با این پشتیبان جایگزین می‌شود (از اطلاعات فعلی هم یک نسخه نگه داشته می‌شود). ادامه می‌دهید؟'))return;toast(await act('backup_restore',{name}));PG.backup()}
+async function backupCancel(){await act('backup_cancel_restore');PG.backup()}
+async function backupDel(name){if(!confirm('این فایل پشتیبان حذف شود؟'))return;await act('backup_delete',{name});PG.backup()}
+async function impOld(){toast(await act('import_old',{path:g('old').trim().replace(/^"|"$/g,'')}))}
+
+/* ───────── ورود ───────── */
+function showLogin(setup){
+  $('#login').classList.add('on');
+  $('#login').innerHTML=`<div class="lbox"><h1>${setup?'ساخت حساب مدیر':'ورود به برنامه'}</h1><p class="sub" style="margin:0">${setup?'اولین بار است. یک نام کاربری و رمز برای مدیر بسازید.':'نام کاربری و رمز عبور را وارد کنید.'}</p>
+  ${fld('نام کاربری','l_u','','text','autocomplete="username" autofocus')}${fld('رمز عبور'+(setup?' (حداقل ۶ کاراکتر)':''),'l_p','','password','autocomplete="current-password"')}
+  ${setup?fld('تکرار رمز عبور','l_p2','','password','autocomplete="new-password"'):''}
+  <div id="l_err" style="color:var(--red);min-height:22px;margin:8px 0"></div><button class="btn p" style="width:100%" id="l_b" onclick="doLogin(${setup})">${setup?'ساخت حساب و ورود':'ورود'}</button></div>`;
+  $('#login').onkeydown=e=>{if(e.key==='Enter')doLogin(setup)};
+  setTimeout(()=>$('#l_u')&&$('#l_u').focus(),50)
+}
+async function doLogin(setup){
+  try{
+    if(setup&&g('l_p')!==g('l_p2'))throw new Error('رمز و تکرار آن یکسان نیست');
+    await api(setup?'setup':'login',{username:g('l_u'),password:g('l_p')});
+    $('#login').classList.remove('on');$('#login').innerHTML='';boot()
+  }catch(e){if(e.message!=='AUTH')$('#l_err').textContent=e.message}
+}
+function drawMe(){$('#me').innerHTML=`<b>👤 ${esc(S.me.user)} <span style="font-weight:400;color:#8a9aa8">(${S.me.role==='admin'?'مدیر':'کارمند'})</span></b><button onclick="pwForm()">رمز عبور</button><button onclick="logout()">خروج</button>`}
+function pwForm(){modal('تغییر رمز عبور',`${fld('رمز فعلی','p_o','','password')}${fld('رمز جدید (حداقل ۶ کاراکتر)','p_n','','password')}${fld('تکرار رمز جدید','p_n2','','password')}`,`<button class="btn p" onclick="pwSave()">تغییر</button>`)}
+async function pwSave(){if(g('p_n')!==g('p_n2'))return toast('رمز جدید و تکرار آن یکسان نیست',true);await act('password_change',{old:g('p_o'),new:g('p_n')},'رمز عبور تغییر کرد');closeModal()}
+async function logout(){await api('logout');S.me=null;$('#view').innerHTML='';showLogin(false)}
+
+/* ───────── شروع ───────── */
+async function boot(){
+  const me=await api('me').catch(()=>null);
+  if(!me||!me.logged_in)return showLogin(me&&me.needs_setup);
+  S.me=me;$('#login').classList.remove('on');buildNav();S.cfg=await api('settings_get');$('#brandName').textContent=S.cfg.shop_name;drawMe();go('dashboard');if(!S.timer)S.timer=setInterval(()=>{if(S.me)refreshBadges()},60000)
+}
+boot();
+</script>
+</body>
+</html>
