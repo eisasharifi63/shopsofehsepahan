@@ -43,7 +43,7 @@ select{width:100%;padding:7px;border:1px solid var(--bd);border-radius:8px;font-
 .ln .st button{width:32px;height:32px;font-size:1.1rem}
 .tot{display:flex;justify-content:space-between;font-weight:700;padding:12px 0}
 .f{margin-bottom:10px}.f label{display:block;font-size:.8rem;font-weight:600;margin-bottom:4px}
-.f input,.f textarea{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;font-size:.95rem}
+.f input,.f textarea,.f select{width:100%;padding:10px;border:1px solid var(--bd);border-radius:8px;font-size:.95rem;background:#fff}
 #err,.err{color:var(--red);font-size:.85rem;margin:8px 0;min-height:1.2em}
 .em{text-align:center;color:var(--sub);padding:30px 0;grid-column:1/-1}
 .inv{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
@@ -83,7 +83,7 @@ const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.par
 const nrm=s=>String(s||'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/\u200c/g,' ').toLowerCase();
 function g2j(gy,gm,gd){const gdm=[0,31,59,90,120,151,181,212,243,273,304,334];const gy2=gm>2?gy+1:gy;let days=355666+365*gy+Math.floor((gy2+3)/4)-Math.floor((gy2+99)/100)+Math.floor((gy2+399)/400)+gd+gdm[gm-1];let jy=-1595+33*Math.floor(days/12053);days%=12053;jy+=4*Math.floor(days/1461);days%=1461;if(days>365){jy+=Math.floor((days-1)/365);days=(days-1)%365}const jm=days<186?1+Math.floor(days/31):7+Math.floor((days-186)/30),jd=1+(days<186?days%31:(days-186)%30);return[jy,jm,jd]}
 function jd(s){const m=String(s||'').match(/(\d+)-(\d+)-(\d+)/);if(!m)return'';const[y,mo,d]=g2j(+m[1],+m[2],+m[3]);return`${y}/${String(mo).padStart(2,'0')}/${String(d).padStart(2,'0')}`.replace(/\d/g,x=>'۰۱۲۳۴۵۶۷۸۹'[x])}
-let P=[],CUR='تومان',CAT='',Q='',CART=LS.get('cart',{}),SEL={},busy=false,PORTAL=null,DRAFT={},TAB='orders';
+let AREAS=[],ALAB=['منطقه','شهر'],P=[],CUR='تومان',CAT='',Q='',CART=LS.get('cart',{}),SEL={},busy=false,PORTAL=null,DRAFT={},TAB='orders';
 const byCode=c=>P.find(p=>p.code===c),unitOf=(p,u)=>p.units.find(x=>x.u===u);
 const uLabel=x=>x.u==='pc'?'عدد':`${UL[x.u]} ${fa(x.size)} عددی`;
 const getTg=()=>window.Eitaa&&window.Eitaa.WebApp;
@@ -100,7 +100,7 @@ const refTxt=x=>/^\d+$/.test(String(x))?fd(x):esc(x);
 async function load(){
   try{
     const r=await fetch(API?API+'?action=products':'/api/miniapp/products');if(!r.ok)throw 0;
-    const d=await r.json();P=d.products;CUR=d.currency||CUR;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
+    const d=await r.json();P=d.products;CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
     for(const k of Object.keys(CART)){const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(!x||x.max<1)delete CART[k];else CART[k]=Math.min(CART[k],x.max)}
     LS.set('cart',CART);cats();paint();bar();
   }catch(e){$('#list').innerHTML='<div class="em">اتصال برقرار نشد.<br><br><button class="btn" onclick="load()">تلاش دوباره</button></div>'}
@@ -158,24 +158,37 @@ function showReview(){
   <h3>مشخصات تحویل‌گیرنده</h3>
   <div class="f"><label>نام و نام خانوادگی</label><input id="nm" value="${esc(nm||'')}" autocomplete="name"></div>
   <div class="f"><label>شماره موبایل</label><input id="ph" type="tel" inputmode="tel" placeholder="۰۹۱۲۳۴۵۶۷۸۹" value="${esc(DRAFT.ph??me.phone??'')}" autocomplete="tel"></div>
-  <div class="f"><label>آدرس</label><textarea id="ad" rows="2" placeholder="شهر، خیابان، پلاک…">${esc(DRAFT.ad??me.address??'')}</textarea></div>
+  ${AREAS.length?`<div class="f"><label>${esc(ALAB[0])}</label><select id="rg"><option value="">انتخاب کنید…</option>${AREAS.map(a=>`<option ${a.name===(DRAFT.rg??me.region??'')?'selected':''}>${esc(a.name)}</option>`).join('')}</select></div>
+  <div class="f" id="ctw"><label>${esc(ALAB[1])}</label><select id="ct"></select></div>`:''}
+  <div class="f"><label>${AREAS.length?'آدرس دقیق (خیابان، کوچه، پلاک)':'آدرس'}</label><textarea id="ad" rows="2" placeholder="${AREAS.length?'خیابان، کوچه، پلاک، واحد…':'شهر، خیابان، پلاک…'}">${esc(DRAFT.ad??me.address??'')}</textarea></div>
   <div class="f"><label>توضیحات (اختیاری)</label><input id="nt" maxlength="300" value="${esc(DRAFT.nt||'')}"></div>
   <div id="err"></div><button class="btn w" id="sub" data-act="submit">ثبت نهایی فاکتور</button><button class="btn g w" style="margin-top:8px" data-act="cart">بازگشت به سبد</button>`);
+  fillCities(DRAFT.ct??me.city??'');
 }
-const keepDraft=()=>{DRAFT={nm:$('#nm')?.value,ph:$('#ph')?.value,ad:$('#ad')?.value,nt:$('#nt')?.value}};
+function fillCities(sel){   // منوی دوم از روی منوی اول پر می‌شود؛ منطقه‌ای که شهر ندارد، منوی دوم را پنهان می‌کند
+  const rg=$('#rg'),ct=$('#ct'),w=$('#ctw');if(!rg||!ct)return;
+  const a=AREAS.find(x=>x.name===rg.value),cs=a?a.cities:[];
+  w.style.display=a&&!cs.length?'none':'';
+  ct.innerHTML=`<option value="">${a?'انتخاب کنید…':'اول '+esc(ALAB[0])+' را انتخاب کنید'}</option>`+cs.map(c=>`<option ${c===sel?'selected':''}>${esc(c)}</option>`).join('');
+}
+const keepDraft=()=>{DRAFT={nm:$('#nm')?.value,ph:$('#ph')?.value,ad:$('#ad')?.value,nt:$('#nt')?.value,rg:$('#rg')?.value,ct:$('#ct')?.value}};
 async function submit(){
   if(busy)return;const err=$('#err');err.textContent='';keepDraft();
   const name=DRAFT.nm.trim();let ph=nrm(DRAFT.ph).replace(/\D/g,'');
   if(ph.startsWith('98')&&ph.length===12)ph='0'+ph.slice(2);if(ph.length===10&&ph[0]==='9')ph='0'+ph;
   if(name.length<3)return err.textContent='نام و نام خانوادگی را کامل بنویسید';
   if(!/^09\d{9}$/.test(ph))return err.textContent='شماره موبایل معتبر نیست (مثلاً ۰۹۱۲۳۴۵۶۷۸۹)';
+  let rgn='',cty='';
+  if(AREAS.length){rgn=DRAFT.rg||'';const a=AREAS.find(x=>x.name===rgn);
+    if(!a)return err.textContent='لطفاً '+ALAB[0]+' را انتخاب کنید';
+    if(a.cities.length){cty=DRAFT.ct||'';if(!a.cities.includes(cty))return err.textContent='لطفاً '+ALAB[1]+' را انتخاب کنید'}}
   const ad=DRAFT.ad.trim();if(ad.length<8)return err.textContent='آدرس را کامل‌تر بنویسید';
   let key=LS.get('okey',null);if(!key){key=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random().toString(36).slice(2);LS.set('okey',key)}
   const items=lines().map(l=>({code:l.p.code,unit:l.x.u,qty:l.q})),snap=cartAsInvoice();
   busy=true;const btn=$('#sub');btn.disabled=true;btn.textContent='در حال ثبت…';
-  const d=await post({action:'order',key,customer:{name,phone:ph,address:ad},note:DRAFT.nt.trim(),items});
+  const d=await post({action:'order',key,customer:{name,phone:ph,address:ad,region:rgn,city:cty},note:DRAFT.nt.trim(),items});
   if(d.ok){
-    LS.set('me',{name,phone:ph,address:ad});LS.set('okey',null);LS.set('last',{ref:String(d.order_id),phone:ph});CART={};LS.set('cart',CART);DRAFT={};bar();busy=false;
+    LS.set('me',{name,phone:ph,address:ad,region:rgn,city:cty});LS.set('okey',null);LS.set('last',{ref:String(d.order_id),phone:ph});CART={};LS.set('cart',CART);DRAFT={};bar();busy=false;
     const inv={ref:API?String(d.order_id):'',id:API?'':d.order_id,date:d.date||'',stage:0,items:d.items||snap.items,final:d.total,total:d.total};
     SH(`<div class="ok"><h3>✅ سفارش شما ثبت شد</h3><p class="cd">${API?'کد پیگیری':'شماره فاکتور'}: <b style="color:var(--tx)">${refTxt(d.order_id)}</b></p></div>${stepper(inv)}${invoice(inv)}
     <p class="cd" style="margin-bottom:10px">فروشنده سفارش را بررسی و تأیید می‌کند. با «پیگیری سفارش» می‌توانید هر زمان مرحله‌ی آن را ببینید.</p>
@@ -233,6 +246,7 @@ async function doTrack(ref,phone,errId){
 }
 
 /* ───────── رویدادها ───────── */
+$('#ov').addEventListener('change',e=>{if(e.target.id==='rg')fillCities('')});
 $('#go').onclick=showCart;$('#bacc').onclick=openAccount;$('#btrk').onclick=()=>PORTAL?(TAB='orders',showAccount()):showLogin();
 $('#ov').addEventListener('click',e=>{if(e.target.id==='ov'||e.target.closest('[data-close]'))return closeSh();
   const a=e.target.closest('[data-act]'),t=e.target.closest('[data-tab]'),oc=e.target.closest('[data-o]'),b=e.target.closest('[data-a]');
