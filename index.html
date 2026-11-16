@@ -157,19 +157,24 @@ function apply(d){
   for(const k of Object.keys(CART)){const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(!x||x.max<1)delete CART[k];else CART[k]=Math.min(CART[k],x.max)}
   LS.set('cart',CART);cats();paint();bar();
 }
+const DBG=/debug/.test(location.search);
+function dbg(m){if(!DBG)return;let b=$('#dbg');if(!b){b=document.createElement('pre');b.id='dbg';b.style.cssText='position:fixed;top:0;left:0;z-index:99;background:#000c;color:#0f0;font:11px/1.4 monospace;margin:0;padding:4px;direction:ltr;max-width:92vw;white-space:pre-wrap';document.body.appendChild(b)}b.textContent+=Math.round(performance.now())+'ms '+m+'\n'}
+dbg('script start');addEventListener('load',()=>dbg('window load'));
+let heroDone=0;const heroOnce=()=>{if(!heroDone){heroDone=1;hero()}};setTimeout(heroOnce,12000);
+async function load(){try{await load0()}finally{heroOnce()}}
 function fail(e){
   if(P.length)return;const m=String(e&&e.message||e||''),h=/Failed to fetch|NetworkError|Load failed/i.test(m)?'ارتباط با صندوق برقرار نشد (اینترنت، فیلترشکن یا آدرس اشتباه)':'';
   $('#list').innerHTML=`<div class="em" style="grid-column:1/-1">اتصال برقرار نشد.${h?'<br><small>'+h+'</small>':''}<br><small dir="ltr" style="display:block;margin:8px 0;opacity:.7">${esc(m)}</small><button class="btn" onclick="load()">تلاش دوباره</button></div>`}
-async function load(){
-  const c=LS.get('cat',null);if(c&&c.products&&!P.length){try{apply(c)}catch(e){}}
+async function load0(){
+  dbg('catalog request');const c=LS.get('cat',null);if(c&&c.products&&!P.length){try{apply(c)}catch(e){}}
   if(/PASTE_YOUR/.test(API||''))return fail('آدرس صندوق در فایل config.js وارد نشده است (خط api)');
   let d;
   try{
     const r=await fetch(API?API+'?action=products':'/api/miniapp/products');if(!r.ok)throw new Error('HTTP '+r.status);
     const t=await r.text();try{d=JSON.parse(t)}catch(e){throw new Error('پاسخ صندوق JSON نیست؛ در Deploy گزینه‌ی Who has access باید Anyone باشد')}
-    if(d.error)throw new Error(d.error);if(!Array.isArray(d.products))throw new Error('پاسخ صندوق فهرست محصولات ندارد');
+    dbg('catalog received');if(d.error)throw new Error(d.error);if(!Array.isArray(d.products))throw new Error('پاسخ صندوق فهرست محصولات ندارد');
   }catch(e){return fail(e)}
-  try{apply(d);LS.set('cat',d)}catch(e){fail(e)}
+  try{apply(d);LS.set('cat',d);dbg('catalog shown')}catch(e){fail(e)}
 }
 const FAU={pc:'عدد',pack:'بسته',ctn:'کارتن'};
 const ICO=[[/ویفر/,'🍫'],[/نوشیدنی|آبمیوه|شربت|دوغ|نوشابه/,'🧃'],[/کیک/,'🍰'],[/بیسکویت|کوکی/,'🍪'],[/شکلات/,'🍬'],[/چیپس|snack|اسنک/i,'🥨'],[/ماکارونی|پاستا/,'🍝'],[/لبنیات|شیر|پنیر/,'🧀']],ico=c=>(ICO.find(x=>x[0].test(c||''))||[0,'🛍️'])[1];
@@ -334,8 +339,8 @@ $('#ov').addEventListener('click',e=>{if(e.target.id==='ov'||e.target.closest('[
 /* ───────── بنر، پشتیبانی، تنظیمات، حالت شب ───────── */
 const SUP=CFG.support||{},dark=on=>{document.documentElement.classList.toggle('dk',on);LS.set('dark',on)};
 {const t=getTg();dark(LS.get('dark',null)??!!(t&&t.colorScheme==='dark'))}
-function hero(){const h=$('#hero'),src=CFG.banner||(IMG+'banner.jpg');h.innerHTML=`<img src="${esc(src)}" alt="" onerror="this.parentNode.classList.add('nob');this.parentNode.innerHTML='<span id=hn>'+$('#shop').textContent+'</span>'">`}
-hero();new MutationObserver(()=>{const h=$('#hn');h&&(h.textContent=$('#shop').textContent)}).observe($('#shop'),{childList:true,characterData:true,subtree:true});
+function hero(){const h=$('#hero'),src=CFG.banner||(IMG+'banner.jpg');h.innerHTML=`<img src="${esc(src)}" alt="" decoding="async" onload="dbg('banner loaded')" onerror="this.parentNode.classList.add('nob');this.parentNode.innerHTML='<span id=hn>'+$('#shop').textContent+'</span>'">`}
+new MutationObserver(()=>{const h=$('#hn');h&&(h.textContent=$('#shop').textContent)}).observe($('#shop'),{childList:true,characterData:true,subtree:true});
 function navOn(id){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.id===id))}
 function showSupport(){
   const L=[];
