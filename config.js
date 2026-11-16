@@ -1,12 +1,12 @@
 // تنظیمات مینی‌اپ — فقط این فایل را ویرایش کنید
 window.MINIAPP_CONFIG = {
-  api: "PASTE_YOUR_APPS_SCRIPT_URL_HERE/exec",   // آدرس /exec صندوق پست
+  api: "https://script.google.com/macros/s/AKfycby6XsB8HlCEF2LSn37RetbZl5dmpxb4anKH78lTcCkJP5KkbHEubRaSxxcmHSKnUuuM/exec",   // آدرس /exec صندوق پست
   // banner: "img/banner.jpg",                    // اگر اسم یا مسیر بنر فرق دارد
   support: {
     phone: "",        // مثلاً 09123456789
     telegram: "",     // نام کاربری بدون @
-    eitaa: "",        // نام کاربری بدون @
-    hours: "شنبه تا پنجشنبه، ۹ تا ۱۸"
+    eitaa: "m_panahi1",        // نام کاربری بدون @
+    hours: "15 شنبه تا پنجشنبه، 8 تا "
   },
   // محدودیت سفارش برای هر مشتری در هر بار ثبت سفارش.
   // کلید = «کد کالا» یا «نام دقیق کالا» در برنامه. مقدار = حداکثر تعداد برای هر واحد (ctn کارتن، pack بسته، pc عدد).
