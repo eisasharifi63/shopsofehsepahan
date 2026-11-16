@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ثبت سفارش</title>
 <script src="config.js" onerror="void 0"></script>
+<script src="https://telegram.org/js/telegram-web-app.js" async onerror="void 0"></script>
 <script src="https://developer.eitaa.com/eitaa-web-app.js" async onerror="void 0"></script>
 <style>
 :root{--p:#16a34a;--pd:#15803d;--bg:#f4f6f8;--card:#fff;--tx:#0f172a;--sub:#64748b;--bd:#e2e8f0;--red:#dc2626;--amb:#b45309;--r:12px}
@@ -32,7 +33,7 @@ select{width:100%;padding:7px;border:1px solid var(--bd);border-radius:8px;font-
 .na{font-size:.8rem;color:var(--red);text-align:center;padding:9px 0}
 #bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--bd);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;max-width:640px;margin:0 auto}
 #bar small{color:var(--sub);font-size:.75rem;display:block}#bar b{color:var(--p);font-size:1.05rem}
-.btn{touch-action:manipulation;background:var(--p);color:#fff;border:none;border-radius:10px;padding:12px 20px;font-weight:700;font-size:.95rem}
+.btn{background:var(--p);color:#fff;border:none;border-radius:10px;padding:12px 20px;font-weight:700;font-size:.95rem}
 .btn:disabled{opacity:.5}.btn.g{background:#e2e8f0;color:var(--tx)}.btn.w{width:100%}
 #ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:30;align-items:flex-end;justify-content:center}
 #ov.on{display:flex}
@@ -89,7 +90,7 @@ h2.sec{font-size:1rem;margin:2px 0 10px;display:flex;align-items:center;gap:6px}
 .card{padding:12px;gap:5px;border-radius:var(--r);text-align:center;background:var(--card);box-shadow:0 1px 0 rgba(0,0,0,.03)}
 .ph{height:128px;display:flex;align-items:center;justify-content:center;font-size:3rem}
 .card img{height:128px;object-fit:contain;background:none;border-radius:0;filter:drop-shadow(0 6px 8px rgba(0,0,0,.14))}
-.nm{font-size:.92rem}.cd{font-size:.76rem}.pr{font-size:1rem;color:var(--p)}
+.pr{margin-bottom:8px}.nm{font-size:.92rem}.cd{font-size:.76rem}.pr{font-size:1rem;color:var(--p)}
 html.dk .pr{color:var(--pd)}
 .card select{background:var(--bg);color:var(--tx);border-color:var(--bd);text-align:center}
 .add{border:0;border-radius:12px;background:var(--p);color:#fff;font-weight:700;font-size:.88rem;padding:11px 6px;margin-top:auto;display:flex;align-items:center;justify-content:center;gap:6px}
@@ -100,8 +101,8 @@ html.dk .pr{color:var(--pd)}
 #bar.show{display:flex;animation:up .25s ease-out}
 @keyframes up{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
 .bc{position:relative;font-size:1.6rem;color:var(--p)}.bdg{position:absolute;top:-6px;left:-8px;background:#d92d20;color:#fff;border-radius:99px;font-size:.7rem;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700}
-.bt{flex:1;display:flex;justify-content:space-between;align-items:center;gap:6px;color:var(--tx)}.bt small{font-size:.78rem;color:var(--sub)}.bt b{color:var(--p);font-size:1rem}
-#bar .btn{border-radius:14px;padding:13px 16px;white-space:nowrap}
+.bt{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:1px;color:var(--tx);min-width:0}.bt b{white-space:nowrap}.bt small{font-size:.78rem;color:var(--sub)}.bt b{color:var(--p);font-size:1rem}
+#bar .btn{border-radius:14px;padding:13px 14px;white-space:nowrap;font-size:.9rem}
 nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:var(--card);border-top:1px solid var(--bd);display:flex;z-index:18;max-width:640px;margin:0 auto}
 nav button{flex:1;border:0;background:none;color:var(--sub);font-size:.72rem;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
 nav button span{font-size:1.35rem;filter:grayscale(1);opacity:.7}nav button.on{color:var(--p)}nav button.on span{filter:none;opacity:1}
@@ -122,7 +123,7 @@ html.dk nav button.on{color:var(--pd)}
 <header><button id="bacc">👤 حساب من</button><div><h1 id="shop">ثبت سفارش</h1><small>مینی‌اپ سفارش</small></div><span style="width:70px"></span></header>
 <div id="hero"></div>
 <main><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="em">در حال بارگذاری…</div></div></main>
-<div id="bar"><div class="bc">🛒<span class="bdg" id="cn">۰</span></div><div class="bt"><div><small>سبد خرید شما</small></div><div><small>جمع کل:</small> <b id="tt">۰</b></div></div><button class="btn" id="go">ثبت سفارش ‹</button></div>
+<div id="bar"><div class="bc">🛒<span class="bdg" id="cn">۰</span></div><div class="bt"><small id="bn">سبد خرید شما</small><div><small>جمع کل: </small><b id="tt">۰</b></div></div><button class="btn" id="go">ثبت سفارش ‹</button></div>
 <nav><button id="nh" class="on"><span>🏠</span>خانه</button><button id="btrk"><span>🧾</span>سفارش‌های من</button><button id="nsp"><span>🎧</span>پشتیبانی</button><button id="nst"><span>⚙️</span>تنظیمات</button></nav>
 <div id="ov"><div id="sh"></div></div>
 <script>
@@ -137,7 +138,7 @@ function jd(s){const m=String(s||'').match(/(\d+)-(\d+)-(\d+)/);if(!m)return'';c
 let AREAS=[],ALAB=['منطقه','شهر'],P=[],CUR='تومان',CAT='',Q='',CART=LS.get('cart',{}),SEL={},busy=false,PORTAL=null,DRAFT={},TAB='orders';
 const byCode=c=>P.find(p=>p.code===c),unitOf=(p,u)=>p.units.find(x=>x.u===u);
 const uLabel=x=>x.u==='pc'?'عدد':`${UL[x.u]} ${fa(x.size)} عددی`;
-const getTg=()=>window.Eitaa&&window.Eitaa.WebApp||null;
+const getTg=()=>(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initData!==undefined&&Telegram.WebApp.platform!=='unknown'&&Telegram.WebApp)||(window.Eitaa&&Eitaa.WebApp)||null;
 function initTg(){const t=getTg();try{t&&(t.ready(),t.expand())}catch(e){}try{t&&t.setHeaderColor&&t.setHeaderColor('#0f5c43')}catch(e){}}
 initTg();addEventListener('load',initTg);
 // همه‌ی درخواست‌ها: «صندوق پست» (text/plain تا پیش‌درخواست CORS لازم نباشد) یا برنامه‌ی همین کامپیوتر
@@ -148,32 +149,13 @@ async function post(body){
 const refTxt=x=>/^\d+$/.test(String(x))?fd(x):esc(x);
 
 /* ───────── فروشگاه ───────── */
-let loadingProducts=false;
 async function load(){
-  if(loadingProducts)return;
-  loadingProducts=true;
-  const list=$('#list');
-  list.innerHTML='<div class="em">در حال دریافت محصولات…</div>';
-  const controller=new AbortController();
-  const timeout=setTimeout(()=>controller.abort(),20000);
   try{
-    const url=API?API+'?action=products':'/api/miniapp/products';
-    const r=await fetch(url,{signal:controller.signal,cache:'no-store'});
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    const d=await r.json();
-    if(!d||!Array.isArray(d.products))throw new Error('ساختار پاسخ سرور معتبر نیست');
-    P=d.products;CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
+    const r=await fetch(API?API+'?action=products':'/api/miniapp/products');if(!r.ok)throw 0;
+    const d=await r.json();P=d.products;CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
     for(const k of Object.keys(CART)){const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(!x||x.max<1)delete CART[k];else CART[k]=Math.min(CART[k],x.max)}
     LS.set('cart',CART);cats();paint();bar();
-  }catch(e){
-    const message=e&&e.name==='AbortError'
-      ?'دریافت محصولات بیش از ۲۰ ثانیه طول کشید. اتصال سرور یا اینترنت را بررسی کنید.'
-      :'ارتباط با سرور برقرار نشد. لطفاً اینترنت و تنظیمات سرور را بررسی کنید.';
-    list.innerHTML='<div class="em">'+message+'<br><br><button class="btn" onclick="load()">تلاش دوباره</button></div>';
-  }finally{
-    clearTimeout(timeout);
-    loadingProducts=false;
-  }
+  }catch(e){$('#list').innerHTML='<div class="em">اتصال برقرار نشد.<br><br><button class="btn" onclick="load()">تلاش دوباره</button></div>'}
 }
 const ICO=[[/ویفر/,'🍫'],[/نوشیدنی|آبمیوه|شربت|دوغ|نوشابه/,'🧃'],[/کیک/,'🍰'],[/بیسکویت|کوکی/,'🍪'],[/شکلات/,'🍬'],[/چیپس|snack|اسنک/i,'🥨'],[/ماکارونی|پاستا/,'🍝'],[/لبنیات|شیر|پنیر/,'🧀']],ico=c=>(ICO.find(x=>x[0].test(c||''))||[0,'🛍️'])[1];
 function cats(){const cs=[...new Set(P.map(p=>p.category).filter(Boolean))];$('#cats').innerHTML=cs.length?['',...cs].map(c=>`<button class="${c===CAT?'on':''}" data-cat="${esc(c)}"><span>${c?ico(c):'✨'}</span>${c?esc(c):'همه'}</button>`).join(''):''}
@@ -189,7 +171,7 @@ function repaint(code){const el=$(`#list [data-c="${CSS.escape(code)}"]`),p=byCo
 function setQ(k,n){const[c,u]=k.split('|'),x=unitOf(byCode(c),u);n=Math.max(0,Math.min(n,x.max));n?CART[k]=n:delete CART[k];LS.set('cart',CART);bar()}
 function lines(){return Object.keys(CART).map(k=>{const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);return p&&x?{k,p,x,q:CART[k]}:null}).filter(Boolean)}
 const total=()=>lines().reduce((s,l)=>s+l.q*l.x.price,0);
-function bar(){const n=lines().length;$('#cn').textContent=fa(n);$('#tt').textContent=fa(total())+' '+CUR;$('#bar').classList.toggle('show',n>0);$('#bar small').textContent=n?'سبد خرید شما: '+fa(n)+' قلم کالا':''}
+function bar(){const n=lines().length;$('#cn').textContent=fa(n);$('#tt').textContent=fa(total())+' '+CUR;$('#bar').classList.toggle('show',n>0);$('#bn').textContent=n?'سبد شما: '+fa(n)+' قلم کالا':''}
 $('#q').addEventListener('input',e=>{Q=e.target.value;paint()});
 $('#cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;CAT=b.dataset.cat;cats();paint()});
 $('#list').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const c=b.closest('.card').dataset.c,k=c+'|'+SEL[c];setQ(k,(CART[k]||0)+(b.dataset.a==='inc'?1:-1));repaint(c)});
@@ -316,31 +298,6 @@ async function doTrack(ref,phone,errId){
 }
 
 /* ───────── رویدادها ───────── */
-// پشتیبانی از لمس مستقیم در WebView موبایل ایتا
-$('#ov').addEventListener('pointerup',e=>{
-  if(e.pointerType!=='touch')return;
-  const a=e.target&&e.target.closest?e.target.closest('[data-act]'):null;
-  if(!a)return;
-  const act=a.dataset.act;
-  if(act==='review'||act==='submit'||act==='cart'){
-    e.preventDefault();e.stopImmediatePropagation();
-    if(act==='review')showReview();
-    else if(act==='submit')submit();
-    else{keepDraft();showCart()}
-  }
-},true);
-// مسیر مستقلِ کلیک برای مراحل اصلی سفارش در WebView ایتا
-$('#ov').addEventListener('click',e=>{
-  const a=e.target.closest('[data-act]');
-  if(!a)return;
-  if(a.dataset.act==='review'){
-    e.preventDefault();e.stopImmediatePropagation();showReview();
-  }else if(a.dataset.act==='submit'){
-    e.preventDefault();e.stopImmediatePropagation();submit();
-  }else if(a.dataset.act==='cart'){
-    e.preventDefault();e.stopImmediatePropagation();keepDraft();showCart();
-  }
-},true);
 $('#ov').addEventListener('change',e=>{if(e.target.id==='rg')fillCities('')});
 $('#go').onclick=showCart;$('#bacc').onclick=openAccount;$('#btrk').onclick=()=>PORTAL?(TAB='orders',showAccount()):showLogin();
 $('#ov').addEventListener('click',e=>{if(e.target.id==='ov'||e.target.closest('[data-close]'))return closeSh();
@@ -362,8 +319,8 @@ $('#ov').addEventListener('click',e=>{if(e.target.id==='ov'||e.target.closest('[
 /* ───────── بنر، پشتیبانی، تنظیمات، حالت شب ───────── */
 const SUP=CFG.support||{},dark=on=>{document.documentElement.classList.toggle('dk',on);LS.set('dark',on)};
 {const t=getTg();dark(LS.get('dark',null)??!!(t&&t.colorScheme==='dark'))}
-function hero(){const h=$('#hero'),src=CFG.banner||(IMG+'banner.jpg');h.innerHTML=`<img src="${esc(src)}" alt="" onerror="this.parentNode.classList.add('nob');this.parentNode.textContent=document.title">`}
-hero();
+function hero(){const h=$('#hero'),src=CFG.banner||(IMG+'banner.jpg');h.innerHTML=`<img src="${esc(src)}" alt="" onerror="this.parentNode.classList.add('nob');this.parentNode.innerHTML='<span id=hn>'+$('#shop').textContent+'</span>'">`}
+hero();new MutationObserver(()=>{const h=$('#hn');h&&(h.textContent=$('#shop').textContent)}).observe($('#shop'),{childList:true,characterData:true,subtree:true});
 function navOn(id){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.id===id))}
 function showSupport(){
   const L=[];
