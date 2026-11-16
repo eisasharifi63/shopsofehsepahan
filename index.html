@@ -157,12 +157,19 @@ function apply(d){
   for(const k of Object.keys(CART)){const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(!x||x.max<1)delete CART[k];else CART[k]=Math.min(CART[k],x.max)}
   LS.set('cart',CART);cats();paint();bar();
 }
+function fail(e){
+  if(P.length)return;const m=String(e&&e.message||e||''),h=/Failed to fetch|NetworkError|Load failed/i.test(m)?'ارتباط با صندوق برقرار نشد (اینترنت، فیلترشکن یا آدرس اشتباه)':'';
+  $('#list').innerHTML=`<div class="em" style="grid-column:1/-1">اتصال برقرار نشد.${h?'<br><small>'+h+'</small>':''}<br><small dir="ltr" style="display:block;margin:8px 0;opacity:.7">${esc(m)}</small><button class="btn" onclick="load()">تلاش دوباره</button></div>`}
 async function load(){
   const c=LS.get('cat',null);if(c&&c.products&&!P.length){try{apply(c)}catch(e){}}
+  if(/PASTE_YOUR/.test(API||''))return fail('آدرس صندوق در فایل config.js وارد نشده است (خط api)');
+  let d;
   try{
-    const r=await fetch(API?API+'?action=products':'/api/miniapp/products');if(!r.ok)throw 0;
-    const d=await r.json();if(!d.products)throw 0;apply(d);LS.set('cat',d);
-  }catch(e){if(!P.length)$('#list').innerHTML='<div class="em" style="grid-column:1/-1">اتصال برقرار نشد.<br><br><button class="btn" onclick="load()">تلاش دوباره</button></div>'}
+    const r=await fetch(API?API+'?action=products':'/api/miniapp/products');if(!r.ok)throw new Error('HTTP '+r.status);
+    const t=await r.text();try{d=JSON.parse(t)}catch(e){throw new Error('پاسخ صندوق JSON نیست؛ در Deploy گزینه‌ی Who has access باید Anyone باشد')}
+    if(d.error)throw new Error(d.error);if(!Array.isArray(d.products))throw new Error('پاسخ صندوق فهرست محصولات ندارد');
+  }catch(e){return fail(e)}
+  try{apply(d);LS.set('cat',d)}catch(e){fail(e)}
 }
 const FAU={pc:'عدد',pack:'بسته',ctn:'کارتن'};
 const ICO=[[/ویفر/,'🍫'],[/نوشیدنی|آبمیوه|شربت|دوغ|نوشابه/,'🧃'],[/کیک/,'🍰'],[/بیسکویت|کوکی/,'🍪'],[/شکلات/,'🍬'],[/چیپس|snack|اسنک/i,'🥨'],[/ماکارونی|پاستا/,'🍝'],[/لبنیات|شیر|پنیر/,'🧀']],ico=c=>(ICO.find(x=>x[0].test(c||''))||[0,'🛍️'])[1];
