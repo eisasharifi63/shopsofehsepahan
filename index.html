@@ -149,13 +149,32 @@ async function post(body){
 const refTxt=x=>/^\d+$/.test(String(x))?fd(x):esc(x);
 
 /* ───────── فروشگاه ───────── */
+let loadingProducts=false;
 async function load(){
+  if(loadingProducts)return;
+  loadingProducts=true;
+  const list=$('#list');
+  list.innerHTML='<div class="em">در حال دریافت محصولات…</div>';
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),20000);
   try{
-    const r=await fetch(API?API+'?action=products':'/api/miniapp/products');if(!r.ok)throw 0;
-    const d=await r.json();P=d.products;CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
+    const url=API?API+'?action=products':'/api/miniapp/products';
+    const r=await fetch(url,{signal:controller.signal,cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    if(!d||!Array.isArray(d.products))throw new Error('ساختار پاسخ سرور معتبر نیست');
+    P=d.products;CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
     for(const k of Object.keys(CART)){const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(!x||x.max<1)delete CART[k];else CART[k]=Math.min(CART[k],x.max)}
     LS.set('cart',CART);cats();paint();bar();
-  }catch(e){$('#list').innerHTML='<div class="em">اتصال برقرار نشد.<br><br><button class="btn" onclick="load()">تلاش دوباره</button></div>'}
+  }catch(e){
+    const message=e&&e.name==='AbortError'
+      ?'دریافت محصولات بیش از ۲۰ ثانیه طول کشید. اتصال سرور یا اینترنت را بررسی کنید.'
+      :'ارتباط با سرور برقرار نشد. لطفاً اینترنت و تنظیمات سرور را بررسی کنید.';
+    list.innerHTML='<div class="em">'+message+'<br><br><button class="btn" onclick="load()">تلاش دوباره</button></div>';
+  }finally{
+    clearTimeout(timeout);
+    loadingProducts=false;
+  }
 }
 const ICO=[[/ویفر/,'🍫'],[/نوشیدنی|آبمیوه|شربت|دوغ|نوشابه/,'🧃'],[/کیک/,'🍰'],[/بیسکویت|کوکی/,'🍪'],[/شکلات/,'🍬'],[/چیپس|snack|اسنک/i,'🥨'],[/ماکارونی|پاستا/,'🍝'],[/لبنیات|شیر|پنیر/,'🧀']],ico=c=>(ICO.find(x=>x[0].test(c||''))||[0,'🛍️'])[1];
 function cats(){const cs=[...new Set(P.map(p=>p.category).filter(Boolean))];$('#cats').innerHTML=cs.length?['',...cs].map(c=>`<button class="${c===CAT?'on':''}" data-cat="${esc(c)}"><span>${c?ico(c):'✨'}</span>${c?esc(c):'همه'}</button>`).join(''):''}
