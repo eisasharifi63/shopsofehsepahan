@@ -91,7 +91,12 @@ h2.sec{font-size:1rem;margin:2px 0 10px;display:flex;align-items:center;gap:6px}
 .card{padding:12px;gap:5px;border-radius:var(--r);text-align:center;background:var(--card);box-shadow:0 1px 0 rgba(0,0,0,.03)}
 .ph{height:128px;display:flex;align-items:center;justify-content:center;font-size:3rem}
 .card img{height:128px;object-fit:contain;background:none;border-radius:0;filter:drop-shadow(0 6px 8px rgba(0,0,0,.14))}
-.pr{margin-bottom:8px}.sk{height:250px;border-radius:16px;background:linear-gradient(90deg,var(--card) 25%,var(--bd) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}.lm{font-size:.72rem;color:#b45309;margin:-4px 0 6px}html.dk .lm{color:#f5b45b}.nm{font-size:.92rem}.cd{font-size:.76rem}.pr{font-size:1rem;color:var(--p)}
+.pr{margin-bottom:8px}.card{position:relative}.dsc{position:absolute;top:8px;right:8px;z-index:1;background:#d92d20;color:#fff;border-radius:99px;font-size:.7rem;font-weight:700;padding:3px 9px}
+.old{display:block;color:var(--sub);font-weight:400;font-size:.78rem;margin-bottom:1px}
+.pm{margin:12px 0 14px;padding:12px 10px 4px;border-radius:20px;background:linear-gradient(135deg,#fff3d6,#ffe2b8);border:1px solid #f0cf94}html.dk .pm{background:linear-gradient(135deg,#2b2616,#3a2a14);border-color:#5a4720}
+.pm .sec{margin:0 4px 10px}.pm .row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 12px;-webkit-overflow-scrolling:touch}
+.pm .card{flex:0 0 158px;scroll-snap-align:start;padding:10px}.pm .ph,.pm .card img{height:96px}.pm .ph{font-size:2.4rem}
+.sk{height:250px;border-radius:16px;background:linear-gradient(90deg,var(--card) 25%,var(--bd) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}.lm{font-size:.72rem;color:#b45309;margin:-4px 0 6px}html.dk .lm{color:#f5b45b}.nm{font-size:.92rem}.cd{font-size:.76rem}.pr{font-size:1rem;color:var(--p)}
 html.dk .pr{color:var(--pd)}
 .card select{background:var(--bg);color:var(--tx);border-color:var(--bd);text-align:center}
 .add{border:0;border-radius:12px;background:var(--p);color:#fff;font-weight:700;font-size:.88rem;padding:11px 6px;margin-top:auto;display:flex;align-items:center;justify-content:center;gap:6px}
@@ -123,7 +128,7 @@ html.dk nav button.on{color:var(--pd)}
 <body>
 <header><button id="bacc">👤 حساب من</button><div><h1 id="shop">ثبت سفارش</h1><small>مینی‌اپ سفارش</small></div><span style="width:70px"></span></header>
 <div id="hero"></div>
-<main><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></main>
+<main><div id="promo"></div><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></main>
 <div id="bar"><div class="bc">🛒<span class="bdg" id="cn">۰</span></div><div class="bt"><small id="bn">سبد خرید شما</small><div><small>جمع کل: </small><b id="tt">۰</b></div></div><button class="btn" id="go">ثبت سفارش ‹</button></div>
 <nav><button id="nh" class="on"><span>🏠</span>خانه</button><button id="btrk"><span>🧾</span>سفارش‌های من</button><button id="nsp"><span>🎧</span>پشتیبانی</button><button id="nst"><span>⚙️</span>تنظیمات</button></nav>
 <div id="ov"><div id="sh"></div></div>
@@ -183,19 +188,20 @@ function card(p){
   const sel=SEL[p.code]||(SEL[p.code]=(p.units.find(x=>x.max>0)||p.units[0]).u),x=unitOf(p,sel),q=CART[p.code+'|'+sel]||0,out=p.units.every(u=>u.max<1);
   const opts=p.units.map(u=>`<option value="${u.u}" ${u.u===sel?'selected':''} ${u.max<1?'disabled':''}>${uLabel(u)}${u.max<1?' (ناموجود)':''}</option>`).join('');
   const act=out?'<div class="na">ناموجود</div>':q?`<div class="st"><button data-a="inc" ${q>=x.max?'disabled':''}>+</button><b>${fa(q)}</b><button class="m" data-a="dec">−</button></div>`:'<button class="add" data-a="inc">🛒 افزودن به سبد</button>';
-  return `<div class="card ${out?'out':''}" data-c="${esc(p.code)}"><div class="ph">${p.image?`<img loading="lazy" src="${esc(IMG)}${encodeURIComponent(p.image)}" alt="" onerror="this.outerHTML='${ico(p.category)}'">`:ico(p.category)}</div>
-  <div class="nm">${esc(p.name)}</div>${p.units.length>1?`<select>${opts}</select>`:`<div class="cd">${uLabel(x)}</div>`}<div class="pr">${fa(x.price)} ${esc(CUR)}</div>${x.cap?`<div class="lm">حداکثر سفارش: ${fa(x.cap)} ${FAU[x.u]||''}</div>`:''}${act}</div>`;
+  return `<div class="card ${out?'out':''}" data-c="${esc(p.code)}">${p.promo>0&&x.old?`<span class="dsc">٪${fa(p.promo)} تخفیف</span>`:''}<div class="ph">${p.image?`<img loading="lazy" src="${esc(IMG)}${encodeURIComponent(p.image)}" alt="" onerror="this.outerHTML='${ico(p.category)}'">`:ico(p.category)}</div>
+  <div class="nm">${esc(p.name)}</div>${p.units.length>1?`<select>${opts}</select>`:`<div class="cd">${uLabel(x)}</div>`}<div class="pr">${x.old?`<s class="old">${fa(x.old)}</s>`:''}${fa(x.price)} ${esc(CUR)}</div>${x.cap?`<div class="lm">حداکثر سفارش: ${fa(x.cap)} ${FAU[x.u]||''}</div>`:''}${act}</div>`;
 }
-function paint(){const w=nrm(Q).split(/\s+/).filter(Boolean);const l=P.filter(p=>(!CAT||p.category===CAT)&&w.every(t=>nrm(p.name+' '+p.code).includes(t)));$('#list').innerHTML=l.map(card).join('')||'<div class="em">کالایی پیدا نشد</div>'}
-function repaint(code){const el=$(`#list [data-c="${CSS.escape(code)}"]`),p=byCode(code);if(el&&p)el.outerHTML=card(p)}
+function paint(){const w=nrm(Q).split(/\s+/).filter(Boolean);const l=P.filter(p=>(!CAT||p.category===CAT)&&w.every(t=>nrm(p.name+' '+p.code).includes(t)));$('#list').innerHTML=l.map(card).join('')||'<div class="em">کالایی پیدا نشد</div>';
+  const d=P.filter(p=>p.promo>0&&p.units.some(u=>u.max>0&&u.old));$('#promo').innerHTML=(d.length&&!CAT&&!Q)?`<section class="pm"><h2 class="sec">🔥 کالاهای تخفیف‌دار</h2><div class="row">${d.map(card).join('')}</div></section>`:''}
+function repaint(code){const p=byCode(code);if(p)document.querySelectorAll(`[data-c="${CSS.escape(code)}"]`).forEach(el=>{if(el.closest('#list,#promo'))el.outerHTML=card(p)})}
 function setQ(k,n){const[c,u]=k.split('|'),x=unitOf(byCode(c),u);n=Math.max(0,Math.min(n,x.max));n?CART[k]=n:delete CART[k];LS.set('cart',CART);bar()}
 function lines(){return Object.keys(CART).map(k=>{const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);return p&&x?{k,p,x,q:CART[k]}:null}).filter(Boolean)}
 const total=()=>lines().reduce((s,l)=>s+l.q*l.x.price,0);
 function bar(){const n=lines().length;$('#cn').textContent=fa(n);$('#tt').textContent=fa(total())+' '+CUR;$('#bar').classList.toggle('show',n>0);$('#bn').textContent=n?'سبد شما: '+fa(n)+' قلم کالا':''}
 $('#q').addEventListener('input',e=>{Q=e.target.value;paint()});
 $('#cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;CAT=b.dataset.cat;cats();paint()});
-$('#list').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const c=b.closest('.card').dataset.c,k=c+'|'+SEL[c];setQ(k,(CART[k]||0)+(b.dataset.a==='inc'?1:-1));repaint(c)});
-$('#list').addEventListener('change',e=>{if(e.target.tagName!=='SELECT')return;const c=e.target.closest('.card').dataset.c;SEL[c]=e.target.value;repaint(c)});
+$('main').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const c=b.closest('.card').dataset.c,k=c+'|'+SEL[c];setQ(k,(CART[k]||0)+(b.dataset.a==='inc'?1:-1));repaint(c)});
+$('main').addEventListener('change',e=>{if(e.target.tagName!=='SELECT')return;const c=e.target.closest('.card').dataset.c;SEL[c]=e.target.value;repaint(c)});
 
 /* ───────── اجزای مشترک: فاکتور و مرحله‌ی سفارش ───────── */
 const SH=h=>{$('#sh').innerHTML=h;$('#ov').classList.add('on');$('#sh').scrollTop=0},closeSh=()=>$('#ov').classList.remove('on');
