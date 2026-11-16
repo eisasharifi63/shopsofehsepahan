@@ -316,6 +316,18 @@ async function doTrack(ref,phone,errId){
 }
 
 /* ───────── رویدادها ───────── */
+// مسیر مستقلِ کلیک برای مراحل اصلی سفارش در WebView ایتا
+$('#ov').addEventListener('click',e=>{
+  const a=e.target.closest('[data-act]');
+  if(!a)return;
+  if(a.dataset.act==='review'){
+    e.preventDefault();e.stopImmediatePropagation();showReview();
+  }else if(a.dataset.act==='submit'){
+    e.preventDefault();e.stopImmediatePropagation();submit();
+  }else if(a.dataset.act==='cart'){
+    e.preventDefault();e.stopImmediatePropagation();keepDraft();showCart();
+  }
+},true);
 $('#ov').addEventListener('change',e=>{if(e.target.id==='rg')fillCities('')});
 $('#go').onclick=showCart;$('#bacc').onclick=openAccount;$('#btrk').onclick=()=>PORTAL?(TAB='orders',showAccount()):showLogin();
 $('#ov').addEventListener('click',e=>{if(e.target.id==='ov'||e.target.closest('[data-close]'))return closeSh();
