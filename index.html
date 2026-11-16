@@ -138,7 +138,8 @@ function jd(s){const m=String(s||'').match(/(\d+)-(\d+)-(\d+)/);if(!m)return'';c
 let AREAS=[],ALAB=['منطقه','شهر'],P=[],CUR='تومان',CAT='',Q='',CART=LS.get('cart',{}),SEL={},busy=false,PORTAL=null,DRAFT={},TAB='orders';
 const byCode=c=>P.find(p=>p.code===c),unitOf=(p,u)=>p.units.find(x=>x.u===u);
 const uLabel=x=>x.u==='pc'?'عدد':`${UL[x.u]} ${fa(x.size)} عددی`;
-const getTg=()=>(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initData!==undefined&&Telegram.WebApp.platform!=='unknown'&&Telegram.WebApp)||(window.Eitaa&&Eitaa.WebApp)||null;
+// ایتا اولویت دارد؛ SDK تلگرام ممکن است بیرون از تلگرام هم یک WebApp خالی بسازد.
+const getTg=()=>((window.Eitaa&&window.Eitaa.WebApp)||(window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initData!==undefined&&window.Telegram.WebApp.platform!=='unknown'&&window.Telegram.WebApp))||null;
 function initTg(){const t=getTg();try{t&&(t.ready(),t.expand())}catch(e){}try{t&&t.setHeaderColor&&t.setHeaderColor('#0f5c43')}catch(e){}}
 initTg();addEventListener('load',initTg);
 // همه‌ی درخواست‌ها: «صندوق پست» (text/plain تا پیش‌درخواست CORS لازم نباشد) یا برنامه‌ی همین کامپیوتر
