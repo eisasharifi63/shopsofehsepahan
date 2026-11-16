@@ -32,7 +32,7 @@ select{width:100%;padding:7px;border:1px solid var(--bd);border-radius:8px;font-
 .na{font-size:.8rem;color:var(--red);text-align:center;padding:9px 0}
 #bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--bd);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;max-width:640px;margin:0 auto}
 #bar small{color:var(--sub);font-size:.75rem;display:block}#bar b{color:var(--p);font-size:1.05rem}
-.btn{background:var(--p);color:#fff;border:none;border-radius:10px;padding:12px 20px;font-weight:700;font-size:.95rem}
+.btn{touch-action:manipulation;background:var(--p);color:#fff;border:none;border-radius:10px;padding:12px 20px;font-weight:700;font-size:.95rem}
 .btn:disabled{opacity:.5}.btn.g{background:#e2e8f0;color:var(--tx)}.btn.w{width:100%}
 #ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:30;align-items:flex-end;justify-content:center}
 #ov.on{display:flex}
@@ -316,6 +316,19 @@ async function doTrack(ref,phone,errId){
 }
 
 /* ───────── رویدادها ───────── */
+// پشتیبانی از لمس مستقیم در WebView موبایل ایتا
+$('#ov').addEventListener('pointerup',e=>{
+  if(e.pointerType!=='touch')return;
+  const a=e.target&&e.target.closest?e.target.closest('[data-act]'):null;
+  if(!a)return;
+  const act=a.dataset.act;
+  if(act==='review'||act==='submit'||act==='cart'){
+    e.preventDefault();e.stopImmediatePropagation();
+    if(act==='review')showReview();
+    else if(act==='submit')submit();
+    else{keepDraft();showCart()}
+  }
+},true);
 // مسیر مستقلِ کلیک برای مراحل اصلی سفارش در WebView ایتا
 $('#ov').addEventListener('click',e=>{
   const a=e.target.closest('[data-act]');
