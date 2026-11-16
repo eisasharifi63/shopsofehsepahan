@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ثبت سفارش</title>
 <script src="config.js" onerror="void 0"></script>
+<script src="https://telegram.org/js/telegram-web-app.js" async onerror="void 0"></script>
 <script src="https://developer.eitaa.com/eitaa-web-app.js" async onerror="void 0"></script>
 <style>
 :root{--p:#16a34a;--pd:#15803d;--bg:#f4f6f8;--card:#fff;--tx:#0f172a;--sub:#64748b;--bd:#e2e8f0;--red:#dc2626;--amb:#b45309;--r:12px}
@@ -68,11 +69,62 @@ select{width:100%;padding:7px;border:1px solid var(--bd);border-radius:8px;font-
 .lg .n{text-align:left;white-space:nowrap}.hr{border:0;border-top:1px solid var(--bd);margin:14px 0}
 .ok{text-align:center;padding:6px 0 4px}.ok h3{color:var(--pd);margin-bottom:4px}
 </style>
+<style>
+:root{--p:#0f5c43;--pd:#0b4733;--bg:#f6f4ee;--card:#fff;--tx:#14231d;--sub:#6b7a73;--bd:#e6e2d6;--gold:#c9a24b;--cream:#fbf3dc;--r:16px;--nav:64px}
+html.dk{--bg:#101815;--card:#18221e;--tx:#eaf1ee;--sub:#9db0a8;--bd:#2a3833;--cream:#222b26;--p:#1b8a65;--pd:#6fd1ad}
+body{padding-bottom:calc(var(--nav) + 90px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--p);color:#fff;border:0;padding:12px 14px calc(12px)}
+header h1{margin:0;font-size:1.1rem}header small{display:block;text-align:center;opacity:.75;font-size:.72rem}
+#bacc{border:0;background:rgba(255,255,255,.16);color:#fff;border-radius:99px;padding:7px 13px;font-size:.8rem;font-weight:600}
+#hero{max-width:640px;margin:0 auto;aspect-ratio:2.4/1;background:linear-gradient(135deg,var(--p),#1d7a5a 60%,var(--gold));position:relative;overflow:hidden}
+#hero img{width:100%;height:100%;object-fit:cover;display:block}
+#hero.nob{display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5rem;font-weight:800}
+.sb{position:relative;margin-bottom:12px}
+#q{padding:13px 44px 13px 14px;border-radius:99px;background:var(--card);border:1px solid var(--bd);color:var(--tx);font-size:.92rem}
+.sb:after{content:"🔍";position:absolute;right:15px;top:50%;transform:translateY(-50%);font-size:.95rem;opacity:.6}
+#cats{padding:2px 0 12px;gap:8px}
+#cats button{display:flex;align-items:center;gap:6px;border-radius:99px;padding:9px 16px;font-size:.86rem;font-weight:600;background:var(--card);color:var(--tx)}
+#cats button.on{background:var(--p);color:#fff;border-color:var(--p)}
+h2.sec{font-size:1rem;margin:2px 0 10px;display:flex;align-items:center;gap:6px}
+#list{grid-template-columns:repeat(2,1fr);gap:12px}
+.card{padding:12px;gap:5px;border-radius:var(--r);text-align:center;background:var(--card);box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.ph{height:128px;display:flex;align-items:center;justify-content:center;font-size:3rem}
+.card img{height:128px;object-fit:contain;background:none;border-radius:0;filter:drop-shadow(0 6px 8px rgba(0,0,0,.14))}
+.nm{font-size:.92rem}.cd{font-size:.76rem}.pr{font-size:1rem;color:var(--p)}
+html.dk .pr{color:var(--pd)}
+.card select{background:var(--bg);color:var(--tx);border-color:var(--bd);text-align:center}
+.add{border:0;border-radius:12px;background:var(--p);color:#fff;font-weight:700;font-size:.88rem;padding:11px 6px;margin-top:auto;display:flex;align-items:center;justify-content:center;gap:6px}
+.add:active{transform:scale(.97)}
+.card .st{margin-top:auto;background:var(--bg);border-radius:12px;padding:3px}
+.card .st button{background:var(--p);color:#fff}.card .st button.m{background:var(--card);color:var(--tx)}
+#bar{display:none;bottom:calc(var(--nav) + 8px + env(safe-area-inset-bottom));left:10px;right:10px;max-width:620px;border:1px solid #e9dcae;background:var(--cream);border-radius:18px;padding:9px 10px;box-shadow:0 8px 24px rgba(0,0,0,.14);z-index:19;gap:10px}
+#bar.show{display:flex;animation:up .25s ease-out}
+@keyframes up{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.bc{position:relative;font-size:1.6rem;color:var(--p)}.bdg{position:absolute;top:-6px;left:-8px;background:#d92d20;color:#fff;border-radius:99px;font-size:.7rem;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.bt{flex:1;display:flex;justify-content:space-between;align-items:center;gap:6px;color:var(--tx)}.bt small{font-size:.78rem;color:var(--sub)}.bt b{color:var(--p);font-size:1rem}
+#bar .btn{border-radius:14px;padding:13px 16px;white-space:nowrap}
+nav{position:fixed;bottom:0;left:0;right:0;height:calc(var(--nav) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);background:var(--card);border-top:1px solid var(--bd);display:flex;z-index:18;max-width:640px;margin:0 auto}
+nav button{flex:1;border:0;background:none;color:var(--sub);font-size:.72rem;font-weight:600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+nav button span{font-size:1.35rem;filter:grayscale(1);opacity:.7}nav button.on{color:var(--p)}nav button.on span{filter:none;opacity:1}
+html.dk nav button.on{color:var(--pd)}
+#sh,.f input,.f textarea,.f select{background:var(--card);color:var(--tx)}
+#sh{border-radius:22px 22px 0 0}
+.inv .h,.bal{background:var(--bg)}.inv .s.fin{background:var(--cream)}
+.btn.g{background:var(--bg);color:var(--tx)}
+.lnk{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--tx);border:1px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:9px;font-weight:600;font-size:.92rem}
+.lnk span{font-size:1.4rem}.sw{display:flex;justify-content:space-between;align-items:center;padding:13px 2px;border-bottom:1px solid var(--bd);font-size:.92rem}
+.sw button{border:0;background:var(--bd);border-radius:99px;width:46px;height:26px;position:relative}
+.sw button:after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.sw button.on{background:var(--p)}.sw button.on:after{right:23px}
+@media(prefers-reduced-motion:reduce){#bar.show{animation:none}}
+</style>
 </head>
 <body>
-<header><h1 id="shop">ثبت سفارش</h1><div id="hb"><button id="bacc">👤 حساب من</button><button id="btrk">🔎 پیگیری سفارش</button></div><input id="q" type="search" placeholder="جستجوی نام یا کد کالا…" autocomplete="off"><div id="cats"></div></header>
-<main><div id="list"><div class="em">در حال بارگذاری…</div></div></main>
-<div id="bar"><div><small>جمع سبد (<span id="cn">۰</span> قلم)</small><b id="tt">۰</b></div><button class="btn" id="go">مشاهده سبد و ثبت</button></div>
+<header><button id="bacc">👤 حساب من</button><div><h1 id="shop">ثبت سفارش</h1><small>مینی‌اپ سفارش</small></div><span style="width:70px"></span></header>
+<div id="hero"></div>
+<main><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="em">در حال بارگذاری…</div></div></main>
+<div id="bar"><div class="bc">🛒<span class="bdg" id="cn">۰</span></div><div class="bt"><div><small>سبد خرید شما</small></div><div><small>جمع کل:</small> <b id="tt">۰</b></div></div><button class="btn" id="go">ثبت سفارش ‹</button></div>
+<nav><button id="nh" class="on"><span>🏠</span>خانه</button><button id="btrk"><span>🧾</span>سفارش‌های من</button><button id="nsp"><span>🎧</span>پشتیبانی</button><button id="nst"><span>⚙️</span>تنظیمات</button></nav>
 <div id="ov"><div id="sh"></div></div>
 <script>
 const $=s=>document.querySelector(s),fa=n=>Number(n||0).toLocaleString('fa-IR'),fd=n=>String(n??'').replace(/\d/g,x=>'۰۱۲۳۴۵۶۷۸۹'[x]);   // fd: شماره‌ها (کد، فاکتور) بدون جداکننده
@@ -86,8 +138,8 @@ function jd(s){const m=String(s||'').match(/(\d+)-(\d+)-(\d+)/);if(!m)return'';c
 let AREAS=[],ALAB=['منطقه','شهر'],P=[],CUR='تومان',CAT='',Q='',CART=LS.get('cart',{}),SEL={},busy=false,PORTAL=null,DRAFT={},TAB='orders';
 const byCode=c=>P.find(p=>p.code===c),unitOf=(p,u)=>p.units.find(x=>x.u===u);
 const uLabel=x=>x.u==='pc'?'عدد':`${UL[x.u]} ${fa(x.size)} عددی`;
-const getTg=()=>window.Eitaa&&window.Eitaa.WebApp;
-function initTg(){const t=getTg();try{t&&(t.ready(),t.expand())}catch(e){}}
+const getTg=()=>(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initData!==undefined&&Telegram.WebApp.platform!=='unknown'&&Telegram.WebApp)||(window.Eitaa&&Eitaa.WebApp)||null;
+function initTg(){const t=getTg();try{t&&(t.ready(),t.expand())}catch(e){}try{t&&t.setHeaderColor&&t.setHeaderColor('#0f5c43')}catch(e){}}
 initTg();addEventListener('load',initTg);
 // همه‌ی درخواست‌ها: «صندوق پست» (text/plain تا پیش‌درخواست CORS لازم نباشد) یا برنامه‌ی همین کامپیوتر
 async function post(body){
@@ -105,21 +157,21 @@ async function load(){
     LS.set('cart',CART);cats();paint();bar();
   }catch(e){$('#list').innerHTML='<div class="em">اتصال برقرار نشد.<br><br><button class="btn" onclick="load()">تلاش دوباره</button></div>'}
 }
-function cats(){const cs=[...new Set(P.map(p=>p.category).filter(Boolean))];$('#cats').innerHTML=cs.length?['',...cs].map(c=>`<button class="${c===CAT?'on':''}" data-cat="${esc(c)}">${c?esc(c):'همه'}</button>`).join(''):''}
+const ICO=[[/ویفر/,'🍫'],[/نوشیدنی|آبمیوه|شربت|دوغ|نوشابه/,'🧃'],[/کیک/,'🍰'],[/بیسکویت|کوکی/,'🍪'],[/شکلات/,'🍬'],[/چیپس|snack|اسنک/i,'🥨'],[/ماکارونی|پاستا/,'🍝'],[/لبنیات|شیر|پنیر/,'🧀']],ico=c=>(ICO.find(x=>x[0].test(c||''))||[0,'🛍️'])[1];
+function cats(){const cs=[...new Set(P.map(p=>p.category).filter(Boolean))];$('#cats').innerHTML=cs.length?['',...cs].map(c=>`<button class="${c===CAT?'on':''}" data-cat="${esc(c)}"><span>${c?ico(c):'✨'}</span>${c?esc(c):'همه'}</button>`).join(''):''}
 function card(p){
   const sel=SEL[p.code]||(SEL[p.code]=(p.units.find(x=>x.max>0)||p.units[0]).u),x=unitOf(p,sel),q=CART[p.code+'|'+sel]||0,out=p.units.every(u=>u.max<1);
   const opts=p.units.map(u=>`<option value="${u.u}" ${u.u===sel?'selected':''} ${u.max<1?'disabled':''}>${uLabel(u)}${u.max<1?' (ناموجود)':''}</option>`).join('');
-  return `<div class="card ${out?'out':''}" data-c="${esc(p.code)}">${p.image?`<img loading="lazy" src="${esc(IMG)}${encodeURIComponent(p.image)}" alt="" onerror="this.remove()">`:''}
-  <div><div class="nm">${esc(p.name)}</div><div class="cd">کد: ${esc(p.code)}</div></div>
-  ${p.units.length>1?`<select>${opts}</select>`:`<div class="cd">${uLabel(x)}</div>`}<div class="pr">${fa(x.price)} ${esc(CUR)}</div>
-  ${out?'<div class="na">ناموجود</div>':`<div class="st"><button data-a="inc" ${q>=x.max?'disabled':''}>+</button><b>${q?fa(q):'—'}</b><button class="m" data-a="dec" ${q?'':'disabled'}>−</button></div>`}</div>`;
+  const act=out?'<div class="na">ناموجود</div>':q?`<div class="st"><button data-a="inc" ${q>=x.max?'disabled':''}>+</button><b>${fa(q)}</b><button class="m" data-a="dec">−</button></div>`:'<button class="add" data-a="inc">🛒 افزودن به سبد</button>';
+  return `<div class="card ${out?'out':''}" data-c="${esc(p.code)}"><div class="ph">${p.image?`<img loading="lazy" src="${esc(IMG)}${encodeURIComponent(p.image)}" alt="" onerror="this.outerHTML='${ico(p.category)}'">`:ico(p.category)}</div>
+  <div class="nm">${esc(p.name)}</div>${p.units.length>1?`<select>${opts}</select>`:`<div class="cd">${uLabel(x)}</div>`}<div class="pr">${fa(x.price)} ${esc(CUR)}</div>${act}</div>`;
 }
 function paint(){const w=nrm(Q).split(/\s+/).filter(Boolean);const l=P.filter(p=>(!CAT||p.category===CAT)&&w.every(t=>nrm(p.name+' '+p.code).includes(t)));$('#list').innerHTML=l.map(card).join('')||'<div class="em">کالایی پیدا نشد</div>'}
 function repaint(code){const el=$(`#list [data-c="${CSS.escape(code)}"]`),p=byCode(code);if(el&&p)el.outerHTML=card(p)}
 function setQ(k,n){const[c,u]=k.split('|'),x=unitOf(byCode(c),u);n=Math.max(0,Math.min(n,x.max));n?CART[k]=n:delete CART[k];LS.set('cart',CART);bar()}
 function lines(){return Object.keys(CART).map(k=>{const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);return p&&x?{k,p,x,q:CART[k]}:null}).filter(Boolean)}
 const total=()=>lines().reduce((s,l)=>s+l.q*l.x.price,0);
-function bar(){$('#cn').textContent=fa(lines().length);$('#tt').textContent=fa(total())+' '+CUR}
+function bar(){const n=lines().length;$('#cn').textContent=fa(n);$('#tt').textContent=fa(total())+' '+CUR;$('#bar').classList.toggle('show',n>0);$('#bar small').textContent=n?'سبد خرید شما: '+fa(n)+' قلم کالا':''}
 $('#q').addEventListener('input',e=>{Q=e.target.value;paint()});
 $('#cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;CAT=b.dataset.cat;cats();paint()});
 $('#list').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const c=b.closest('.card').dataset.c,k=c+'|'+SEL[c];setQ(k,(CART[k]||0)+(b.dataset.a==='inc'?1:-1));repaint(c)});
@@ -263,6 +315,36 @@ $('#ov').addEventListener('click',e=>{if(e.target.id==='ov'||e.target.closest('[
     case'doTrack':{const r=$('#tr').value.trim(),p=nrm($('#tp').value).replace(/\D/g,'');if(!r||!p)return $('#terr').textContent='کد پیگیری و شماره موبایل را بنویسید';return doTrack(r,p,'terr')}
     case'trackLast':{const l=LS.get('last',null);if(l)return doTrack(l.ref,l.phone,'err');return closeSh()}
   }});
+
+/* ───────── بنر، پشتیبانی، تنظیمات، حالت شب ───────── */
+const SUP=CFG.support||{},dark=on=>{document.documentElement.classList.toggle('dk',on);LS.set('dark',on)};
+{const t=getTg();dark(LS.get('dark',null)??!!(t&&t.colorScheme==='dark'))}
+function hero(){const h=$('#hero'),src=CFG.banner||(IMG+'banner.jpg');h.innerHTML=`<img src="${esc(src)}" alt="" onerror="this.parentNode.classList.add('nob');this.parentNode.textContent=document.title">`}
+hero();
+function navOn(id){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.id===id))}
+function showSupport(){
+  const L=[];
+  if(SUP.phone)L.push(`<a class="lnk" href="tel:${esc(SUP.phone)}"><span>📞</span>تماس تلفنی: ${fd(esc(SUP.phone))}</a>`);
+  if(SUP.telegram)L.push(`<a class="lnk" target="_blank" rel="noopener" href="https://t.me/${esc(String(SUP.telegram).replace('@',''))}"><span>✈️</span>پیام در تلگرام</a>`);
+  if(SUP.eitaa)L.push(`<a class="lnk" target="_blank" rel="noopener" href="https://eitaa.com/${esc(String(SUP.eitaa).replace('@',''))}"><span>💬</span>پیام در ایتا</a>`);
+  SH(`<h3>🎧 پشتیبانی</h3><p class="cd" style="margin-bottom:12px">${esc(SUP.hours||'برای پرسش درباره‌ی سفارش، قیمت یا موجودی با ما در تماس باشید.')}</p>${L.join('')||'<div class="em">راه ارتباطی هنوز تنظیم نشده است.</div>'}<button class="btn g w" data-close>بستن</button>`);
+}
+function showSettings(){
+  const dk=document.documentElement.classList.contains('dk'),me=LS.get('me',null);
+  SH(`<h3>⚙️ تنظیمات</h3><div class="sw"><span>حالت شب</span><button class="${dk?'on':''}" data-act="dark" aria-label="حالت شب"></button></div>
+  <div class="sw"><span>مشخصات ذخیره‌شده‌ی تحویل${me?' ('+esc(me.name)+')':''}</span><button class="btn g" style="padding:7px 12px;font-size:.8rem" data-act="forget" ${me?'':'disabled'}>پاک کردن</button></div>
+  <div class="sw"><span>سبد خرید</span><button class="btn g" style="padding:7px 12px;font-size:.8rem" data-act="clearcart">خالی کردن</button></div>
+  <p class="cd" style="margin:14px 0">با پاک کردن، فقط اطلاعات ذخیره‌شده در همین گوشی حذف می‌شود.</p><button class="btn g w" data-close>بستن</button>`);
+}
+$('#nh').onclick=()=>{closeSh();navOn('nh');scrollTo({top:0,behavior:'smooth'})};
+$('#nsp').onclick=()=>{navOn('nsp');showSupport()};$('#nst').onclick=()=>{navOn('nst');showSettings()};
+$('#btrk').addEventListener('click',()=>navOn('btrk'));
+new MutationObserver(()=>{if(!$('#ov').classList.contains('on'))navOn('nh')}).observe($('#ov'),{attributes:true,attributeFilter:['class']});
+$('#ov').addEventListener('click',e=>{const a=e.target.closest('[data-act]');if(!a)return;
+  if(a.dataset.act==='dark'){dark(!document.documentElement.classList.contains('dk'));return showSettings()}
+  if(a.dataset.act==='forget'){LS.set('me',null);LS.set('okey',null);return showSettings()}
+  if(a.dataset.act==='clearcart'){CART={};LS.set('cart',CART);bar();paint();return showSettings()}
+});
 setAcc();load();
 (async()=>{const c=LS.get('login',null);if(c)await login(c,true)})();
 </script>
