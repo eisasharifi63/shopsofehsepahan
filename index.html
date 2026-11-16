@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>ثبت سفارش</title>
 <script src="config.js" onerror="void 0"></script>
-<script src="https://telegram.org/js/telegram-web-app.js" async onerror="void 0"></script>
+<link rel="preconnect" href="https://script.google.com">
+<script>if(/tgWebApp/i.test(location.hash+location.search))document.write('<script src="https://telegram.org/js/telegram-web-app.js"><\/script>')</script>
 <script src="https://developer.eitaa.com/eitaa-web-app.js" async onerror="void 0"></script>
 <style>
 :root{--p:#16a34a;--pd:#15803d;--bg:#f4f6f8;--card:#fff;--tx:#0f172a;--sub:#64748b;--bd:#e2e8f0;--red:#dc2626;--amb:#b45309;--r:12px}
@@ -90,7 +91,7 @@ h2.sec{font-size:1rem;margin:2px 0 10px;display:flex;align-items:center;gap:6px}
 .card{padding:12px;gap:5px;border-radius:var(--r);text-align:center;background:var(--card);box-shadow:0 1px 0 rgba(0,0,0,.03)}
 .ph{height:128px;display:flex;align-items:center;justify-content:center;font-size:3rem}
 .card img{height:128px;object-fit:contain;background:none;border-radius:0;filter:drop-shadow(0 6px 8px rgba(0,0,0,.14))}
-.pr{margin-bottom:8px}.nm{font-size:.92rem}.cd{font-size:.76rem}.pr{font-size:1rem;color:var(--p)}
+.pr{margin-bottom:8px}.sk{height:250px;border-radius:16px;background:linear-gradient(90deg,var(--card) 25%,var(--bd) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}.lm{font-size:.72rem;color:#b45309;margin:-4px 0 6px}html.dk .lm{color:#f5b45b}.nm{font-size:.92rem}.cd{font-size:.76rem}.pr{font-size:1rem;color:var(--p)}
 html.dk .pr{color:var(--pd)}
 .card select{background:var(--bg);color:var(--tx);border-color:var(--bd);text-align:center}
 .add{border:0;border-radius:12px;background:var(--p);color:#fff;font-weight:700;font-size:.88rem;padding:11px 6px;margin-top:auto;display:flex;align-items:center;justify-content:center;gap:6px}
@@ -113,16 +114,16 @@ html.dk nav button.on{color:var(--pd)}
 .btn.g{background:var(--bg);color:var(--tx)}
 .lnk{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--tx);border:1px solid var(--bd);border-radius:14px;padding:13px;margin-bottom:9px;font-weight:600;font-size:.92rem}
 .lnk span{font-size:1.4rem}.sw{display:flex;justify-content:space-between;align-items:center;padding:13px 2px;border-bottom:1px solid var(--bd);font-size:.92rem}
-.sw button{border:0;background:var(--bd);border-radius:99px;width:46px;height:26px;position:relative}
-.sw button:after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
-.sw button.on{background:var(--p)}.sw button.on:after{right:23px}
+.sw .tg{border:0;background:var(--bd);border-radius:99px;width:46px;height:26px;position:relative;flex:none}
+.sw .tg:after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.sw .tg.on{background:var(--p)}.sw .tg.on:after{right:23px}.sw .btn{flex:none;white-space:nowrap}.sw span{padding-left:10px}
 @media(prefers-reduced-motion:reduce){#bar.show{animation:none}}
 </style>
 </head>
 <body>
 <header><button id="bacc">👤 حساب من</button><div><h1 id="shop">ثبت سفارش</h1><small>مینی‌اپ سفارش</small></div><span style="width:70px"></span></header>
 <div id="hero"></div>
-<main><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="em">در حال بارگذاری…</div></div></main>
+<main><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></main>
 <div id="bar"><div class="bc">🛒<span class="bdg" id="cn">۰</span></div><div class="bt"><small id="bn">سبد خرید شما</small><div><small>جمع کل: </small><b id="tt">۰</b></div></div><button class="btn" id="go">ثبت سفارش ‹</button></div>
 <nav><button id="nh" class="on"><span>🏠</span>خانه</button><button id="btrk"><span>🧾</span>سفارش‌های من</button><button id="nsp"><span>🎧</span>پشتیبانی</button><button id="nst"><span>⚙️</span>تنظیمات</button></nav>
 <div id="ov"><div id="sh"></div></div>
@@ -131,7 +132,7 @@ const $=s=>document.querySelector(s),fa=n=>Number(n||0).toLocaleString('fa-IR'),
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const UL={pc:'عدد',pack:'بسته',ctn:'کارتن'},STAGES=['ثبت شد','آماده‌سازی','ارسال شد','تحویل شد'];
 const CFG=window.MINIAPP_CONFIG||{},API=CFG.api||'',IMG=CFG.img||(API?'img/':'/img/');   // با config.js به «صندوق پست» وصل می‌شود؛ بدون آن به برنامه‌ی همین کامپیوتر
-const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const LS={get(k,d){try{const v=localStorage.getItem(k);if(v==null)return d;const j=JSON.parse(v);return j==null?d:j}catch(e){return d}},del(k){try{localStorage.removeItem(k)}catch(e){}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 const nrm=s=>String(s||'').replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/\u200c/g,' ').toLowerCase();
 function g2j(gy,gm,gd){const gdm=[0,31,59,90,120,151,181,212,243,273,304,334];const gy2=gm>2?gy+1:gy;let days=355666+365*gy+Math.floor((gy2+3)/4)-Math.floor((gy2+99)/100)+Math.floor((gy2+399)/400)+gd+gdm[gm-1];let jy=-1595+33*Math.floor(days/12053);days%=12053;jy+=4*Math.floor(days/1461);days%=1461;if(days>365){jy+=Math.floor((days-1)/365);days=(days-1)%365}const jm=days<186?1+Math.floor(days/31):7+Math.floor((days-186)/30),jd=1+(days<186?days%31:(days-186)%30);return[jy,jm,jd]}
 function jd(s){const m=String(s||'').match(/(\d+)-(\d+)-(\d+)/);if(!m)return'';const[y,mo,d]=g2j(+m[1],+m[2],+m[3]);return`${y}/${String(mo).padStart(2,'0')}/${String(d).padStart(2,'0')}`.replace(/\d/g,x=>'۰۱۲۳۴۵۶۷۸۹'[x])}
@@ -149,14 +150,21 @@ async function post(body){
 const refTxt=x=>/^\d+$/.test(String(x))?fd(x):esc(x);
 
 /* ───────── فروشگاه ───────── */
+const LIM=CFG.limits||{};
+function apply(d){
+  P=d.products;CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
+  P.forEach(p=>{const l=LIM[p.code]||LIM[p.name]||{};p.units.forEach(u=>{const c=+(u.limit||l[u.u]||0);if(c>0){u.cap=c;u.max=Math.min(u.max,c)}})});
+  for(const k of Object.keys(CART)){const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(!x||x.max<1)delete CART[k];else CART[k]=Math.min(CART[k],x.max)}
+  LS.set('cart',CART);cats();paint();bar();
+}
 async function load(){
+  const c=LS.get('cat',null);if(c&&c.products&&!P.length){try{apply(c)}catch(e){}}
   try{
     const r=await fetch(API?API+'?action=products':'/api/miniapp/products');if(!r.ok)throw 0;
-    const d=await r.json();P=d.products;CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
-    for(const k of Object.keys(CART)){const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(!x||x.max<1)delete CART[k];else CART[k]=Math.min(CART[k],x.max)}
-    LS.set('cart',CART);cats();paint();bar();
-  }catch(e){$('#list').innerHTML='<div class="em">اتصال برقرار نشد.<br><br><button class="btn" onclick="load()">تلاش دوباره</button></div>'}
+    const d=await r.json();if(!d.products)throw 0;apply(d);LS.set('cat',d);
+  }catch(e){if(!P.length)$('#list').innerHTML='<div class="em" style="grid-column:1/-1">اتصال برقرار نشد.<br><br><button class="btn" onclick="load()">تلاش دوباره</button></div>'}
 }
+const FAU={pc:'عدد',pack:'بسته',ctn:'کارتن'};
 const ICO=[[/ویفر/,'🍫'],[/نوشیدنی|آبمیوه|شربت|دوغ|نوشابه/,'🧃'],[/کیک/,'🍰'],[/بیسکویت|کوکی/,'🍪'],[/شکلات/,'🍬'],[/چیپس|snack|اسنک/i,'🥨'],[/ماکارونی|پاستا/,'🍝'],[/لبنیات|شیر|پنیر/,'🧀']],ico=c=>(ICO.find(x=>x[0].test(c||''))||[0,'🛍️'])[1];
 function cats(){const cs=[...new Set(P.map(p=>p.category).filter(Boolean))];$('#cats').innerHTML=cs.length?['',...cs].map(c=>`<button class="${c===CAT?'on':''}" data-cat="${esc(c)}"><span>${c?ico(c):'✨'}</span>${c?esc(c):'همه'}</button>`).join(''):''}
 function card(p){
@@ -164,7 +172,7 @@ function card(p){
   const opts=p.units.map(u=>`<option value="${u.u}" ${u.u===sel?'selected':''} ${u.max<1?'disabled':''}>${uLabel(u)}${u.max<1?' (ناموجود)':''}</option>`).join('');
   const act=out?'<div class="na">ناموجود</div>':q?`<div class="st"><button data-a="inc" ${q>=x.max?'disabled':''}>+</button><b>${fa(q)}</b><button class="m" data-a="dec">−</button></div>`:'<button class="add" data-a="inc">🛒 افزودن به سبد</button>';
   return `<div class="card ${out?'out':''}" data-c="${esc(p.code)}"><div class="ph">${p.image?`<img loading="lazy" src="${esc(IMG)}${encodeURIComponent(p.image)}" alt="" onerror="this.outerHTML='${ico(p.category)}'">`:ico(p.category)}</div>
-  <div class="nm">${esc(p.name)}</div>${p.units.length>1?`<select>${opts}</select>`:`<div class="cd">${uLabel(x)}</div>`}<div class="pr">${fa(x.price)} ${esc(CUR)}</div>${act}</div>`;
+  <div class="nm">${esc(p.name)}</div>${p.units.length>1?`<select>${opts}</select>`:`<div class="cd">${uLabel(x)}</div>`}<div class="pr">${fa(x.price)} ${esc(CUR)}</div>${x.cap?`<div class="lm">حداکثر سفارش: ${fa(x.cap)} ${FAU[x.u]||''}</div>`:''}${act}</div>`;
 }
 function paint(){const w=nrm(Q).split(/\s+/).filter(Boolean);const l=P.filter(p=>(!CAT||p.category===CAT)&&w.every(t=>nrm(p.name+' '+p.code).includes(t)));$('#list').innerHTML=l.map(card).join('')||'<div class="em">کالایی پیدا نشد</div>'}
 function repaint(code){const el=$(`#list [data-c="${CSS.escape(code)}"]`),p=byCode(code);if(el&&p)el.outerHTML=card(p)}
@@ -331,7 +339,7 @@ function showSupport(){
 }
 function showSettings(){
   const dk=document.documentElement.classList.contains('dk'),me=LS.get('me',null);
-  SH(`<h3>⚙️ تنظیمات</h3><div class="sw"><span>حالت شب</span><button class="${dk?'on':''}" data-act="dark" aria-label="حالت شب"></button></div>
+  SH(`<h3>⚙️ تنظیمات</h3><div class="sw"><span>حالت شب</span><button class="tg ${dk?'on':''}" data-act="dark" aria-label="حالت شب"></button></div>
   <div class="sw"><span>مشخصات ذخیره‌شده‌ی تحویل${me?' ('+esc(me.name)+')':''}</span><button class="btn g" style="padding:7px 12px;font-size:.8rem" data-act="forget" ${me?'':'disabled'}>پاک کردن</button></div>
   <div class="sw"><span>سبد خرید</span><button class="btn g" style="padding:7px 12px;font-size:.8rem" data-act="clearcart">خالی کردن</button></div>
   <p class="cd" style="margin:14px 0">با پاک کردن، فقط اطلاعات ذخیره‌شده در همین گوشی حذف می‌شود.</p><button class="btn g w" data-close>بستن</button>`);
@@ -342,7 +350,7 @@ $('#btrk').addEventListener('click',()=>navOn('btrk'));
 new MutationObserver(()=>{if(!$('#ov').classList.contains('on'))navOn('nh')}).observe($('#ov'),{attributes:true,attributeFilter:['class']});
 $('#ov').addEventListener('click',e=>{const a=e.target.closest('[data-act]');if(!a)return;
   if(a.dataset.act==='dark'){dark(!document.documentElement.classList.contains('dk'));return showSettings()}
-  if(a.dataset.act==='forget'){LS.set('me',null);LS.set('okey',null);return showSettings()}
+  if(a.dataset.act==='forget'){LS.del('me');LS.del('okey');return showSettings()}
   if(a.dataset.act==='clearcart'){CART={};LS.set('cart',CART);bar();paint();return showSettings()}
 });
 setAcc();load();

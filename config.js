@@ -1,16 +1,18 @@
-// آدرس صندوق پست (همان آدرسی که Google بعد از Deploy می‌دهد و به /exec ختم می‌شود) را جای متن زیر بگذارید.
-window.MINIAPP_CONFIG = {
-  api: "https://script.google.com/macros/s/AKfycby6XsB8HlCEF2LSn37RetbZl5dmpxb4anKH78lTcCkJP5KkbHEubRaSxxcmHSKnUuuM/exec"
-};
-  
 // تنظیمات مینی‌اپ — فقط این فایل را ویرایش کنید
 window.MINIAPP_CONFIG = {
-  api: "https://script.google.com/macros/s/AKfycby6XsB8HlCEF2LSn37RetbZl5dmpxb4anKH78lTcCkJP5KkbHEubRaSxxcmHSKnUuuM/exec",  
-  // banner: "img/banner.jpg",                 
+  api: "PASTE_YOUR_APPS_SCRIPT_URL_HERE/exec",   // آدرس /exec صندوق پست
+  // banner: "img/banner.jpg",                    // اگر اسم یا مسیر بنر فرق دارد
   support: {
     phone: "",        // مثلاً 09123456789
     telegram: "",     // نام کاربری بدون @
-    eitaa: "M_panahi1",        // نام کاربری بدون @
-    hours: "شنبه تا پنجشنبه، 9 تا 15"
+    eitaa: "",        // نام کاربری بدون @
+    hours: "شنبه تا پنجشنبه، ۹ تا ۱۸"
+  },
+  // محدودیت سفارش برای هر مشتری در هر بار ثبت سفارش.
+  // کلید = «کد کالا» یا «نام دقیق کالا» در برنامه. مقدار = حداکثر تعداد برای هر واحد (ctn کارتن، pack بسته، pc عدد).
+  // کالاهایی که اینجا نیستند محدودیت ندارند (فقط به‌اندازه‌ی موجودی).
+  limits: {
+    // "رب شیشه 750 گرمی نامزد": { ctn: 3 },
+    // "1025": { ctn: 2, pc: 24 }
   }
 };
