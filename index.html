@@ -61,7 +61,7 @@ select{width:100%;padding:7px;border:1px solid var(--bd);border-radius:8px;font-
 .stp div:before{content:"";display:block;width:18px;height:18px;border-radius:50%;background:#cbd5e1;margin:0 auto 5px;position:relative;z-index:1}
 .stp div:not(:last-child):after{content:"";position:absolute;top:8px;right:50%;width:100%;height:3px;background:#cbd5e1}
 .stp div.on{color:var(--tx);font-weight:700}.stp div.on:before,.stp div.on:after{background:var(--p)}.stp div.cur:before{box-shadow:0 0 0 4px #bbf7d0}
-.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{flex:1;border:1px solid var(--bd);background:#f8fafc;border-radius:10px;padding:9px;font-weight:600;font-size:.88rem}
+.tabsX{display:flex;gap:6px;margin-bottom:12px}.tabs button{flex:1;border:1px solid var(--bd);background:#f8fafc;border-radius:10px;padding:9px;font-weight:600;font-size:.88rem}
 .tabs button.on{background:var(--p);color:#fff;border-color:var(--p)}
 .oc{border:1px solid var(--bd);border-radius:var(--r);padding:11px 12px;margin-bottom:9px;cursor:pointer}
 .oc .t{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:4px;font-size:.88rem}.oc .m{color:var(--sub);font-size:.78rem;display:flex;justify-content:space-between}
@@ -96,6 +96,15 @@ h2.sec{font-size:1rem;margin:2px 0 10px;display:flex;align-items:center;gap:6px}
 .pm{margin:12px 0 14px;padding:12px 10px 4px;border-radius:20px;background:linear-gradient(135deg,#fff3d6,#ffe2b8);border:1px solid #f0cf94}html.dk .pm{background:linear-gradient(135deg,#2b2616,#3a2a14);border-color:#5a4720}
 .pm .sec{margin:0 4px 10px}.pm .row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 12px;-webkit-overflow-scrolling:touch}
 .pm .card{flex:0 0 158px;scroll-snap-align:start;padding:10px}.pm .ph,.pm .card img{height:96px}.pm .ph{font-size:2.4rem}
+.dsc.g{background:#b7791f}.dsc.n{background:#15803d}
+.pm.bs{background:linear-gradient(135deg,#eef4ff,#dbe7ff);border-color:#b9ccf3}.pm.nw{background:linear-gradient(135deg,#ecfdf3,#d3f5e0);border-color:#a7dfbd}
+html.dk .pm.bs{background:linear-gradient(135deg,#1b2233,#222c44);border-color:#34415f}html.dk .pm.nw{background:linear-gradient(135deg,#14261c,#1b3526);border-color:#2b5a3c}
+.warn{background:#fff4e5;color:#92400e;border:1px solid #f4cf9a;border-radius:12px;padding:10px 12px;font-size:.86rem;margin-bottom:10px}html.dk .warn{background:#3a2a14;color:#f5c27a;border-color:#5a4720}
+.btn:disabled{opacity:.45}
+nav .dot{display:none;position:absolute;top:9px;margin-right:22px;width:9px;height:9px;border-radius:50%;background:#d92d20;border:2px solid var(--card)}nav button{position:relative}nav .dot.on{display:block}
+.note{display:flex;align-items:center;gap:8px;margin:10px 12px 0;padding:11px 12px;border-radius:14px;background:var(--cream);border:1px solid #e9dcae;color:var(--tx);font-size:.88rem;animation:up .25s ease-out}
+.note b{flex:1}.note button{border:0;border-radius:10px;padding:7px 11px;font-weight:700;font-size:.8rem;background:var(--p);color:#fff}.note button.x{background:none;color:var(--sub);font-size:1.1rem;padding:4px 8px}
+.pm .tabs{display:flex;gap:6px;margin:0 2px 10px;overflow-x:auto}.pm .tabs button{border:0;border-radius:99px;padding:8px 13px;font-size:.82rem;font-weight:700;background:rgba(255,255,255,.7);color:var(--tx);white-space:nowrap}.pm .tabs button.on{background:var(--p);color:#fff}html.dk .pm .tabs button{background:rgba(255,255,255,.08)}html.dk .pm .tabs button.on{background:var(--p)}
 .sk{height:250px;border-radius:16px;background:linear-gradient(90deg,var(--card) 25%,var(--bd) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}.lm{font-size:.72rem;color:#b45309;margin:-4px 0 6px}html.dk .lm{color:#f5b45b}.nm{font-size:.92rem}.cd{font-size:.76rem}.pr{font-size:1rem;color:var(--p)}
 html.dk .pr{color:var(--pd)}
 .card select{background:var(--bg);color:var(--tx);border-color:var(--bd);text-align:center}
@@ -128,9 +137,9 @@ html.dk nav button.on{color:var(--pd)}
 <body>
 <header><button id="bacc">👤 حساب من</button><div><h1 id="shop">ثبت سفارش</h1><small>مینی‌اپ سفارش</small></div><span style="width:70px"></span></header>
 <div id="hero"></div>
-<main><div id="promo"></div><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></main>
+<main><div id="note"></div><div id="promo"></div><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></main>
 <div id="bar"><div class="bc">🛒<span class="bdg" id="cn">۰</span></div><div class="bt"><small id="bn">سبد خرید شما</small><div><small>جمع کل: </small><b id="tt">۰</b></div></div><button class="btn" id="go">ثبت سفارش ‹</button></div>
-<nav><button id="nh" class="on"><span>🏠</span>خانه</button><button id="btrk"><span>🧾</span>سفارش‌های من</button><button id="nsp"><span>🎧</span>پشتیبانی</button><button id="nst"><span>⚙️</span>تنظیمات</button></nav>
+<nav><button id="nh" class="on"><span>🏠</span>خانه</button><button id="btrk"><span>🧾</span>سفارش‌های من<i class="dot"></i></button><button id="nsp"><span>🎧</span>پشتیبانی</button><button id="nst"><span>⚙️</span>تنظیمات</button></nav>
 <div id="ov"><div id="sh"></div></div>
 <script>
 const $=s=>document.querySelector(s),fa=n=>Number(n||0).toLocaleString('fa-IR'),fd=n=>String(n??'').replace(/\d/g,x=>'۰۱۲۳۴۵۶۷۸۹'[x]);   // fd: شماره‌ها (کد، فاکتور) بدون جداکننده
@@ -155,9 +164,9 @@ async function post(body){
 const refTxt=x=>/^\d+$/.test(String(x))?fd(x):esc(x);
 
 /* ───────── فروشگاه ───────── */
-const LIM=CFG.limits||{};
+const LIM=CFG.limits||{};let MINO=0;
 function apply(d){
-  P=d.products;CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
+  P=d.products;MINO=+d.min_order||0;CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
   P.forEach(p=>{const l=LIM[p.code]||LIM[p.name]||{};p.units.forEach(u=>{const c=+(u.limit||l[u.u]||0);if(c>0){u.cap=c;u.max=Math.min(u.max,c)}})});
   for(const k of Object.keys(CART)){const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(!x||x.max<1)delete CART[k];else CART[k]=Math.min(CART[k],x.max)}
   LS.set('cart',CART);cats();paint();bar();
@@ -188,16 +197,23 @@ function card(p){
   const sel=SEL[p.code]||(SEL[p.code]=(p.units.find(x=>x.max>0)||p.units[0]).u),x=unitOf(p,sel),q=CART[p.code+'|'+sel]||0,out=p.units.every(u=>u.max<1);
   const opts=p.units.map(u=>`<option value="${u.u}" ${u.u===sel?'selected':''} ${u.max<1?'disabled':''}>${uLabel(u)}${u.max<1?' (ناموجود)':''}</option>`).join('');
   const act=out?'<div class="na">ناموجود</div>':q?`<div class="st"><button data-a="inc" ${q>=x.max?'disabled':''}>+</button><b>${fa(q)}</b><button class="m" data-a="dec">−</button></div>`:'<button class="add" data-a="inc">🛒 افزودن به سبد</button>';
-  return `<div class="card ${out?'out':''}" data-c="${esc(p.code)}">${p.promo>0&&x.old?`<span class="dsc">٪${fa(p.promo)} تخفیف</span>`:''}<div class="ph">${p.image?`<img loading="lazy" src="${esc(IMG)}${encodeURIComponent(p.image)}" alt="" onerror="this.outerHTML='${ico(p.category)}'">`:ico(p.category)}</div>
+  return `<div class="card ${out?'out':''}" data-c="${esc(p.code)}">${p.promo>0&&x.old?`<span class="dsc">٪${fa(p.promo)} تخفیف</span>`:p.best?'<span class="dsc g">⭐ پرفروش</span>':p.new?'<span class="dsc n">🆕 جدید</span>':''}<div class="ph">${p.image?`<img loading="lazy" src="${esc(IMG)}${encodeURIComponent(p.image)}" alt="" onerror="this.outerHTML='${ico(p.category)}'">`:ico(p.category)}</div>
   <div class="nm">${esc(p.name)}</div>${p.units.length>1?`<select>${opts}</select>`:`<div class="cd">${uLabel(x)}</div>`}<div class="pr">${x.old?`<s class="old">${fa(x.old)}</s>`:''}${fa(x.price)} ${esc(CUR)}</div>${x.cap?`<div class="lm">حداکثر سفارش: ${fa(x.cap)} ${FAU[x.u]||''}</div>`:''}${act}</div>`;
 }
 function paint(){const w=nrm(Q).split(/\s+/).filter(Boolean);const l=P.filter(p=>(!CAT||p.category===CAT)&&w.every(t=>nrm(p.name+' '+p.code).includes(t)));$('#list').innerHTML=l.map(card).join('')||'<div class="em">کالایی پیدا نشد</div>';
-  const d=P.filter(p=>p.promo>0&&p.units.some(u=>u.max>0&&u.old));$('#promo').innerHTML=(d.length&&!CAT&&!Q)?`<section class="pm"><h2 class="sec">🔥 کالاهای تخفیف‌دار</h2><div class="row">${d.map(card).join('')}</div></section>`:''}
+  paintPromo()}
+let STRIP='';
+function paintPromo(){
+  const seen=new Set(),ok=p=>p.units.some(u=>u.max>0),mk=(k,t,f)=>{const a=P.filter(p=>!seen.has(p.code)&&ok(p)&&f(p));a.forEach(p=>seen.add(p.code));return{k,t,a}};
+  const T=(!CAT&&!Q)?[mk('d','🔥 تخفیف‌دار',p=>p.promo>0&&p.units.some(u=>u.old)),mk('b','⭐ پرفروش‌ها',p=>p.best),mk('n','🆕 جدیدترین‌ها',p=>p.new)].filter(x=>x.a.length):[];
+  if(!T.length){$('#promo').innerHTML='';return}
+  const cur=T.find(x=>x.k===STRIP)||T[0];
+  $('#promo').innerHTML=`<section class="pm"><div class="tabs">${T.map(x=>`<button class="${x===cur?'on':''}" data-st="${x.k}">${x.t}</button>`).join('')}</div><div class="row">${cur.a.map(card).join('')}</div></section>`}
 function repaint(code){const p=byCode(code);if(p)document.querySelectorAll(`[data-c="${CSS.escape(code)}"]`).forEach(el=>{if(el.closest('#list,#promo'))el.outerHTML=card(p)})}
 function setQ(k,n){const[c,u]=k.split('|'),x=unitOf(byCode(c),u);n=Math.max(0,Math.min(n,x.max));n?CART[k]=n:delete CART[k];LS.set('cart',CART);bar()}
 function lines(){return Object.keys(CART).map(k=>{const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);return p&&x?{k,p,x,q:CART[k]}:null}).filter(Boolean)}
 const total=()=>lines().reduce((s,l)=>s+l.q*l.x.price,0);
-function bar(){const n=lines().length;$('#cn').textContent=fa(n);$('#tt').textContent=fa(total())+' '+CUR;$('#bar').classList.toggle('show',n>0);$('#bn').textContent=n?'سبد شما: '+fa(n)+' قلم کالا':''}
+function bar(){const n=lines().length;$('#cn').textContent=fa(n);$('#tt').textContent=fa(total())+' '+CUR;$('#bar').classList.toggle('show',n>0);$('#bn').textContent=n?(MINO&&total()<MINO?'تا حداقل سفارش: '+fa(MINO-total())+' '+CUR:'سبد شما: '+fa(n)+' قلم کالا'):''}
 $('#q').addEventListener('input',e=>{Q=e.target.value;paint()});
 $('#cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;CAT=b.dataset.cat;cats();paint()});
 $('main').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const c=b.closest('.card').dataset.c,k=c+'|'+SEL[c];setQ(k,(CART[k]||0)+(b.dataset.a==='inc'?1:-1));repaint(c)});
@@ -226,7 +242,7 @@ function showCart(){
   SH(`<h3>سبد خرید</h3>${ls.map(l=>`<div class="ln" data-k="${esc(l.k)}"><div class="i"><div>${esc(l.p.name)}</div><div>${uLabel(l.x)} · ${fa(l.x.price)} ${esc(CUR)} · جمع ${fa(l.q*l.x.price)}</div></div>
    <div class="st"><button data-a="inc" ${l.q>=l.x.max?'disabled':''}>+</button><b>${fa(l.q)}</b><button class="m" data-a="dec">−</button></div></div>`).join('')}
   <div class="tot"><span>جمع کل</span><span>${fa(total())} ${esc(CUR)}</span></div>
-  <button class="btn w" data-act="review">مرحله بعد: مشخصات و مرور فاکتور</button><button class="btn g w" style="margin-top:8px" data-close>ادامه‌ی خرید</button>`);
+  ${MINO&&total()<MINO?`<div class="warn">حداقل مبلغ سفارش ${fa(MINO)} ${esc(CUR)} است؛ ${fa(MINO-total())} ${esc(CUR)} دیگر به سبد اضافه کنید.</div><button class="btn w" disabled>مرحله بعد: مشخصات و مرور فاکتور</button>`:'<button class="btn w" data-act="review">مرحله بعد: مشخصات و مرور فاکتور</button>'}<button class="btn g w" style="margin-top:8px" data-close>ادامه‌ی خرید</button>`);
 }
 function showReview(){
   const ls=lines();if(!ls.length)return showCart();
@@ -266,7 +282,7 @@ async function submit(){
   busy=true;const btn=$('#sub');btn.disabled=true;btn.textContent='در حال ثبت…';
   const d=await post({action:'order',key,customer:{name,phone:ph,address:ad,region:rgn,city:cty},note:DRAFT.nt.trim(),items});
   if(d.ok){
-    LS.set('me',{name,phone:ph,address:ad,region:rgn,city:cty});LS.set('okey',null);LS.set('last',{ref:String(d.order_id),phone:ph});CART={};LS.set('cart',CART);DRAFT={};bar();busy=false;
+    LS.set('me',{name,phone:ph,address:ad,region:rgn,city:cty});LS.set('okey',null);LS.set('last',{ref:String(d.order_id),phone:ph});remember(String(d.order_id),ph,'');CART={};LS.set('cart',CART);DRAFT={};bar();busy=false;
     const inv={ref:API?String(d.order_id):'',id:API?'':d.order_id,date:d.date||'',stage:0,items:d.items||snap.items,final:d.total,total:d.total};
     SH(`<div class="ok"><h3>✅ سفارش شما ثبت شد</h3><p class="cd">${API?'کد پیگیری':'شماره فاکتور'}: <b style="color:var(--tx)">${refTxt(d.order_id)}</b></p></div>${stepper(inv)}${invoice(inv)}
     <p class="cd" style="margin-bottom:10px">فروشنده سفارش را بررسی و تأیید می‌کند. با «پیگیری سفارش» می‌توانید هر زمان مرحله‌ی آن را ببینید.</p>
@@ -319,7 +335,7 @@ function showOrder(o,back){
 }
 async function doTrack(ref,phone,errId){
   const d=await post({action:'track',ref,phone});
-  if(d.ok){LS.set('last',{ref:String(ref).toUpperCase(),phone});showOrder(d.order,PORTAL?'account':'login')}
+  if(d.ok){LS.set('last',{ref:String(ref).toUpperCase(),phone});remember(String(ref).toUpperCase(),phone,d.order.status);showOrder(d.order,PORTAL?'account':'login')}
   else{const e=$('#'+errId);if(e)e.textContent=d.error||'سفارش پیدا نشد'}
 }
 
@@ -371,7 +387,27 @@ $('#ov').addEventListener('click',e=>{const a=e.target.closest('[data-act]');if(
   if(a.dataset.act==='forget'){LS.del('me');LS.del('okey');return showSettings()}
   if(a.dataset.act==='clearcart'){CART={};LS.set('cart',CART);bar();paint();return showSettings()}
 });
-setAcc();load();
+/* ───────── اطلاع‌رسانی وضعیت سفارش ───────── */
+const MINE=()=>LS.get('mine',[]),saveMine=m=>LS.set('mine',m.slice(0,5));
+function remember(ref,phone,st){const m=MINE().filter(x=>x.ref!==ref);m.unshift({ref,phone,st:st||''});saveMine(m)}
+let chk=0;
+async function checkStatus(force){
+  const m=MINE().filter(o=>!o.fin);if(!m.length||!API||(!force&&Date.now()-chk<60000))return;chk=Date.now();const ups=[];
+  for(const o of m){try{const d=await post({action:'track',ref:o.ref,phone:o.phone});if(d.ok&&d.order){const s=d.order.status||'',g=d.order.stage;if(!o.st){o.st=s;saveMine(MINE().map(x=>x.ref===o.ref?o:x));continue}if(g>0||g<0){if(s!==o.st)ups.push({ref:o.ref,s,g})}}}catch(e){}}
+  showNote(ups)}
+function showNote(ups){
+  const n=$('#note'),dot=document.querySelector('nav .dot');if(!ups.length){n.innerHTML='';dot.classList.remove('on');return}
+  const u=ups[0],ic=u.g<0?'❌':u.g>=3?'✅':'📦';dot.classList.add('on');
+  n.innerHTML=`<div class="note"><span>${ic}</span><b>سفارش ${fd(esc(u.ref))}: ${esc(u.g<0?'لغو شد':u.s)}</b><button data-nv="${esc(u.ref)}">مشاهده</button><button class="x" data-nx="${esc(u.ref)}" data-ns="${esc(u.s)}" aria-label="بستن">✕</button></div>`}
+$('#promo').addEventListener('click',e=>{const t=e.target.closest('[data-st]');if(t){STRIP=t.dataset.st;paintPromo()}});
+$('#note').addEventListener('click',e=>{
+  const v=e.target.closest('[data-nv]'),x=e.target.closest('[data-nx]');
+  const done=(ref,s)=>{const m=MINE().map(o=>o.ref===ref?{...o,st:s,fin:/لغو|تحویل|تسویه/.test(s)?1:0}:o);saveMine(m);showNote([])};
+  if(x)return done(x.dataset.nx,x.dataset.ns);
+  if(v){const o=MINE().find(z=>z.ref===v.dataset.nv);if(o){const s=($('#note b')||{}).textContent||'';doTrack(o.ref,o.phone,'x').then(()=>{});done(o.ref,s.split(': ').slice(1).join(': ').replace('لغو شد','لغو شده'))}}
+});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkStatus()});
+setAcc();load().then(()=>checkStatus(true));
 (async()=>{const c=LS.get('login',null);if(c)await login(c,true)})();
 </script>
 </body>
