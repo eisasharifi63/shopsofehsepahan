@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://script.google.com">
 <script>if(/tgWebApp/i.test(location.hash+location.search)&&!/eitaa/i.test(navigator.userAgent)){var _s=document.createElement('script');_s.src='https://telegram.org/js/telegram-web-app.js';_s.async=true;_s.onload=function(){try{initTg()}catch(e){}};document.head.appendChild(_s)}</script>
 <script src="https://developer.eitaa.com/eitaa-web-app.js" async onerror="void 0"></script>
+<script src="https://tapi.bale.ai/miniapp.js?3" async onerror="void 0"></script>
 <style>
 :root{--p:#16a34a;--pd:#15803d;--bg:#f4f6f8;--card:#fff;--tx:#0f172a;--sub:#64748b;--bd:#e2e8f0;--red:#dc2626;--amb:#b45309;--r:12px}
 *{box-sizing:border-box;margin:0;padding:0;font-family:Vazirmatn,Tahoma,system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
@@ -154,7 +155,7 @@ function jd(s){const m=String(s||'').match(/(\d+)-(\d+)-(\d+)/);if(!m)return'';c
 let AREAS=[],ALAB=['منطقه','شهر'],P=[],CUR='تومان',CAT='',Q='',CART=LS.get('cart',{}),SEL={},busy=false,PORTAL=null,DRAFT={},TAB='orders';
 const byCode=c=>P.find(p=>p.code===c),unitOf=(p,u)=>p.units.find(x=>x.u===u);
 const uLabel=x=>x.u==='pc'?'عدد':`${UL[x.u]} ${fa(x.size)} عددی`;
-const getTg=()=>(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initData!==undefined&&Telegram.WebApp.platform!=='unknown'&&Telegram.WebApp)||(window.Eitaa&&Eitaa.WebApp)||null;
+const getTg=()=>(window.Telegram&&Telegram.WebApp&&Telegram.WebApp.initData!==undefined&&Telegram.WebApp.platform!=='unknown'&&Telegram.WebApp)||(window.Eitaa&&Eitaa.WebApp)||(window.Bale&&Bale.WebApp)||null;
 function initTg(){const t=getTg();try{t&&(t.ready(),t.expand())}catch(e){}try{t&&t.setHeaderColor&&t.setHeaderColor('#0f5c43')}catch(e){}}
 initTg();addEventListener('load',initTg);
 // همه‌ی درخواست‌ها: «صندوق پست» (text/plain تا پیش‌درخواست CORS لازم نباشد) یا برنامه‌ی همین کامپیوتر
@@ -167,7 +168,7 @@ const refTxt=x=>/^\d+$/.test(String(x))?fd(x):esc(x);
 /* ───────── فروشگاه ───────── */
 const LIM=CFG.limits||{};let MINO=0,GUILDS=[],CDAYS=[];
 function apply(d){
-  P=d.products;MINO=+d.min_order||0;GUILDS=d.guilds||[];CDAYS=(d.cheque_days||[]).map(Number);CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
+  P=d.products;MINO=+d.min_order||0;GUILDS=d.guilds||[];CDAYS=(d.cheque_days||[]).map(Number);dbg('guilds:'+GUILDS.length+' cheque_days:['+CDAYS.join()+'] min_order:'+MINO);CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
   P.forEach(p=>{const l=LIM[p.code]||LIM[p.name]||{};p.units.forEach(u=>{const c=+(u.limit||l[u.u]||0);if(c>0){u.cap=c;u.max=Math.min(u.max,c)}})});
   for(const k of Object.keys(CART)){const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(!x||x.max<1)delete CART[k];else CART[k]=Math.min(CART[k],x.max)}
   LS.set('cart',CART);cats();paint();bar();
