@@ -105,6 +105,7 @@ nav .dot{display:none;position:absolute;top:9px;margin-right:22px;width:9px;heig
 .note{display:flex;align-items:center;gap:8px;margin:10px 12px 0;padding:11px 12px;border-radius:14px;background:var(--cream);border:1px solid #e9dcae;color:var(--tx);font-size:.88rem;animation:up .25s ease-out}
 .note b{flex:1}.note button{border:0;border-radius:10px;padding:7px 11px;font-weight:700;font-size:.8rem;background:var(--p);color:#fff}.note button.x{background:none;color:var(--sub);font-size:1.1rem;padding:4px 8px}
 .pm .tabs{display:flex;gap:6px;margin:0 2px 10px;overflow-x:auto}.pm .tabs button{border:0;border-radius:99px;padding:8px 13px;font-size:.82rem;font-weight:700;background:rgba(255,255,255,.7);color:var(--tx);white-space:nowrap}.pm .tabs button.on{background:var(--p);color:#fff}html.dk .pm .tabs button{background:rgba(255,255,255,.08)}html.dk .pm .tabs button.on{background:var(--p)}
+.pay{display:flex;gap:8px;flex-wrap:wrap}.po{flex:1;min-width:120px;cursor:pointer}.po input{display:none}.po span{display:block;text-align:center;padding:11px 8px;border:1px solid var(--bd);border-radius:12px;font-weight:600;font-size:.9rem;background:var(--card)}.po input:checked+span{background:var(--p);color:#fff;border-color:var(--p)}
 .sk{height:250px;border-radius:16px;background:linear-gradient(90deg,var(--card) 25%,var(--bd) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}.lm{font-size:.72rem;color:#b45309;margin:-4px 0 6px}html.dk .lm{color:#f5b45b}.nm{font-size:.92rem}.cd{font-size:.76rem}.pr{font-size:1rem;color:var(--p)}
 html.dk .pr{color:var(--pd)}
 .card select{background:var(--bg);color:var(--tx);border-color:var(--bd);text-align:center}
@@ -164,9 +165,9 @@ async function post(body){
 const refTxt=x=>/^\d+$/.test(String(x))?fd(x):esc(x);
 
 /* ───────── فروشگاه ───────── */
-const LIM=CFG.limits||{};let MINO=0;
+const LIM=CFG.limits||{};let MINO=0,GUILDS=[],CDAYS=[];
 function apply(d){
-  P=d.products;MINO=+d.min_order||0;CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
+  P=d.products;MINO=+d.min_order||0;GUILDS=d.guilds||[];CDAYS=(d.cheque_days||[]).map(Number);CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
   P.forEach(p=>{const l=LIM[p.code]||LIM[p.name]||{};p.units.forEach(u=>{const c=+(u.limit||l[u.u]||0);if(c>0){u.cap=c;u.max=Math.min(u.max,c)}})});
   for(const k of Object.keys(CART)){const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(!x||x.max<1)delete CART[k];else CART[k]=Math.min(CART[k],x.max)}
   LS.set('cart',CART);cats();paint();bar();
@@ -254,8 +255,10 @@ function showReview(){
   <div class="f"><label>شماره موبایل</label><input id="ph" type="tel" inputmode="tel" placeholder="۰۹۱۲۳۴۵۶۷۸۹" value="${esc(DRAFT.ph??me.phone??'')}" autocomplete="tel"></div>
   ${AREAS.length?`<div class="f"><label>${esc(ALAB[0])}</label><select id="rg"><option value="">انتخاب کنید…</option>${AREAS.map(a=>`<option ${a.name===(DRAFT.rg??me.region??'')?'selected':''}>${esc(a.name)}</option>`).join('')}</select></div>
   <div class="f" id="ctw"><label>${esc(ALAB[1])}</label><select id="ct"></select></div>`:''}
+  ${GUILDS.length?`<div class="f"><label>صنف شما</label><select id="gd"><option value="">انتخاب کنید…</option>${GUILDS.map(g=>`<option ${g===(DRAFT.gd??me.guild??'')?'selected':''}>${esc(g)}</option>`).join('')}</select></div>`:''}
   <div class="f"><label>${AREAS.length?'آدرس دقیق (خیابان، کوچه، پلاک)':'آدرس'}</label><textarea id="ad" rows="2" placeholder="${AREAS.length?'خیابان، کوچه، پلاک، واحد…':'شهر، خیابان، پلاک…'}">${esc(DRAFT.ad??me.address??'')}</textarea></div>
   <div class="f"><label>توضیحات (اختیاری)</label><input id="nt" maxlength="300" value="${esc(DRAFT.nt||'')}"></div>
+  <div class="f"><label>نحوه‌ی پرداخت</label><div class="pay">${[['cash','💵 نقد'],...CDAYS.map(d=>['chq'+d,'📝 چک '+fa(d)+' روزه'])].map(([k,t])=>`<label class="po"><input type="radio" name="pay" value="${k}" ${k===(DRAFT.pay??me.pay??'cash')?'checked':''}><span>${t}</span></label>`).join('')}</div></div>
   <div id="err"></div><button class="btn w" id="sub" data-act="submit">ثبت نهایی فاکتور</button><button class="btn g w" style="margin-top:8px" data-act="cart">بازگشت به سبد</button>`);
   fillCities(DRAFT.ct??me.city??'');
 }
@@ -265,7 +268,7 @@ function fillCities(sel){   // منوی دوم از روی منوی اول پر 
   w.style.display=a&&!cs.length?'none':'';
   ct.innerHTML=`<option value="">${a?'انتخاب کنید…':'اول '+esc(ALAB[0])+' را انتخاب کنید'}</option>`+cs.map(c=>`<option ${c===sel?'selected':''}>${esc(c)}</option>`).join('');
 }
-const keepDraft=()=>{DRAFT={nm:$('#nm')?.value,ph:$('#ph')?.value,ad:$('#ad')?.value,nt:$('#nt')?.value,rg:$('#rg')?.value,ct:$('#ct')?.value}};
+const keepDraft=()=>{DRAFT={nm:$('#nm')?.value,ph:$('#ph')?.value,ad:$('#ad')?.value,nt:$('#nt')?.value,rg:$('#rg')?.value,ct:$('#ct')?.value,gd:$('#gd')?.value,pay:document.querySelector('input[name=pay]:checked')?.value}};
 async function submit(){
   if(busy)return;const err=$('#err');err.textContent='';keepDraft();
   const name=DRAFT.nm.trim();let ph=nrm(DRAFT.ph).replace(/\D/g,'');
@@ -276,13 +279,15 @@ async function submit(){
   if(AREAS.length){rgn=DRAFT.rg||'';const a=AREAS.find(x=>x.name===rgn);
     if(!a)return err.textContent='لطفاً '+ALAB[0]+' را انتخاب کنید';
     if(a.cities.length){cty=DRAFT.ct||'';if(!a.cities.includes(cty))return err.textContent='لطفاً '+ALAB[1]+' را انتخاب کنید'}}
+  if(GUILDS.length&&!GUILDS.includes(DRAFT.gd||''))return err.textContent='لطفاً صنف خود را انتخاب کنید';
+  if(DRAFT.pay&&DRAFT.pay!=='cash'&&!CDAYS.includes(+DRAFT.pay.slice(3)))DRAFT.pay='cash';
   const ad=DRAFT.ad.trim();if(ad.length<8)return err.textContent='آدرس را کامل‌تر بنویسید';
   let key=LS.get('okey',null);if(!key){key=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random().toString(36).slice(2);LS.set('okey',key)}
   const items=lines().map(l=>({code:l.p.code,unit:l.x.u,qty:l.q})),snap=cartAsInvoice();
   busy=true;const btn=$('#sub');btn.disabled=true;btn.textContent='در حال ثبت…';
-  const d=await post({action:'order',key,customer:{name,phone:ph,address:ad,region:rgn,city:cty},note:DRAFT.nt.trim(),items});
+  const d=await post({action:'order',key,customer:{name,phone:ph,address:ad,region:rgn,city:cty,guild:DRAFT.gd||''},pay:DRAFT.pay||'cash',note:DRAFT.nt.trim(),items});
   if(d.ok){
-    LS.set('me',{name,phone:ph,address:ad,region:rgn,city:cty});LS.set('okey',null);LS.set('last',{ref:String(d.order_id),phone:ph});remember(String(d.order_id),ph,'');CART={};LS.set('cart',CART);DRAFT={};bar();busy=false;
+    LS.set('me',{name,phone:ph,address:ad,region:rgn,city:cty,guild:DRAFT.gd||'',pay:DRAFT.pay||'cash'});LS.set('okey',null);LS.set('last',{ref:String(d.order_id),phone:ph});remember(String(d.order_id),ph,'');CART={};LS.set('cart',CART);DRAFT={};bar();busy=false;
     const inv={ref:API?String(d.order_id):'',id:API?'':d.order_id,date:d.date||'',stage:0,items:d.items||snap.items,final:d.total,total:d.total};
     SH(`<div class="ok"><h3>✅ سفارش شما ثبت شد</h3><p class="cd">${API?'کد پیگیری':'شماره فاکتور'}: <b style="color:var(--tx)">${refTxt(d.order_id)}</b></p></div>${stepper(inv)}${invoice(inv)}
     <p class="cd" style="margin-bottom:10px">فروشنده سفارش را بررسی و تأیید می‌کند. با «پیگیری سفارش» می‌توانید هر زمان مرحله‌ی آن را ببینید.</p>
