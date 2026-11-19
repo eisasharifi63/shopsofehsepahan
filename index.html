@@ -107,6 +107,7 @@ nav .dot{display:none;position:absolute;top:9px;margin-right:22px;width:9px;heig
 .note b{flex:1}.note button{border:0;border-radius:10px;padding:7px 11px;font-weight:700;font-size:.8rem;background:var(--p);color:#fff}.note button.x{background:none;color:var(--sub);font-size:1.1rem;padding:4px 8px}
 .pm .tabs{display:flex;gap:6px;margin:0 2px 10px;overflow-x:auto}.pm .tabs button{border:0;border-radius:99px;padding:8px 13px;font-size:.82rem;font-weight:700;background:rgba(255,255,255,.7);color:var(--tx);white-space:nowrap}.pm .tabs button.on{background:var(--p);color:#fff}html.dk .pm .tabs button{background:rgba(255,255,255,.08)}html.dk .pm .tabs button.on{background:var(--p)}
 .pay{display:flex;gap:8px;flex-wrap:wrap}.po{flex:1;min-width:120px;cursor:pointer}.po input{display:none}.po span{display:block;text-align:center;padding:11px 8px;border:1px solid var(--bd);border-radius:12px;font-weight:600;font-size:.9rem;background:var(--card)}.po input:checked+span{background:var(--p);color:#fff;border-color:var(--p)}
+.srt{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:.84rem;color:var(--sub)}.srt select{flex:1;max-width:200px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:99px;padding:7px 12px;font-size:.84rem}
 .sk{height:250px;border-radius:16px;background:linear-gradient(90deg,var(--card) 25%,var(--bd) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}.lm{font-size:.72rem;color:#b45309;margin:-4px 0 6px}html.dk .lm{color:#f5b45b}.nm{font-size:.92rem}.cd{font-size:.76rem}.pr{font-size:1rem;color:var(--p)}
 html.dk .pr{color:var(--pd)}
 .card select{background:var(--bg);color:var(--tx);border-color:var(--bd);text-align:center}
@@ -139,7 +140,7 @@ html.dk nav button.on{color:var(--pd)}
 <body>
 <header><button id="bacc">👤 حساب من</button><div><h1 id="shop">ثبت سفارش</h1><small>مینی‌اپ سفارش</small></div><span style="width:70px"></span></header>
 <div id="hero"></div>
-<main><div id="note"></div><div id="promo"></div><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></main>
+<main><div id="note"></div><div id="promo"></div><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><div class="srt"><label for="srt">مرتب‌سازی</label><select id="srt"><option value="">پیش‌فرض</option><option value="new">جدیدترین</option><option value="lo">ارزان‌ترین</option><option value="hi">گران‌ترین</option><option value="best">پرفروش‌ترین</option><option value="off">بیشترین تخفیف</option></select></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></main>
 <div id="bar"><div class="bc">🛒<span class="bdg" id="cn">۰</span></div><div class="bt"><small id="bn">سبد خرید شما</small><div><small>جمع کل: </small><b id="tt">۰</b></div></div><button class="btn" id="go">ثبت سفارش ‹</button></div>
 <nav><button id="nh" class="on"><span>🏠</span>خانه</button><button id="btrk"><span>🧾</span>سفارش‌های من<i class="dot"></i></button><button id="nsp"><span>🎧</span>پشتیبانی</button><button id="nst"><span>⚙️</span>تنظیمات</button></nav>
 <div id="ov"><div id="sh"></div></div>
@@ -167,8 +168,10 @@ const refTxt=x=>/^\d+$/.test(String(x))?fd(x):esc(x);
 
 /* ───────── فروشگاه ───────── */
 const LIM=CFG.limits||{};let MINO=0,GUILDS=[],CDAYS=[];
+const MODE=(new URLSearchParams(location.search).get('m')||CFG.defaultMode||'super'),HOME=MODE==='home';
+let SORT=LS.get('srt','');
 function apply(d){
-  P=d.products;MINO=+d.min_order||0;GUILDS=d.guilds||[];CDAYS=(d.cheque_days||[]).map(Number);dbg('guilds:'+GUILDS.length+' cheque_days:['+CDAYS.join()+'] min_order:'+MINO);CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
+  P=d.products;if(!HOME){P.forEach(p=>p.units=p.units.filter(u=>u.u!=='pc'));P=P.filter(p=>p.units.length)}MINO=+d.min_order||0;GUILDS=d.guilds||[];CDAYS=(d.cheque_days||[]).map(Number);dbg('guilds:'+GUILDS.length+' cheque_days:['+CDAYS.join()+'] min_order:'+MINO);CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
   P.forEach(p=>{const l=LIM[p.code]||LIM[p.name]||{};p.units.forEach(u=>{const c=+(u.limit||l[u.u]||0);if(c>0){u.cap=c;u.max=Math.min(u.max,c)}})});
   for(const k of Object.keys(CART)){const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(!x||x.max<1)delete CART[k];else CART[k]=Math.min(CART[k],x.max)}
   LS.set('cart',CART);cats();paint();bar();
@@ -202,7 +205,10 @@ function card(p){
   return `<div class="card ${out?'out':''}" data-c="${esc(p.code)}">${p.promo>0&&x.old?`<span class="dsc">٪${fa(p.promo)} تخفیف</span>`:p.best?'<span class="dsc g">⭐ پرفروش</span>':p.new?'<span class="dsc n">🆕 جدید</span>':''}<div class="ph">${p.image?`<img loading="lazy" src="${esc(IMG)}${encodeURIComponent(p.image)}" alt="" onerror="this.outerHTML='${ico(p.category)}'">`:ico(p.category)}</div>
   <div class="nm">${esc(p.name)}</div>${p.units.length>1?`<select>${opts}</select>`:`<div class="cd">${uLabel(x)}</div>`}<div class="pr">${x.old?`<s class="old">${fa(x.old)}</s>`:''}${fa(x.price)} ${esc(CUR)}</div>${x.cap?`<div class="lm">حداکثر سفارش: ${fa(x.cap)} ${FAU[x.u]||''}</div>`:''}${act}</div>`;
 }
-function paint(){const w=nrm(Q).split(/\s+/).filter(Boolean);const l=P.filter(p=>(!CAT||p.category===CAT)&&w.every(t=>nrm(p.name+' '+p.code).includes(t)));$('#list').innerHTML=l.map(card).join('')||'<div class="em">کالایی پیدا نشد</div>';
+function paint(){const w=nrm(Q).split(/\s+/).filter(Boolean);const l=P.filter(p=>(!CAT||p.category===CAT)&&w.every(t=>nrm(p.name+' '+p.code).includes(t)));
+  const av=p=>p.units.some(u=>u.max>0)?0:1,pr=p=>{const x=unitOf(p,SEL[p.code]||(p.units.find(u=>u.max>0)||p.units[0]).u);return x?x.price:0};
+  const K={new:(a,b)=>(b.created||'').localeCompare(a.created||''),lo:(a,b)=>pr(a)-pr(b),hi:(a,b)=>pr(b)-pr(a),best:(a,b)=>(b.sold||0)-(a.sold||0),off:(a,b)=>(b.promo||0)-(a.promo||0)};
+  if(K[SORT])l.sort((a,b)=>av(a)-av(b)||K[SORT](a,b));$('#list').innerHTML=l.map(card).join('')||'<div class="em">کالایی پیدا نشد</div>';
   paintPromo()}
 let STRIP='';
 function paintPromo(){
@@ -219,7 +225,7 @@ function bar(){const n=lines().length;$('#cn').textContent=fa(n);$('#tt').textCo
 $('#q').addEventListener('input',e=>{Q=e.target.value;paint()});
 $('#cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;CAT=b.dataset.cat;cats();paint()});
 $('main').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const c=b.closest('.card').dataset.c,k=c+'|'+SEL[c];setQ(k,(CART[k]||0)+(b.dataset.a==='inc'?1:-1));repaint(c)});
-$('main').addEventListener('change',e=>{if(e.target.tagName!=='SELECT')return;const c=e.target.closest('.card').dataset.c;SEL[c]=e.target.value;repaint(c)});
+$('main').addEventListener('change',e=>{if(e.target.tagName!=='SELECT'||e.target.id==='srt')return;const c=e.target.closest('.card').dataset.c;SEL[c]=e.target.value;repaint(c)});
 
 /* ───────── اجزای مشترک: فاکتور و مرحله‌ی سفارش ───────── */
 const SH=h=>{$('#sh').innerHTML=h;$('#ov').classList.add('on');$('#sh').scrollTop=0},closeSh=()=>$('#ov').classList.remove('on');
@@ -286,7 +292,7 @@ async function submit(){
   let key=LS.get('okey',null);if(!key){key=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random().toString(36).slice(2);LS.set('okey',key)}
   const items=lines().map(l=>({code:l.p.code,unit:l.x.u,qty:l.q})),snap=cartAsInvoice();
   busy=true;const btn=$('#sub');btn.disabled=true;btn.textContent='در حال ثبت…';
-  const d=await post({action:'order',key,customer:{name,phone:ph,address:ad,region:rgn,city:cty,guild:DRAFT.gd||''},pay:DRAFT.pay||'cash',note:DRAFT.nt.trim(),items});
+  const d=await post({action:'order',key,customer:{name,phone:ph,address:ad,region:rgn,city:cty,guild:DRAFT.gd||''},mode:MODE,pay:DRAFT.pay||'cash',note:DRAFT.nt.trim(),items});
   if(d.ok){
     LS.set('me',{name,phone:ph,address:ad,region:rgn,city:cty,guild:DRAFT.gd||'',pay:DRAFT.pay||'cash'});LS.set('okey',null);LS.set('last',{ref:String(d.order_id),phone:ph});remember(String(d.order_id),ph,'');CART={};LS.set('cart',CART);DRAFT={};bar();busy=false;
     const inv={ref:API?String(d.order_id):'',id:API?'':d.order_id,date:d.date||'',stage:0,items:d.items||snap.items,final:d.total,total:d.total};
@@ -405,6 +411,7 @@ function showNote(ups){
   const n=$('#note'),dot=document.querySelector('nav .dot');if(!ups.length){n.innerHTML='';dot.classList.remove('on');return}
   const u=ups[0],ic=u.g<0?'❌':u.g>=3?'✅':'📦';dot.classList.add('on');
   n.innerHTML=`<div class="note"><span>${ic}</span><b>سفارش ${fd(esc(u.ref))}: ${esc(u.g<0?'لغو شد':u.s)}</b><button data-nv="${esc(u.ref)}">مشاهده</button><button class="x" data-nx="${esc(u.ref)}" data-ns="${esc(u.s)}" aria-label="بستن">✕</button></div>`}
+$('#srt').value=SORT;$('#srt').addEventListener('change',e=>{SORT=e.target.value;LS.set('srt',SORT);paint()});
 $('#promo').addEventListener('click',e=>{const t=e.target.closest('[data-st]');if(t){STRIP=t.dataset.st;paintPromo()}});
 $('#note').addEventListener('click',e=>{
   const v=e.target.closest('[data-nv]'),x=e.target.closest('[data-nx]');
