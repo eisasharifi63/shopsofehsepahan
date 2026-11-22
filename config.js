@@ -7,7 +7,7 @@ window.MINIAPP_CONFIG = {
   // اگر این فهرست را ننویسید، فقط img/banner.jpg نشان داده می‌شود.
   banners: [
     { img: "banner1.jpg" },
-    { img: "banner2.jpg", cat: "ویفر" },
+    { img: "Banner2.jpg", cat: "ویفر" },
     // { img: "banner3.jpg", promo: true },
   ],
 
