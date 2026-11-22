@@ -72,7 +72,7 @@ select{width:100%;padding:7px;border:1px solid var(--bd);border-radius:8px;font-
 .ok{text-align:center;padding:6px 0 4px}.ok h3{color:var(--pd);margin-bottom:4px}
 </style>
 <style>
-:root{--p:#0f5c43;--pd:#0b4733;--bg:#f6f4ee;--card:#fff;--tx:#14231d;--sub:#6b7a73;--bd:#e6e2d6;--gold:#c9a24b;--cream:#fbf3dc;--r:16px;--nav:64px}
+:root{--p:#0f5c43;--pd:#0b4733;--bg:#f6f4ee;--card:#fff;--tx:#14231d;--sub:#6b7a73;--bd:#e6e2d6;--gold:#c9a24b;--cream:#fbf3dc;--r:16px;--nav:92px}
 html.dk{--bg:#101815;--card:#18221e;--tx:#eaf1ee;--sub:#9db0a8;--bd:#2a3833;--cream:#222b26;--p:#1b8a65;--pd:#6fd1ad}
 body{padding-bottom:calc(var(--nav) + 90px + env(safe-area-inset-bottom))}
 header{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--p);color:#fff;border:0;padding:12px 14px calc(12px)}
@@ -108,6 +108,16 @@ nav .dot{display:none;position:absolute;top:9px;margin-right:22px;width:9px;heig
 .pm .tabs{display:flex;gap:6px;margin:0 2px 10px;overflow-x:auto}.pm .tabs button{border:0;border-radius:99px;padding:8px 13px;font-size:.82rem;font-weight:700;background:rgba(255,255,255,.7);color:var(--tx);white-space:nowrap}.pm .tabs button.on{background:var(--p);color:#fff}html.dk .pm .tabs button{background:rgba(255,255,255,.08)}html.dk .pm .tabs button.on{background:var(--p)}
 .pay{display:flex;gap:8px;flex-wrap:wrap}.po{flex:1;min-width:120px;cursor:pointer}.po input{display:none}.po span{display:block;text-align:center;padding:11px 8px;border:1px solid var(--bd);border-radius:12px;font-weight:600;font-size:.9rem;background:var(--card)}.po input:checked+span{background:var(--p);color:#fff;border-color:var(--p)}
 .srt{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:.84rem;color:var(--sub)}.srt select{flex:1;max-width:200px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:99px;padding:7px 12px;font-size:.84rem}
+.hc{position:relative;width:44px;height:44px;border:0;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;font-size:1.3rem}.hc i{position:absolute;top:-2px;left:-2px;background:#d92d20;color:#fff;border-radius:99px;font-size:.68rem;min-width:19px;height:19px;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;border:2px solid var(--p)}.hc i:empty{display:none}
+html nav{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));height:60px;padding:0 4px;border:0;border-radius:32px;box-shadow:0 8px 26px rgba(0,0,0,.2);max-width:616px}
+html nav button{font-size:.66rem}html nav button b{font-weight:600}html nav button .dot{top:6px}
+html nav button.hm{flex:none;width:60px;height:60px;margin-top:-26px;border-radius:50%;background:var(--p);color:#fff;box-shadow:0 6px 16px rgba(15,92,67,.45);border:4px solid var(--bg)}html nav button.hm span{filter:none;opacity:1;font-size:1.5rem}
+#hero .bsl{display:flex;height:100%;transition:transform .45s ease}#hero .bs{flex:0 0 100%;height:100%;cursor:pointer}#hero .bs img{width:100%;height:100%;object-fit:cover;display:block}
+.bdots{position:absolute;bottom:6px;left:0;right:0;display:flex;justify-content:center;gap:5px}.bdots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55)}.bdots i.on{background:#fff;width:16px;border-radius:4px}
+.rep{margin:0 0 12px;background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px;display:flex;align-items:center;gap:10px}.rep b{display:block}.rep small{color:var(--sub)}.rep .rg{margin-right:auto;padding:9px 12px;border-radius:12px;font-size:.84rem}
+.ctg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0 12px}.ctg button{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:14px;padding:14px 6px;font-weight:700;font-size:.9rem}.ctg button span{display:block;font-size:1.8rem}.ctg small{display:block;color:var(--sub);font-weight:400}
+.ac{background:linear-gradient(135deg,var(--p),#14795a);color:#fff;border-radius:var(--r);padding:14px;margin-bottom:12px}.ac small{opacity:.88;display:block}.ac b{font-size:1.45rem;display:block;margin:2px 0}
+.menu{border:1px solid var(--bd);border-radius:var(--r);background:var(--card)}.menu button{display:flex;gap:12px;align-items:center;width:100%;border:0;background:none;padding:12px;text-align:right;border-bottom:1px solid var(--bd);color:var(--tx);font-size:.92rem}.menu button:last-child{border:0}.menu i{font-style:normal;width:36px;height:36px;border-radius:50%;background:#e3f2ea;display:flex;align-items:center;justify-content:center;flex:none}.menu small{display:block;color:var(--sub);font-size:.76rem}html.dk .menu i{background:#1f3a30}
 .sk{height:250px;border-radius:16px;background:linear-gradient(90deg,var(--card) 25%,var(--bd) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}.lm{font-size:.72rem;color:#b45309;margin:-4px 0 6px}html.dk .lm{color:#f5b45b}.nm{font-size:.92rem}.cd{font-size:.76rem}.pr{font-size:1rem;color:var(--p)}
 html.dk .pr{color:var(--pd)}
 .card select{background:var(--bg);color:var(--tx);border-color:var(--bd);text-align:center}
@@ -138,11 +148,11 @@ html.dk nav button.on{color:var(--pd)}
 </style>
 </head>
 <body>
-<header><button id="bacc">👤 حساب من</button><div><h1 id="shop">ثبت سفارش</h1><small>مینی‌اپ سفارش</small></div><span style="width:70px"></span></header>
+<header><button id="bcart" class="hc" aria-label="سبد خرید">🛒<i id="hcn"></i></button><div><h1 id="shop">ثبت سفارش</h1><small>مینی‌اپ سفارش</small></div><span style="width:44px"></span></header>
 <div id="hero"></div>
-<main><div id="note"></div><div id="promo"></div><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><div class="srt"><label for="srt">مرتب‌سازی</label><select id="srt"><option value="">پیش‌فرض</option><option value="new">جدیدترین</option><option value="lo">ارزان‌ترین</option><option value="hi">گران‌ترین</option><option value="best">پرفروش‌ترین</option><option value="off">بیشترین تخفیف</option></select></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></main>
+<main><div id="note"></div><div id="rep"></div><div id="promo"></div><div class="sb"><input id="q" type="search" placeholder="جستجوی محصول…" autocomplete="off"></div><div id="cats"></div><div class="srt"><label for="srt">مرتب‌سازی</label><select id="srt"><option value="">پیش‌فرض</option><option value="new">جدیدترین</option><option value="lo">ارزان‌ترین</option><option value="hi">گران‌ترین</option><option value="best">پرفروش‌ترین</option><option value="off">بیشترین تخفیف</option></select></div><h2 class="sec">🛒 محصولات ما</h2><div id="list"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div></main>
 <div id="bar"><div class="bc">🛒<span class="bdg" id="cn">۰</span></div><div class="bt"><small id="bn">سبد خرید شما</small><div><small>جمع کل: </small><b id="tt">۰</b></div></div><button class="btn" id="go">ثبت سفارش ‹</button></div>
-<nav><button id="nh" class="on"><span>🏠</span>خانه</button><button id="btrk"><span>🧾</span>سفارش‌های من<i class="dot"></i></button><button id="nsp"><span>🎧</span>پشتیبانی</button><button id="nst"><span>⚙️</span>تنظیمات</button></nav>
+<nav><button id="nacc"><span>👤</span><b id="nal">حساب من</b></button><button id="btrk"><span>🧾</span>سفارش‌ها<i class="dot"></i></button><button id="nh" class="hm on" aria-label="خانه"><span>🏠</span></button><button id="nct"><span>▦</span>دسته‌بندی</button><button id="nsp"><span>🎧</span>پشتیبانی</button></nav>
 <div id="ov"><div id="sh"></div></div>
 <script>
 const $=s=>document.querySelector(s),fa=n=>Number(n||0).toLocaleString('fa-IR'),fd=n=>String(n??'').replace(/\d/g,x=>'۰۱۲۳۴۵۶۷۸۹'[x]);   // fd: شماره‌ها (کد، فاکتور) بدون جداکننده
@@ -209,7 +219,7 @@ function paint(){const w=nrm(Q).split(/\s+/).filter(Boolean);const l=P.filter(p=
   const av=p=>p.units.some(u=>u.max>0)?0:1,pr=p=>{const x=unitOf(p,SEL[p.code]||(p.units.find(u=>u.max>0)||p.units[0]).u);return x?x.price:0};
   const K={new:(a,b)=>(b.created||'').localeCompare(a.created||''),lo:(a,b)=>pr(a)-pr(b),hi:(a,b)=>pr(b)-pr(a),best:(a,b)=>(b.sold||0)-(a.sold||0),off:(a,b)=>(b.promo||0)-(a.promo||0)};
   if(K[SORT])l.sort((a,b)=>av(a)-av(b)||K[SORT](a,b));$('#list').innerHTML=l.map(card).join('')||'<div class="em">کالایی پیدا نشد</div>';
-  paintPromo()}
+  paintRep();paintPromo()}
 let STRIP='';
 function paintPromo(){
   const seen=new Set(),ok=p=>p.units.some(u=>u.max>0),mk=(k,t,f)=>{const a=P.filter(p=>!seen.has(p.code)&&ok(p)&&f(p));a.forEach(p=>seen.add(p.code));return{k,t,a}};
@@ -221,7 +231,7 @@ function repaint(code){const p=byCode(code);if(p)document.querySelectorAll(`[dat
 function setQ(k,n){const[c,u]=k.split('|'),x=unitOf(byCode(c),u);n=Math.max(0,Math.min(n,x.max));n?CART[k]=n:delete CART[k];LS.set('cart',CART);bar()}
 function lines(){return Object.keys(CART).map(k=>{const[c,u]=k.split('|'),p=byCode(c),x=p&&unitOf(p,u);return p&&x?{k,p,x,q:CART[k]}:null}).filter(Boolean)}
 const total=()=>lines().reduce((s,l)=>s+l.q*l.x.price,0);
-function bar(){const n=lines().length;$('#cn').textContent=fa(n);$('#tt').textContent=fa(total())+' '+CUR;$('#bar').classList.toggle('show',n>0);$('#bn').textContent=n?(MINO&&total()<MINO?'تا حداقل سفارش: '+fa(MINO-total())+' '+CUR:'سبد شما: '+fa(n)+' قلم کالا'):''}
+function bar(){const n=lines().length;$('#cn').textContent=fa(n);$('#hcn').textContent=n?fa(n):'';$('#tt').textContent=fa(total())+' '+CUR;$('#bar').classList.toggle('show',n>0);$('#bn').textContent=n?(MINO&&total()<MINO?'تا حداقل سفارش: '+fa(MINO-total())+' '+CUR:'سبد شما: '+fa(n)+' قلم کالا'):''}
 $('#q').addEventListener('input',e=>{Q=e.target.value;paint()});
 $('#cats').addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;CAT=b.dataset.cat;cats();paint()});
 $('main').addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;const c=b.closest('.card').dataset.c,k=c+'|'+SEL[c];setQ(k,(CART[k]||0)+(b.dataset.a==='inc'?1:-1));repaint(c)});
@@ -294,7 +304,7 @@ async function submit(){
   busy=true;const btn=$('#sub');btn.disabled=true;btn.textContent='در حال ثبت…';
   const d=await post({action:'order',key,customer:{name,phone:ph,address:ad,region:rgn,city:cty,guild:DRAFT.gd||''},mode:MODE,pay:DRAFT.pay||'cash',note:DRAFT.nt.trim(),items});
   if(d.ok){
-    LS.set('me',{name,phone:ph,address:ad,region:rgn,city:cty,guild:DRAFT.gd||'',pay:DRAFT.pay||'cash'});LS.set('okey',null);LS.set('last',{ref:String(d.order_id),phone:ph});remember(String(d.order_id),ph,'');CART={};LS.set('cart',CART);DRAFT={};bar();busy=false;
+    LS.set('me',{name,phone:ph,address:ad,region:rgn,city:cty,guild:DRAFT.gd||'',pay:DRAFT.pay||'cash'});LS.set('okey',null);LS.set('lastorder',lines().map(l=>({k:l.k,q:l.q})));LS.set('last',{ref:String(d.order_id),phone:ph});remember(String(d.order_id),ph,'');CART={};LS.set('cart',CART);DRAFT={};bar();busy=false;
     const inv={ref:API?String(d.order_id):'',id:API?'':d.order_id,date:d.date||'',stage:0,items:d.items||snap.items,final:d.total,total:d.total};
     SH(`<div class="ok"><h3>✅ سفارش شما ثبت شد</h3><p class="cd">${API?'کد پیگیری':'شماره فاکتور'}: <b style="color:var(--tx)">${refTxt(d.order_id)}</b></p></div>${stepper(inv)}${invoice(inv)}
     <p class="cd" style="margin-bottom:10px">فروشنده سفارش را بررسی و تأیید می‌کند. با «پیگیری سفارش» می‌توانید هر زمان مرحله‌ی آن را ببینید.</p>
@@ -306,7 +316,7 @@ async function submit(){
 
 /* ───────── حساب من (ورود با کد مشتری) ───────── */
 function who(){return PORTAL?'👤 '+esc(String(PORTAL.name).split(' ')[0]):'👤 حساب من'}
-function setAcc(){$('#bacc').innerHTML=who()}
+function setAcc(){$('#nal').textContent=PORTAL?String(PORTAL.name).split(' ')[0]:'حساب من'}
 async function login(code,silent){
   const d=await post({action:'portal',code});
   if(d.ok){PORTAL=d.data;LS.set('login',code);setAcc();return true}
@@ -325,21 +335,23 @@ function showLogin(){
   <div class="err" id="terr"></div><button class="btn g w" data-act="doTrack">پیگیری</button><button class="btn g w" style="margin-top:8px;background:#fff;border:1px solid var(--bd)" data-close>بستن</button>`);
 }
 const showTrack=showLogin;
-async function openAccount(){
+async function openAccount(){TAB='home';
   if(!PORTAL){const c=LS.get('login',null);if(c){SH('<div class="em">در حال بارگذاری…</div>');if(await login(c,true))return showAccount()}return showLogin()}
   showAccount();login(LS.get('login'),true).then(ok=>ok&&$('#ov').classList.contains('on')&&$('#acct')&&showAccount());   // تازه‌سازی بی‌صدا
 }
 function balTxt(b){return b>0?`<span class="tag r">بدهکار</span>`:b<0?`<span class="tag g">بستانکار</span>`:`<span class="tag">تسویه</span>`}
 function showAccount(){
-  const d=PORTAL;if(!d)return showLogin();CUR=d.currency||CUR;
-  const orders=d.orders.length?d.orders.map((o,i)=>`<div class="oc" data-o="${i}"><div class="t"><b>فاکتور ${fd(o.id)}</b><span class="tag ${o.stage<0?'r':o.stage>=3?'g':'a'}">${o.stage<0?'لغو شده':esc(o.status)}</span></div>
-    <div class="m"><span>${jd(o.date)} · ${fa(o.items.length)} قلم</span><b>${fa(o.final)} ${esc(CUR)}</b></div></div>`).join(''):'<div class="em">هنوز فاکتوری ثبت نشده</div>';
-  const led=d.ledger.length?[...d.ledger].reverse().map(e=>`<div class="lg"><div>${esc(e.desc)}<small>${jd(e.date)}</small></div><div class="n">${e.debit?'<span style="color:var(--red)">+'+fa(e.debit)+'</span>':e.credit?'<span style="color:var(--pd)">−'+fa(e.credit)+'</span>':'—'}<small>مانده ${fa(e.balance)}</small></div></div>`).join(''):'<div class="em">گردشی ثبت نشده</div>';
-  const chq=d.cheques.length?`<h3 style="margin-top:14px">چک‌های در جریان وصول</h3>${d.cheques.map(c=>`<div class="lg"><div>چک ${esc(c.no)}${c.bank?' — '+esc(c.bank):''}<small>سررسید ${jd(c.due)}</small></div><div class="n">${fa(c.amount)}</div></div>`).join('')}`:'';
-  SH(`<div id="acct"></div><h3>${esc(d.name)} <small class="cd">· کد مشتری ${fd(d.code)}</small></h3>
-  <div class="tabs"><button class="${TAB==='orders'?'on':''}" data-tab="orders">سفارش‌های من</button><button class="${TAB==='acc'?'on':''}" data-tab="acc">حساب مالی</button></div>
-  ${TAB==='orders'?orders:`<div class="bal"><small class="cd">مانده‌ی حساب شما ${balTxt(d.balance)}</small><b>${fa(Math.abs(d.balance))} ${esc(CUR)}</b><small class="cd">مثبت = بدهکار، به‌روزرسانی چند دقیقه یک‌بار</small></div>${led}${chq}`}
-  <button class="btn g w" style="margin-top:14px" data-close>بستن</button><button class="btn g w" style="margin-top:8px;background:#fff;border:1px solid var(--bd);color:var(--red)" data-act="logout">خروج از حساب</button>`);
+const d=PORTAL;if(!d)return showLogin();CUR=d.currency||CUR;
+const orders=d.orders.length?d.orders.map((o,i)=>`<div class="oc" data-o="${i}"><div class="t"><b>فاکتور ${fd(o.id)}</b><span class="tag ${o.stage<0?'r':o.stage>=3?'g':'a'}">${o.stage<0?'لغو شده':esc(o.status)}</span></div>
+<div class="m"><span>${jd(o.date)} · ${fa(o.items.length)} قلم</span><b>${fa(o.final)} ${esc(CUR)}</b></div></div>`).join(''):'<div class="em">هنوز فاکتوری ثبت نشده</div>';
+const led=d.ledger.length?[...d.ledger].reverse().map(e=>`<div class="lg"><div>${esc(e.desc)}<small>${jd(e.date)}</small></div><div class="n">${e.debit?'<span style="color:var(--red)">+'+fa(e.debit)+'</span>':e.credit?'<span style="color:var(--pd)">−'+fa(e.credit)+'</span>':'—'}<small>مانده ${fa(e.balance)}</small></div></div>`).join(''):'<div class="em">گردشی ثبت نشده</div>';
+const chq=d.cheques.length?`<h3 style="margin-top:14px">چک‌های در جریان وصول</h3>${d.cheques.map(c=>`<div class="lg"><div>چک ${esc(c.no)}${c.bank?' — '+esc(c.bank):''}<small>سررسید ${jd(c.due)}</small></div><div class="n">${fa(c.amount)}</div></div>`).join('')}`:'';
+const nx=d.cheques.length?[...d.cheques].sort((a,b)=>String(a.due).localeCompare(String(b.due)))[0]:null;
+const card=`<div class="ac"><small>${esc(d.name)} · کد مشتری ${fd(d.code)}</small><b>${fa(Math.abs(d.balance))} ${esc(CUR)}</b><small>${d.balance>0?'بدهکار':d.balance<0?'بستانکار':'تسویه'}${nx?` · چک در جریان: ${fa(d.cheques.length)} فقره، سررسید بعدی ${jd(nx.due)}`:''}</small></div>`;
+let body;
+if(TAB==='home'){const lo=LS.get('lastorder',null);body=`<div class="menu"><button data-tab="orders"><i>🧾</i><span>سفارش‌های من<small>پیگیری سفارش‌ها</small></span></button><button data-tab="acc"><i>📒</i><span>صورت‌حساب و چک‌ها<small>گردش حساب</small></span></button>${lo&&lo.length?'<button data-act="repeat"><i>🔁</i><span>تکرار سفارش قبلی<small>اقلام آخرین سفارش به سبد برمی‌گردد</small></span></button>':''}<button data-act="support"><i>🎧</i><span>پشتیبانی<small>تماس با فروشنده</small></span></button><button data-act="settings"><i>⚙️</i><span>تنظیمات<small>حالت شب، پاک کردن مشخصات</small></span></button></div>`}
+else body=`<button class="btn g w" data-tab="home" style="margin-bottom:10px">‹ بازگشت به حساب من</button>`+(TAB==='orders'?orders:`${led}${chq}`);
+SH(`<div id="acct"></div>${card}${body}<button class="btn g w" style="margin-top:14px" data-close>بستن</button><button class="btn g w" style="margin-top:8px;background:#fff;border:1px solid var(--bd);color:var(--red)" data-act="logout">خروج از حساب</button>`);
 }
 function showOrder(o,back){
   SH(`<h3>جزئیات سفارش</h3>${stepper(o)}${invoice(o)}<div style="margin:-4px 0 12px">وضعیت پرداخت: ${payTag(o.payment)} · مرحله: <b>${o.stage<0?'لغو شده':esc(o.status)}</b></div>
@@ -353,7 +365,7 @@ async function doTrack(ref,phone,errId){
 
 /* ───────── رویدادها ───────── */
 $('#ov').addEventListener('change',e=>{if(e.target.id==='rg')fillCities('')});
-$('#go').onclick=showCart;$('#bacc').onclick=openAccount;$('#btrk').onclick=()=>PORTAL?(TAB='orders',showAccount()):showLogin();
+$('#go').onclick=showCart;$('#bcart').onclick=showCart;$('#nacc').onclick=()=>{navOn('nacc');openAccount()};$('#btrk').onclick=()=>PORTAL?(TAB='orders',showAccount()):showLogin();
 $('#ov').addEventListener('click',e=>{if(e.target.id==='ov'||e.target.closest('[data-close]'))return closeSh();
   const a=e.target.closest('[data-act]'),t=e.target.closest('[data-tab]'),oc=e.target.closest('[data-o]'),b=e.target.closest('[data-a]');
   if(b){const k=b.closest('.ln').dataset.k;setQ(k,(CART[k]||0)+(b.dataset.a==='inc'?1:-1));repaint(k.split('|')[0]);return showCart()}
@@ -373,7 +385,23 @@ $('#ov').addEventListener('click',e=>{if(e.target.id==='ov'||e.target.closest('[
 /* ───────── بنر، پشتیبانی، تنظیمات، حالت شب ───────── */
 const SUP=CFG.support||{},dark=on=>{document.documentElement.classList.toggle('dk',on);LS.set('dark',on)};
 {const t=getTg();dark(LS.get('dark',null)??!!(t&&t.colorScheme==='dark'))}
-function hero(){const h=$('#hero'),src=CFG.banner||(IMG+'banner.jpg');h.innerHTML=`<img src="${esc(src)}" alt="" decoding="async" onload="dbg('banner loaded')" onerror="this.parentNode.classList.add('nob');this.parentNode.innerHTML='<span id=hn>'+$('#shop').textContent+'</span>'">`}
+let BI=0,BT=null;
+function hero(){const h=$('#hero'),B=(CFG.banners&&CFG.banners.length)?CFG.banners:[{img:CFG.banner||'banner.jpg'}],src=b=>/^(https?:|\/)/.test(b.img)?b.img:IMG+b.img;
+ h.innerHTML=`<div class="bsl" id="bsl">${B.map((b,i)=>`<div class="bs" data-bi="${i}"><img src="${esc(src(b))}" alt="" decoding="async" onload="dbg('banner loaded')" onerror="bErr(this)"></div>`).join('')}</div>${B.length>1?`<div class="bdots" id="bdots">${B.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>`:''}`;
+ BI=0;clearInterval(BT);if(B.length>1)BT=setInterval(()=>bGo(BI+1),5000);
+ let x0=null;h.ontouchstart=e=>{x0=e.touches[0].clientX};h.ontouchend=e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)bGo(BI+(dx>0?1:-1))};
+ h.onclick=e=>{const sl=e.target.closest('[data-bi]');if(!sl)return;const b=B[+sl.dataset.bi]||{};if(b.cat){CAT=b.cat;cats();paint();scrollTo({top:Math.max(0,$('#list').offsetTop-130),behavior:'smooth'})}else if(b.promo&&$('#promo').firstChild)$('#promo').scrollIntoView({behavior:'smooth'})}}
+function bGo(i){const n=document.querySelectorAll('#bsl .bs').length;if(!n)return;BI=(i+n)%n;$('#bsl').style.transform=`translateX(${BI*100}%)`;document.querySelectorAll('#bdots i').forEach((d,k)=>d.classList.toggle('on',k===BI))}
+function bErr(img){const sl=img.closest('.bs');sl&&sl.remove();const h=$('#hero');if(!h.querySelector('.bs')){clearInterval(BT);h.classList.add('nob');h.innerHTML='<span id=hn>'+$('#shop').textContent+'</span>'}else{const n=h.querySelectorAll('.bs').length,d=$('#bdots');if(d)d.innerHTML=[...Array(n)].map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('');bGo(0)}}
+function paintRep(){const lo=LS.get('lastorder',null),b=$('#rep');if(!b)return;if(!lo||!lo.length||CAT||Q){b.innerHTML='';return}
+ const ok=lo.map(i=>{const[c,u]=i.k.split('|'),p=byCode(c),x=p&&unitOf(p,u);return x&&x.max>0?{q:Math.min(i.q,x.max),x}:null}).filter(Boolean);
+ if(!ok.length){b.innerHTML='';return}
+ b.innerHTML=`<div class="rep"><span style="font-size:1.6rem">🔁</span><div><b>تکرار سفارش قبلی</b><small>${fa(ok.length)}${ok.length<lo.length?' از '+fa(lo.length):''} قلم · ${fa(ok.reduce((t,i)=>t+i.q*i.x.price,0))} ${esc(CUR)}</small></div><button class="btn rg" data-rep>افزودن به سبد</button></div>`}
+function doRepeat(){const lo=LS.get('lastorder',[]);lo.forEach(i=>{const[c,u]=i.k.split('|'),p=byCode(c),x=p&&unitOf(p,u);if(x&&x.max>0)setQ(i.k,Math.min(i.q,x.max))});bar();paint();showCart()}
+$('#rep').addEventListener('click',e=>{if(e.target.closest('[data-rep]'))doRepeat()});
+function showCats(){const cs=[...new Set(P.map(p=>p.category).filter(Boolean))];
+ SH(`<h3>دسته‌بندی‌ها</h3><div class="ctg"><button data-c2=""><span>✨</span>همه<small>${fa(P.length)} کالا</small></button>${cs.map(c=>`<button data-c2="${esc(c)}"><span>${ico(c)}</span>${esc(c)}<small>${fa(P.filter(p=>p.category===c).length)} کالا</small></button>`).join('')}</div><button class="btn g w" data-close>بستن</button>`)}
+
 new MutationObserver(()=>{const h=$('#hn');h&&(h.textContent=$('#shop').textContent)}).observe($('#shop'),{childList:true,characterData:true,subtree:true});
 function navOn(id){document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.id===id))}
 function showSupport(){
@@ -391,12 +419,13 @@ function showSettings(){
   <p class="cd" style="margin:14px 0">با پاک کردن، فقط اطلاعات ذخیره‌شده در همین گوشی حذف می‌شود.</p><button class="btn g w" data-close>بستن</button>`);
 }
 $('#nh').onclick=()=>{closeSh();navOn('nh');scrollTo({top:0,behavior:'smooth'})};
-$('#nsp').onclick=()=>{navOn('nsp');showSupport()};$('#nst').onclick=()=>{navOn('nst');showSettings()};
+$('#nsp').onclick=()=>{navOn('nsp');showSupport()};$('#nct').onclick=()=>{navOn('nct');showCats()};
 $('#btrk').addEventListener('click',()=>navOn('btrk'));
 new MutationObserver(()=>{if(!$('#ov').classList.contains('on'))navOn('nh')}).observe($('#ov'),{attributes:true,attributeFilter:['class']});
-$('#ov').addEventListener('click',e=>{const a=e.target.closest('[data-act]');if(!a)return;
+$('#ov').addEventListener('click',e=>{const c2=e.target.closest('[data-c2]');if(c2){CAT=c2.dataset.c2;cats();paint();closeSh();scrollTo({top:Math.max(0,$('#list').offsetTop-130),behavior:'smooth'});return}const a=e.target.closest('[data-act]');if(!a)return;
   if(a.dataset.act==='dark'){dark(!document.documentElement.classList.contains('dk'));return showSettings()}
   if(a.dataset.act==='forget'){LS.del('me');LS.del('okey');return showSettings()}
+  if(a.dataset.act==='repeat')return doRepeat();if(a.dataset.act==='support')return showSupport();if(a.dataset.act==='settings')return showSettings();
   if(a.dataset.act==='clearcart'){CART={};LS.set('cart',CART);bar();paint();return showSettings()}
 });
 /* ───────── اطلاع‌رسانی وضعیت سفارش ───────── */

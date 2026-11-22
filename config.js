@@ -1,9 +1,17 @@
 // تنظیمات مینی‌اپ — فقط این فایل را ویرایش کنید
 window.MINIAPP_CONFIG = {
-  api: "https://script.google.com/macros/s/AKfycby6XsB8HlCEF2LSn37RetbZl5dmpxb4anKH78lTcCkJP5KkbHEubRaSxxcmHSKnUuuM/exec",   // آدرس /exec صندوق پست
-  // banner: "img/banner.jpg",                    // اگر اسم یا مسیر بنر فرق دارد
+  api: "PASTE_YOUR_APPS_SCRIPT_URL_HERE/exec",   // آدرس /exec صندوق پست
+
+  // بنرهای بالای صفحه (اسلایدر). فایل‌ها را در پوشه‌ی img مخزن GitHub بگذارید.
+  // هر بنر می‌تواند اختیاری باشد: cat = با لمس بنر فقط آن دسته نشان داده شود، promo = با لمس بنر به بخش تخفیف‌دارها برود.
+  // اگر این فهرست را ننویسید، فقط img/banner.jpg نشان داده می‌شود.
+  banners: [
+    { img: "banner1.jpg" },
+    // { img: "banner2.jpg", cat: "ویفر" },
+    // { img: "banner3.jpg", promo: true },
+  ],
+
   // حالت پیش‌فرض: "super" = بدون گزینه‌ی «عدد» (سوپرمارکت‌ها)، "home" = با گزینه‌ی «عدد» (خانگی).
-  // برای یک کانال دیگر می‌توانید آدرس مینی‌اپ را با ?m=home ثبت کنید.
   defaultMode: "super",
   support: {
     phone: "",        // مثلاً 09123456789
