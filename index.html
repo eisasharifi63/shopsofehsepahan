@@ -179,6 +179,9 @@ const refTxt=x=>/^\d+$/.test(String(x))?fd(x):esc(x);
 /* ───────── فروشگاه ───────── */
 const LIM=CFG.limits||{};let MINO=0,GUILDS=[],CDAYS=[];
 const MODE=(new URLSearchParams(location.search).get('m')||CFG.defaultMode||'super'),HOME=MODE==='home';
+// کانال و ویزیتوری که لینک از آن‌ها آمده (?ch=… و ?v=…)؛ یک بار ذخیره می‌شود تا اگر مشتری بعداً بدون پارامتر باز کرد هم از دست نرود
+const SRC=(()=>{const q=new URLSearchParams(location.search),c=(q.get('ch')||'').replace(/\D/g,'').slice(0,6),v=(q.get('v')||'').replace(/\D/g,'').slice(0,6),s=LS.get('src',{});if((c&&c!==s.ch)||(v&&v!==s.v)){s.ch=c||s.ch||'';s.v=v||s.v||'';LS.set('src',s)}return LS.get('src',{})})(),CHN=SRC.ch||'',VISN=SRC.v||'';
+const srcTag=()=>'[['+['m='+MODE,CHN?'ch='+CHN:'',VISN?'v='+VISN:''].filter(Boolean).join(';')+']] ';
 let SORT=LS.get('srt','');
 function apply(d){
   P=d.products;if(!HOME){P.forEach(p=>p.units=p.units.filter(u=>u.u!=='pc'));P=P.filter(p=>p.units.length)}MINO=+d.min_order||0;GUILDS=d.guilds||[];CDAYS=(d.cheque_days||[]).map(Number);dbg('guilds:'+GUILDS.length+' cheque_days:['+CDAYS.join()+'] min_order:'+MINO);CUR=d.currency||CUR;AREAS=d.areas||[];ALAB=d.area_labels||ALAB;$('#shop').textContent=d.shop||'ثبت سفارش';document.title=d.shop||'ثبت سفارش';
@@ -302,7 +305,7 @@ async function submit(){
   let key=LS.get('okey',null);if(!key){key=(self.crypto&&crypto.randomUUID)?crypto.randomUUID():String(Date.now())+Math.random().toString(36).slice(2);LS.set('okey',key)}
   const items=lines().map(l=>({code:l.p.code,unit:l.x.u,qty:l.q})),snap=cartAsInvoice();
   busy=true;const btn=$('#sub');btn.disabled=true;btn.textContent='در حال ثبت…';
-  const d=await post({action:'order',key,customer:{name,phone:ph,address:ad,region:rgn,city:cty,guild:DRAFT.gd||''},mode:MODE,pay:DRAFT.pay||'cash',note:DRAFT.nt.trim(),items});
+  const d=await post({action:'order',key,customer:{name,phone:ph,address:ad,region:rgn,city:cty,guild:DRAFT.gd||''},mode:MODE,ch:CHN,v:VISN,pay:DRAFT.pay||'cash',note:srcTag()+DRAFT.nt.trim(),items});
   if(d.ok){
     LS.set('me',{name,phone:ph,address:ad,region:rgn,city:cty,guild:DRAFT.gd||'',pay:DRAFT.pay||'cash'});LS.set('okey',null);LS.set('lastorder',lines().map(l=>({k:l.k,q:l.q})));LS.set('last',{ref:String(d.order_id),phone:ph});remember(String(d.order_id),ph,'');CART={};LS.set('cart',CART);DRAFT={};bar();busy=false;
     const inv={ref:API?String(d.order_id):'',id:API?'':d.order_id,date:d.date||'',stage:0,items:d.items||snap.items,final:d.total,total:d.total};
