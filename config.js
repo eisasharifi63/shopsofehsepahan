@@ -8,7 +8,7 @@ window.MINIAPP_CONFIG = {
   banners: [
     { img: "banner1.jpg" },
     { img: "Banner2.jpg", cat: "ویفر" },
-    { img: "Banner3.jpg", cat: "نوشیدنی" },
+    { img: "banner3.jpg", cat: "نوشیدنی" },
   ],
 
   // حالت پیش‌فرض: "super" = بدون گزینه‌ی «عدد» (سوپرمارکت‌ها)، "home" = با گزینه‌ی «عدد» (خانگی).
